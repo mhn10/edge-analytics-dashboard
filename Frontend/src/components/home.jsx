@@ -7,15 +7,18 @@ class FileUpload extends Component {
     super();
     this.state = {
       file: null,
+      model: null,
+      data: null,
       results: ''
     };
     this.valueChangeHandler = this.valueChangeHandler.bind(this);
+    this.handleFileUpload = this.handleFileUpload.bind(this);
   }
   valueChangeHandler = (e) => {
-    if(e.target.name == 'model'){
+
       this.setState({ [e.target.name]: e.target.value });
       console.log(this.state);
-    }
+    
  
        
     
@@ -23,14 +26,29 @@ class FileUpload extends Component {
   submitFile = (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append('file', this.state.file[0]);
-    axios.post(`http://localhost:3001/test-upload`, formData, {
+    const formModel = new FormData();
+
+    formData.append('file', this.state.data[0]);
+    formModel.append('file', this.state.model[0])
+    axios.post(`http://localhost:3001/uploaddata`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     }).then(response => {
-      console.log("file upload successful", response)
-      this.setState({results : response.data.Location})
+      console.log("data upload successful", response)
+      axios.post(`http://localhost:3001/uploadmodel`, formModel, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res=>{
+        this.setState({results : res.data.Location})
+        console.log("uploads of data successfull ")
+      })
+
+
+
+
+      
       // handle your response;
     }).catch(error => {
       console.log("error");
@@ -39,8 +57,13 @@ class FileUpload extends Component {
   }
 
   handleFileUpload = (event) => {
-    this.setState({file: event.target.files});
+    this.setState({[event.target.name]: event.target.files});
+    console.log(this.state);
   }
+//username
+//modelname
+//datafile
+//type of user
 
   render () {
     return (
@@ -48,7 +71,8 @@ class FileUpload extends Component {
 
         <Navbar/>
         <form onSubmit={this.submitFile} style={{margin:"100px"}}>
-        <input name='model' placeholder='Model' label='upload file' type='file' onChange={this.handleFileUpload} />
+        <input name='model'  label='upload model' type='file' onChange={this.handleFileUpload} />
+        <input name='data'  label='upload datafile' type='file' onChange={this.handleFileUpload} />
         <button type='submit'>Send</button>
         <a href={this.state.results}> Location</a>
       </form>

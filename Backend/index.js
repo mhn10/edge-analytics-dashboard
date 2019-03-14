@@ -95,8 +95,8 @@ app.get("/healthcheck", (req, res) => {
 
 
 // Define POST route
-app.post('/test-upload', (request, response) => {
-  console.log("tEst upload node", process.env.AWS_ACCESS_KEY_ID);
+app.post('/uploaddata', (request, response) => {
+  console.log("tEst upload data", process.env.AWS_ACCESS_KEY_ID);
   const form = new multiparty.Form();
     form.parse(request, async (error, fields, files) => {
       if (error) throw new Error(error);
@@ -105,7 +105,27 @@ app.post('/test-upload', (request, response) => {
         const buffer = fs.readFileSync(path);
         const type = fileType(buffer);
         const timestamp = Date.now().toString();
-        const fileName = `bucketFolder/${timestamp}-lg`;
+        const fileName = `user1/data/${timestamp}-lg`;
+        const data = await uploadFile(buffer, fileName, type);
+        return response.status(200).send(data);
+      } catch (error) {
+        return response.status(400).send(error);
+      }
+    });
+});
+
+
+app.post('/uploadmodel', (request, response) => {
+  console.log("tEst upload model", process.env.AWS_ACCESS_KEY_ID);
+  const form = new multiparty.Form();
+    form.parse(request, async (error, fields, files) => {
+      if (error) throw new Error(error);
+      try {
+        const path = files.file[0].path;
+        const buffer = fs.readFileSync(path);
+        const type = fileType(buffer);
+        const timestamp = Date.now().toString();
+        const fileName = `user1/model/${timestamp}-lg`;
         const data = await uploadFile(buffer, fileName, type);
         return response.status(200).send(data);
       } catch (error) {
