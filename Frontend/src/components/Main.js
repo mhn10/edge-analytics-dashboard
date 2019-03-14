@@ -3,7 +3,7 @@ import {Route} from "react-router-dom";
 
 //Import Components
 import Navbar from "./Navbar/navbar";
-
+import Home from "./home"
 
 // Create a Main Component
 
@@ -12,7 +12,7 @@ class Main extends Component {
         return(
             <div>
                 {/*Render Different Component based on Route*/}
-                <Route exact path="/" component={Navbar}/>
+                <Route exact path="/" component={Home}/>
             </div>
         )
     }

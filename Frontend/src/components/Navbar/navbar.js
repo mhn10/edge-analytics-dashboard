@@ -18,6 +18,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import Avatar from '@material-ui/core/Avatar';
 
 const drawerWidth = 240;
 
@@ -108,6 +109,7 @@ class MiniDrawer extends React.Component {
             [classes.appBarShift]: this.state.open,
           })}
         >
+        {/* <Avatar src="../../assets/user.png"  /> */}
           <Toolbar disableGutters={!this.state.open}>
             <IconButton
               color="inherit"
@@ -120,9 +122,10 @@ class MiniDrawer extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
-              Mini variant drawer
+              Home
             </Typography>
           </Toolbar>
+          
         </AppBar>
         <Drawer
           variant="permanent"
@@ -145,32 +148,16 @@ class MiniDrawer extends React.Component {
           </div>
           <Divider />
           <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            {['Models', 'Files', 'Output', 'Dashboard'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
             ))}
           </List>
-          <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
+
         </Drawer>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Typography paragraph>
-			Welcome! Raghav,
-          </Typography>
-          <Typography paragraph>
-			
-          </Typography>
-        </main>
+
       </div>
     );
   }
