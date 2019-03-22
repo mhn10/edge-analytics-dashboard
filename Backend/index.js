@@ -31,7 +31,7 @@ const uploadFile = (buffer, name, type) => {
     ACL: "public-read",
     Body: buffer,
     Bucket: process.env.S3_BUCKET,
-    ContentType: type.mime,
+    
     Key: `${name}.${type.ext}`
   };
   console.log("params: ", params);
@@ -87,11 +87,12 @@ app.get("/healthcheck", (req, res) => {
   console.log("health check success");
   res.status(200);
   res.send();
+
 });
 
 // Define POST route
 app.post("/uploaddata", (request, response) => {
-  console.log("tEst upload data", process.env.AWS_ACCESS_KEY_ID);
+  console.log("tEst upload data", request);
   const form = new multiparty.Form();
   form.parse(request, async (error, fields, files) => {
     if (error) throw new Error(error);

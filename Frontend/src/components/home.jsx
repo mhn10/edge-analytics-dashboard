@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Navbar from "./Navbar/navbar";
 import styled from "styled-components";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
 
 class FileUpload extends Component {
@@ -32,8 +32,9 @@ class FileUpload extends Component {
 
     formData.append("file", this.state.data[0]);
     formModel.append("file", this.state.model[0]);
-console.log("state before uplaod", this.state);
-    console.log("formdata oss : ", formData);
+
+    console.log("state before uplaod", this.state);
+    console.log("formdata is : ", formData);
     axios
       .post(`http://localhost:3001/uploaddata`, formData, {
         headers: {
@@ -67,28 +68,25 @@ console.log("state before uplaod", this.state);
   };
 
   handleFileUpload = event => {
-
     this.setState({ [event.target.name]: event.target.files });
     console.log(this.state);
   };
 
-
   sendTask = event => {
     event.preventDefault();
-   
+
     axios
-      .post(`http://localhost:3001/sendtask`, {data : "user1"})
+      .post(`http://localhost:3001/sendtask`, { data: "user1" })
       .then(response => {
         //nested calls
         console.log("data upload successful", response);
-        
       })
       .catch(error => {
         console.log("Failed to send task");
         // handle your error
       });
   };
-  
+
   getOutput = event => {
     axios.get("http://localhost:3001/output").then(response => {
       console.log("Fetched output = ", response.data.data);
@@ -107,75 +105,90 @@ console.log("state before uplaod", this.state);
       <React.Fragment>
         <Navbar />
         <body>
-          <form onSubmit={this.submitFile} style={{ marginLeft: "100px", marginTop:"150px" }}>
+          <form
+            onSubmit={this.submitFile}
+            style={{ marginLeft: "100px", marginTop: "150px" }}
+          >
             <input
               name="model"
               label="upload model"
               type="file"
               onChange={this.handleFileUpload}
-              accept=".csv"
+  
             />
-            <Input
+            <input
               name="data"
               label="upload datafile"
               type="file"
+    
               onChange={this.handleFileUpload}
             />
             <Button type="submit">Send</Button>
-            
+
             <dl className="form-row">
-            <dl className="col-6">
-            <div className="card" style={{
-                      marginLeft: "3rem",
-                      marginRight: "3rem",
-                      marginBottom: "1rem",
-                      width:"40vh",
+              <dl className="col-6">
+                <div
+                  className="card"
+                  style={{
+                    marginLeft: "3rem",
+                    marginRight: "3rem",
+                    marginBottom: "1rem",
+                    width: "40vh",
 
-                      padding: "1.5rem",
-                      //  marginLeft: "3rem",
-                      borderRadius: "7px",
-                      backgroundColor: "#f0f0f0",
-                      boxShadow:
-                        "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
-                    }}>
-            <a href={this.state.modelLocation}>Model Location</a>
-            </div>
+                    padding: "1.5rem",
+                    //  marginLeft: "3rem",
+                    borderRadius: "7px",
+                    backgroundColor: "#f0f0f0",
+                    boxShadow:
+                      "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
+                  }}
+                >
+                  <a href={this.state.modelLocation}>Model Location</a>
+                </div>
+              </dl>
+              <dl className="col-6">
+                <div
+                  className="card col-3"
+                  style={{
+                    marginLeft: "3rem",
+                    marginRight: "3rem",
+                    marginBottom: "1rem",
+                    width: "40vh",
+                    padding: "1.5rem",
+                    //  marginLeft: "3rem",
+                    borderRadius: "7px",
+                    backgroundColor: "#f0f0f0",
+                    boxShadow:
+                      "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
+                  }}
+                >
+                  <a href={this.state.dataLocation}> Data Location</a>
+                </div>
+              </dl>
             </dl>
-            <dl className="col-6">
-            <div className="card col-3" style={{
-                      marginLeft: "3rem",
-                      marginRight: "3rem",
-                      marginBottom: "1rem",
-                      width:"40vh",
-                      padding: "1.5rem",
-                      //  marginLeft: "3rem",
-                      borderRadius: "7px",
-                      backgroundColor: "#f0f0f0",
-                      boxShadow:
-                        "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
-                    }}>
-            <a href={this.state.dataLocation}> Data Location</a>
-            </div>
-            </dl>
-
-            </dl>
-            
-            
-            
-           
           </form>
-          <Button type="submit" onClick={this.sendTask} style={{ marginLeft: "100px", marginTop:"40px" }}>Send Task</Button>
-          <Button color="primary"
-            style={{ marginLeft: "100px", marginTop:"40px" }}
+          <Button
+            type="submit"
+            onClick={this.sendTask}
+            style={{ marginLeft: "100px", marginTop: "40px" }}
+          >
+            Send Task
+          </Button>
+          <Button
+            color="primary"
+            style={{ marginLeft: "100px", marginTop: "40px" }}
             type="submit"
             onClick={this.getOutput}
           >
             Get Output
           </Button>
-          <ul className="card" style={{width: "70vh", display:"block", marginLeft: "45px"}}>
+          <ul
+            className="card"
+            style={{ width: "70vh", display: "block", marginLeft: "45px" }}
+          >
             {allImgs.map((file, i) => (
               <a href={"https://cmpe295-jetson-s3.s3.amazonaws.com/" + file}>
-                <li class="cards__item"   id={i}>
+                <li class="cards__item" id={i}>
                   <div
                     className="card"
                     style={{
@@ -190,7 +203,6 @@ console.log("state before uplaod", this.state);
                       boxShadow:
                         "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
                     }}
-                  
                   >
                     <p class="card__text">{file}</p>
                   </div>
