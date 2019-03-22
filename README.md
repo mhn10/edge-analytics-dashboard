@@ -1,8 +1,9 @@
-# edge-analytics-dashboard
+# Edge Analytics
 A single point dashboard for managing Edge devices
 The main objective of this project is to deploy and run machine learning models on the edge.
 
-##Techstack 
+
+## Techstack 
 * ReactJS
 * Nodejs
 * RabbitMQ
@@ -10,9 +11,55 @@ The main objective of this project is to deploy and run machine learning models 
 * AWS S3
 * Jetson TX3 
 * Tensorflow
+  
 ## Architecture
 ![Architecture Diagram](https://github.com/mhn10/edge-analytics-dashboard/blob/master/readme_assets/Edge_analytics_arch.png)
 
+### How to run
+* make sure node and npm in installed. [here](https://nodejs.org/en/)
+
+Clone this repo 
+```bash 
+git clone https://github.com/mhn10/edge-analytics-dashboard
+```
+
+#### Frontend
+Change into directory of frontend
+```bash
+cd Frontend
+```
+Install node packages 
+```bash
+npm install
+```
+or through yarn
+```bash
+yarn install
+```
+Once the packages are installed, perform npm start
+```bash
+npm start
+```
+
+#### Server
+Change into directory of Backend
+```bash
+cd Backend
+```
+Install node packages 
+```bash
+npm install
+```
+or through yarn
+```bash
+yarn install
+```
+Once the packages are installed, run the file
+```bash
+node index.js
+```
+
+#### Jetson
 
 ## Credits
 Mentor - Kaikai Liu
