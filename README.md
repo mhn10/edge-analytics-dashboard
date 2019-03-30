@@ -9,7 +9,7 @@ The main objective of this project is to deploy and run machine learning models 
 * RabbitMQ
 * DynamoDB
 * AWS S3
-* Jetson TX3 
+* [Jetson TX3](https://devblogs.nvidia.com/jetson-tx2-delivers-twice-intelligence-edge/) 
 * Tensorflow
   
 ## Architecture
