@@ -45,9 +45,17 @@ const styles = theme => ({
   },
 });
 
+
+
 function SignIn(props) {
   const { classes } = props;
-
+  const SignUpHandler = (e) => {
+    e.preventDefault();
+    props.history.push({
+      pathname : "/signup"
+    })
+  }
+  
   return (
     <main className={classes.main}>
       <CssBaseline />
@@ -79,6 +87,16 @@ function SignIn(props) {
             className={classes.submit}
           >
             Sign in
+          </Button>
+          <Button
+            type="submit"
+            
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={SignUpHandler}
+          >
+           Sign up
           </Button>
         </form>
       </Paper>
