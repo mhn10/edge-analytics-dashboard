@@ -9,8 +9,8 @@ const fileType = require("file-type");
 const bluebird = require("bluebird");
 const multiparty = require("multiparty");
 
-const mongoose = require("mongoose");
 var cors = require("cors");
+var {mongoose} = require("./Mongo/connect");
 
 // configure the keys for accessing AWS
 AWS.config.update({
