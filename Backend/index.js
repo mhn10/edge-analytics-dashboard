@@ -70,18 +70,19 @@ app.use(function(req, res, next) {
 
 //index.js stores the homepage
 // var index = require("./routes/api/index");
-// var applicant = require("./routes/api/applicant");
+var user = require("./routes/users/user.js");
+app.use("/users", user);
 // var jobs = require("./routes/api/jobs");
 // var recruiter = require("./routes/api/recruiter");
 // var graphs = require("./routes/api/graph");
 // //app.use('/', index);
 // app.use("/jobs", jobs);
-// app.use("/applicants", applicant);
+
 // app.use("/recruiters", recruiter);
 // app.use("/graphs", graphs);
 // app.use("/api/photos", photos);
 // app.use("/api/documentsUpload", doc);
-// app.use;
+app.use;
 
 app.get("/healthcheck", (req, res) => {
   console.log("health check success");

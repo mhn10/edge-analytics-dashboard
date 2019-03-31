@@ -34,12 +34,12 @@ var userSchema = new mongoose.Schema({
             data: [{
                 name: { type: String, required: false, default: "" },
                 timeStamp: {type: Date, default: Date.now},
-                result: [{
+                result: {
                   remark: { type: String, required: false, default: "" },
                   timeStamp: {type: Date, default: Date.now},
                   accuracy: {type: Number, default: 0},
 
-              }]
+              }
             }],
             
         }
