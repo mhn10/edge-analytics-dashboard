@@ -4,6 +4,9 @@ import Navbar from "./Navbar/navbar";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
+import Select from '@material-ui/core/Select';
+
+import Grid from '@material-ui/core/Grid';
 
 class FileUpload extends Component {
   constructor() {
@@ -12,6 +15,7 @@ class FileUpload extends Component {
       file: null,
       model: null,
       data: null,
+      type: "",
       modelLocation: "",
       dataLocation: "",
       output: ""
@@ -103,20 +107,39 @@ class FileUpload extends Component {
     var allImgs = Array.prototype.slice.call(this.state.output);
     return (
       <React.Fragment>
-        <Navbar />
+
+<Navbar/>
+
+
+
+      
+        
         <body>
           <form
             onSubmit={this.submitFile}
             style={{ marginLeft: "100px", marginTop: "150px" }}
           >
-            <input
+         <Grid container className={""} spacing={16}>
+
+         <Grid item xs={12}>
+          <Grid container className={"Files"} justify="center" spacing="16">
+          <Select
+            value={""}
+            onChange={this.handleChange}
+            inputProps={{
+              type: 'classification'
+             
+            }}
+          ></Select>
+          
+            <Input
               name="model"
               label="upload model"
               type="file"
               onChange={this.handleFileUpload}
   
             />
-            <input
+            <Input
               name="data"
               label="upload datafile"
               type="file"
@@ -124,7 +147,9 @@ class FileUpload extends Component {
               onChange={this.handleFileUpload}
             />
             <Button type="submit">Send</Button>
-
+          </Grid>
+        </Grid>
+    </Grid>
             <dl className="form-row">
               <dl className="col-6">
                 <div
