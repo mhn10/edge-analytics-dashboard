@@ -13,8 +13,14 @@ The main objective of this project is to deploy and run machine learning models 
 * Tensorflow
   
 ## Architecture
+### Overall Architectire
 ![Architecture Diagram](https://github.com/mhn10/edge-analytics-dashboard/blob/master/readme_assets/Edge_analytics_arch.png)
 
+### Edge Architecture
+![Edge Architecture](https://github.com/mhn10/edge-analytics-dashboard/blob/master/readme_assets/Edge.png)
+
+### Server Architecture
+![Server Architecture](https://github.com/mhn10/edge-analytics-dashboard/blob/master/readme_assets/Frontend.png)
 ### How to run
 * make sure node and npm in installed. [here](https://nodejs.org/en/)
 
