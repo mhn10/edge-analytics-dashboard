@@ -1,6 +1,5 @@
 import React, { Component }from 'react';
 import LoginNavbar from "./Navbar/loginnavbar";
-
 import validate from '../validate';
 
 class Signup extends Component{
