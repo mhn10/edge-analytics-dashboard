@@ -1,40 +1,28 @@
-import pika
-import time
-import subprocess
+import boto3
+import sys, time
 
-# Worker is running on localhost and is checking if any task is assigned to the system
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-channel = connection.channel()
+# Get service resource
+sqs = boto3.resource( 'sqs' )
 
-# Name of queue that we are looking for
-channel.queue_declare(queue='task_queue', durable=True)
-print(' [*] Waiting for messages...')
+# Get the queue
+queue = sqs.get_queue_by_name( QueueName='taskQ1' )
 
-def callback(ch, method, properties, body):
-    body = body.decode('utf-8')
-    # print(body)
-    vals = body.split(' ')
-    # print(vals)
-    uid = vals[0]
-    # uid = "001"
-    # modelName = "IRIS.csv"
-    # typeOfModel = "abc"
-    modelName = vals[1]
-    typeOfModel = vals[2]
-    if len(vals) == 4:
-        dataFileName = vals[3]
-    else:
-        dataFileName = ""
+while True:
+    # Process messages by printing out body and optional author name
+    for message in queue.receive_messages( MessageAttributeNames = [ 'User', 'Type' ] ):
+        # Get the custom author message if it was set
+        user_name = ''
+        action_name = ''
+        if message.message_attributes is not None:
+            user = message.message_attributes.get( 'User' ).get( 'StringValue' )
+            action = message.message_attributes.get( 'Type' ).get( 'StringValue' )
+            if user:
+                user_name = ' ({0})'.format( user )
+            if action:
+                action_name = ' ({0})'.format( action )
 
-    # print(" [x] Received %r" % body)
-    #time.sleep(body.count(b'.'))
-    #print(" [x] Done")
-    ch.basic_ack(delivery_tag = method.delivery_tag)
-    # print("gonna run script now")
-    subprocess.call(['python3','checkS3.py',uid,modelName,typeOfModel,dataFileName])
-    # subprocess.call(['python3', 'Response.py', 'resultfilename'])
-
-channel.basic_qos(prefetch_count=1)
-channel.basic_consume(callback, queue='task_queue')
-
-channel.start_consuming()
+        # Print out body and author
+        print('{0}->user: {1}, Name: {2}, Type: {3}'.format( sys.argv[1], user_name, message.body, action_name ) )
+        time.sleep( 1 )
+        # Let the queue know that the message is processed
+        message.delete()
