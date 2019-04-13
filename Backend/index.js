@@ -15,14 +15,18 @@ var {mongoose} = require("./Mongo/connect");
 // configure the keys for accessing AWS
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: 'us-west-1'
 });
 
-// configure AWS to work with promises
+// configure AWS tqqo work with promises
 AWS.config.setPromisesDependency(bluebird);
 
 // create S3 instance
 const s3 = new AWS.S3();
+
+// Create an SQS service object
+var sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 // abstracts function to upload a file returning a promise
 const uploadFile = (buffer, name, type) => {
@@ -153,26 +157,26 @@ app.get("/output", (req, res) => {
   });
 });
 
-var amqp = require("amqplib/callback_api");
-app.post("/sendtask", (request, response) => {
-  console.log("req: ", request.data);
+// var amqp = require("amqplib/callback_api");
+// app.post("/sendtask", (request, response) => {
+//   console.log("req: ", request.data);
 
-  amqp.connect("amqp://jetson:jetson@73.92.205.30:5672", function(err, conn) {
-    conn.createChannel(function(err, ch) {
-      var q = "task_queue";
-      console.log("Process argv ", process.argv);
-      var msg = "001 IRIS.csv model";
+//   amqp.connect("amqp://jetson:jetson@73.92.205.30:5672", function(err, conn) {
+//     conn.createChannel(function(err, ch) {
+//       var q = "task_queue";
+//       console.log("Process argv ", process.argv);
+//       var msg = "001 IRIS.csv model";
 
-      ch.assertQueue(q, { durable: true });
-      ch.sendToQueue(q, Buffer.from(msg), { persistent: true });
-      console.log(" [x] Sent '%s'", msg);
-      return response.status(200).send(msg);
-    });
-    setTimeout(function() {
-      conn.close();
-    }, 500);
-  });
-});
+//       ch.assertQueue(q, { durable: true });
+//       ch.sendToQueue(q, Buffer.from(msg), { persistent: true });
+//       console.log(" [x] Sent '%s'", msg);
+//       return response.status(200).send(msg);
+//     });
+//     setTimeout(function() {
+//       conn.close();
+//     }, 500);
+//   });
+// });
 
 app.listen(3001);
 console.log("Server Listening on port 3001");
