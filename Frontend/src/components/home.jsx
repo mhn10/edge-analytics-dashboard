@@ -11,10 +11,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 // import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
-import Select from "@material-ui/core/Select";
-
-import Grid from "@material-ui/core/Grid";
-
 class FileUpload extends Component {
   constructor() {
     super();

@@ -28,7 +28,7 @@ render(){
 	<React.Fragment>
 	<LoginNavbar />
 	<body>
-<div class="container white z-depth-2">
+<div class="container container-signup white z-depth-2">
 	<ul class="tabs light-blue">
 		<li class="tab col s3"><a class="white-text active" href="#login">login</a></li>
 		<li class="tab col s3"><a class="white-text" href="#register">register</a></li>
