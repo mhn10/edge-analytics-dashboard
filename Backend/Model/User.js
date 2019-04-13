@@ -25,25 +25,31 @@ var userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-    model: [
-        {
-            name: { type: String, required: false, default: "" },
-            timeStamp: {type: Date, default: Date.now},
-            type: { type: String, required: false, default: "" },
 
-            data: [{
-                name: { type: String, required: false, default: "" },
-                timeStamp: {type: Date, default: Date.now},
-                result: {
-                  remark: { type: String, required: false, default: "" },
-                  timeStamp: {type: Date, default: Date.now},
-                  accuracy: {type: Number, default: 0},
+  classification : [ {
+    name: { type: String, required: false, default: "" },
+    timeStamp: {type: Date, default: Date.now},
+    
+    requirement : {type: String, required:false, default: ""},
+    code : {type: String, required:false, default: ""},
+    data : {type: String, required:false, default: ""},
+    input : {type: String, required:false, default: ""},
+    result : {type: String, required:false, default: ""},
 
-              }
-            }],
-            
-        }
-    ],
+    }
+  ],
+  regression : [ {
+    name: { type: String, required: false, default: "" },
+    timeStamp: {type: Date, default: Date.now},
+    
+    requirement : {type: String, required:false, default: ""},
+    code : {type: String, required:false, default: ""},
+    data : {type: String, required:false, default: ""},
+    input : {type: String, required:false, default: ""},
+    result : {type: String, required:false, default: ""},
+
+    }
+  ],
   profileImage: {
     type: String,
     required: false,

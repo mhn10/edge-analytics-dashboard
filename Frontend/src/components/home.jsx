@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import Navbar from "./Navbar/navbar";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
+import Button from 'react-bootstrap/Button'
+// import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
 import Select from '@material-ui/core/Select';
 
@@ -146,7 +147,7 @@ class FileUpload extends Component {
     
               onChange={this.handleFileUpload}
             />
-            <Button type="submit">Send</Button>
+            <Button variant="primary" type="submit">Send</Button>
           </Grid>
         </Grid>
     </Grid>
@@ -199,7 +200,7 @@ class FileUpload extends Component {
           >
             Send Task
           </Button>
-          <Button
+          <Button variant="primary"
             color="primary"
             style={{ marginLeft: "100px", marginTop: "40px" }}
             type="submit"
