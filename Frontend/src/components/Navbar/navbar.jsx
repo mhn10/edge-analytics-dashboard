@@ -104,7 +104,8 @@ class MiniDrawer extends React.Component {
       <div className={classes.root}>
         <CssBaseline />
         <AppBar
-          position="fixed"
+		  position="fixed"
+		  style={{ background: '#03a9f4' }}
           className={classNames(classes.appBar, {
             [classes.appBarShift]: this.state.open,
           })}

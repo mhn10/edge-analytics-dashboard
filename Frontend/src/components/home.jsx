@@ -3,7 +3,6 @@ import axios from "axios";
 import Navbar from "./Navbar/navbar";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
-import Input from "@material-ui/core/Input";
 
 class FileUpload extends Component {
   constructor() {
