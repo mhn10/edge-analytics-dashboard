@@ -2,7 +2,18 @@ import React, { Component } from "react";
 import axios from "axios";
 import Navbar from "./Navbar/navbar";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Dropdown from "react-bootstrap/Dropdown";
+
+import DropdownButton from "react-bootstrap/DropdownButton";
+// import Button from "@material-ui/core/Button";
+import Input from "@material-ui/core/Input";
+import Select from "@material-ui/core/Select";
+
+import Grid from "@material-ui/core/Grid";
 
 class FileUpload extends Component {
   constructor() {
@@ -11,6 +22,7 @@ class FileUpload extends Component {
       file: null,
       model: null,
       data: null,
+      type: "",
       modelLocation: "",
       dataLocation: "",
       output: ""
@@ -102,70 +114,79 @@ class FileUpload extends Component {
     var allImgs = Array.prototype.slice.call(this.state.output);
     return (
       <React.Fragment>
+
+        <Container style={{ marginTop: "100px" }}>      
         <Navbar />
-        <body>
-          <form
-            onSubmit={this.submitFile}
-            style={{ marginLeft: "100px", marginTop: "150px" }}
-          >
-            <input
+          <Row>
+            <DropdownButton id="dropdown-basic-button" title="Method">
+              <Dropdown.Item href="#/action-1">Classification</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Regression </Dropdown.Item>
+            </DropdownButton>
+          </Row>
+          <Row>
+            <Input
               name="model"
               label="upload model"
               type="file"
               onChange={this.handleFileUpload}
-  
             />
-            <input
+          </Row>
+          <Row>
+            <Input
               name="data"
               label="upload datafile"
               type="file"
-    
               onChange={this.handleFileUpload}
             />
-            <Button type="submit">Send</Button>
+          </Row>
+          <Row>
+            <Button variant="primary" type="submit">
+              Send
+            </Button>
+          </Row>
 
-            <dl className="form-row">
-              <dl className="col-6">
-                <div
-                  className="card"
-                  style={{
-                    marginLeft: "3rem",
-                    marginRight: "3rem",
-                    marginBottom: "1rem",
-                    width: "40vh",
+          <Row>
+            <Col xs={3} style={{marginTop: "2rem"}}>
+              <div
+                className="card"
+                style={{
+                  // marginLeft: "3rem",
+                  // marginRight: "3rem",
+                  marginBottom: "1rem",
+                  // width: "40vh",
 
-                    padding: "1.5rem",
-                    //  marginLeft: "3rem",
-                    borderRadius: "7px",
-                    backgroundColor: "#f0f0f0",
-                    boxShadow:
-                      "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
-                  }}
-                >
-                  <a href={this.state.modelLocation}>Model Location</a>
-                </div>
-              </dl>
-              <dl className="col-6">
-                <div
-                  className="card col-3"
-                  style={{
-                    marginLeft: "3rem",
-                    marginRight: "3rem",
-                    marginBottom: "1rem",
-                    width: "40vh",
-                    padding: "1.5rem",
-                    //  marginLeft: "3rem",
-                    borderRadius: "7px",
-                    backgroundColor: "#f0f0f0",
-                    boxShadow:
-                      "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
-                  }}
-                >
-                  <a href={this.state.dataLocation}> Data Location</a>
-                </div>
-              </dl>
-            </dl>
-          </form>
+                  padding: "1.5rem",
+                  //  marginLeft: "3rem",
+                  borderRadius: "7px",
+                  backgroundColor: "#f0f0f0",
+                  boxShadow:
+                    "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
+                }}
+              >
+                <a href={this.state.modelLocation}>Model Location</a>
+              </div>
+            </Col>
+            <Col xs={3}  style={{marginTop: "2rem"}}>
+              <div
+                className="card"
+                style={{
+                  // marginLeft: "3rem",
+                  // marginRight: "3rem",
+                  marginBottom: "1rem",
+                  // width: "40vh",
+                  padding: "1.5rem",
+                  //  marginLeft: "3rem",
+                  borderRadius: "7px",
+                  backgroundColor: "#f0f0f0",
+                  boxShadow:
+                    "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
+                }}
+              >
+                <a href={this.state.dataLocation}> Data Location</a>
+              </div>
+            </Col>
+          </Row>
+
           <Button
             type="submit"
             onClick={this.sendTask}
@@ -174,6 +195,7 @@ class FileUpload extends Component {
             Send Task
           </Button>
           <Button
+            variant="primary"
             color="primary"
             style={{ marginLeft: "100px", marginTop: "40px" }}
             type="submit"
@@ -210,7 +232,8 @@ class FileUpload extends Component {
               </a>
             ))}
           </ul>
-        </body>
+        </Container>
+        >
       </React.Fragment>
     );
   }
