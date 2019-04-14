@@ -23,14 +23,22 @@ const reducer = (state, action) => {
     case "decrementState":
       return { ...state, step: state.step >1 ? state.step - 1 : state.step };
 
-    case "setName":
-      return { ...state, name: action.value };
+	case "setName":
+	console.log("name: ",action.taskName);
+      return { ...state, name: action.taskName };
 
     case "setUsername":
       return { ...state, username: action.value };
 
     case "setRequirement":
-      return { ...state, requirement: action.value };
+	  return { ...state, requirement: action.value };
+
+	case "setType":
+	  return { ...state, type: action.value };
+	  
+	case "setModel":
+      return { ...state, model: action.value };
+
 
     case "setData":
       return { ...state, data: action.value };
