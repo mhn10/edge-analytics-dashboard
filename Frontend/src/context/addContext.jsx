@@ -12,7 +12,7 @@ const addContext = {
         input : null,
         result : null,
         code: null,
-        model: null,
+        model: '',
 
         step  : 1
 

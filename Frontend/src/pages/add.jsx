@@ -24,9 +24,12 @@ const reducer = (state, action) => {
       return { ...state, step: state.step >1 ? state.step - 1 : state.step };
 
 	case "setName":
-	console.log("name: ",action.taskName);
+		console.log("name: ",action.taskName);
       return { ...state, name: action.taskName };
-
+	  
+	// case "getName":
+	// 	return  {name: state.name} ;
+  
     case "setUsername":
       return { ...state, username: action.value };
 
@@ -35,9 +38,9 @@ const reducer = (state, action) => {
 
 	case "setType":
 	  return { ...state, type: action.value };
-	  
+
 	case "setModel":
-      return { ...state, model: action.value };
+      return { ...state, model: action.model };
 
 
     case "setData":
@@ -60,12 +63,14 @@ const reducer = (state, action) => {
 const AddPage = ({ props }) => {
   const [addState, dispatch] = React.useReducer(reducer, {
     name: "",
-    username: "",
+	username: "",
+	type: "",
     requirement: null,
     data: null,
     input: null,
     result: null,
-    code: null,
+	code: null,
+	model: "",
     step: 1
   });
   const incrementState = () => {
@@ -87,7 +92,7 @@ const AddPage = ({ props }) => {
         <section className="page-content">
           <AddContext.Provider value={{ addState, dispatch }}>
             {
-					<AddDetailsWrapper>
+				<AddDetailsWrapper>
              
                 <Button label={"Previous Step"} onClick={decrementState}>
                   Previous Step
