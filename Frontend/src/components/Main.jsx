@@ -4,7 +4,7 @@ import {Route} from "react-router-dom";
 //Import Components
 import Navbar from "./Navbar/navbar";
 import Home from "./home";
-import Login from "./login";
+// import Login from "./login";
 import Signup from "./signup";
 // Create a Main Component
 
@@ -14,7 +14,7 @@ class Main extends Component {
             <div>
                 {/*Render Different Component based on Route*/}
                 <Route exact path="/" component={Home}/>
-                <Route exact path="/login" component={Login}/>
+                {/* <Route exact path="/login" component={Login}/> */}
 				<Route exact path="/signup" component={Signup}/>
             </div>
         )
