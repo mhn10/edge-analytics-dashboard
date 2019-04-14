@@ -3,12 +3,12 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const {mongoose} = require('./db/mongoose');
+const {mongoose} = require('./Mongo/connect');
 
 
 //Adding the Route Dependencies
 const loginRoutes = require('./routes/users/login');
-const signupRoutes = require('./api/routes/signup');
+const signupRoutes = require('./routes/users/signup');
 
 
 

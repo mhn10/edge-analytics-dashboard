@@ -8,8 +8,8 @@ const JWT_KEY = "secret";
 //Route to handle Post Request Call for Login
 router.post('/', (req,res, next) => {
     console.log("Inside Login Post Request");
-    var EMAIL = req.body.email;
-    var PASSWORD = req.body.password;
+    var EMAIL = req.body.loginEmail;
+    var PASSWORD = req.body.loginPassword;
     console.log("Email and Password:  : ",EMAIL, PASSWORD);
         //QUERY user_INFO Collection to get the email and password
         userModel.findOne({email: EMAIL})
@@ -31,9 +31,9 @@ router.post('/', (req,res, next) => {
                         {
                             email: user.email,
                             userId: user._id,
-                            firstName: user.firstname,
-                            lastName:user.lastname,
-                            memberSince: traveler.memberSince,
+                            firstName: user.firstName,
+                            lastName:user.lastName,
+                            memberSince: user.memberSince,
                         },
                         JWT_KEY,
                         {

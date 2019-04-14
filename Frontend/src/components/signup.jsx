@@ -52,8 +52,7 @@ class Signup extends Component{
                         ...this.state,
                         isRegistered : true
                     })
-                    // this.props.postJobData(jobData,true);
-                    console.log("message:", response.data.message);
+					// this.props.postJobData(jobData,true);
                     alert("User registered successfully");
                 }else{
                     this.setState({
@@ -99,16 +98,15 @@ class Signup extends Component{
             })
             .then(response => {
                 console.log("Status Code : ",response.status);
-                if(response.status === 201){
+                if(response.status === 200){
                     this.setState({
                         ...this.state,
                         isLogged : true
 					})
 					// this.props.postJobData(jobData,true);
-					let loggedInUserDetails = JSON.parse(response.data)[0];
-					console.log("UserDetails:", loggedInUserDetails);
-                    console.log("message:", response.data.message);
-                    alert("User Logged in successfully");
+					console.log("Message", response.data.message);
+					console.log("Data:", response.data.token);
+					localStorage.setItem("userToken", response.data.token);
                 }else{
                     this.setState({
                         ...this.state,
@@ -180,7 +178,7 @@ class Signup extends Component{
 									</div>
 									<br />
 									<center>
-										<button class="btn waves-effect waves-light light-blue" type="submit" name="action">Connect</button>
+										<button class="btn waves-effect waves-light light-blue" type="submit" name="action" onClick={this.doLogin.bind(this)}>Connect</button>
 										<br />
 										<br />
 										<a href="">Forgotten password?</a>
@@ -219,7 +217,7 @@ class Signup extends Component{
 										</div>
 									</div>
 									<center>
-										<button class="btn waves-effect waves-light light-blue" type="submit" name="action">Submit</button>
+										<button class="btn waves-effect waves-light light-blue" type="submit" name="action" onClick={this.doSignUp.bind(this)}>Submit</button>
 									</center>
 								</div>
 							</form>

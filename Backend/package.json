@@ -13,6 +13,7 @@
     "aws-sdk": "^2.421.0",
     "axios": "^0.18.0",
     "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",
@@ -27,6 +28,7 @@
     "jsonwebtoken": "^8.3.0",
     "mongodb": "^3.1.9",
     "mongoose": "^5.4.19",
+    "morgan": "^1.9.1",
     "multiparty": "^4.2.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0"
