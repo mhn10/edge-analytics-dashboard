@@ -1,5 +1,6 @@
 import React, { Component }from 'react';
 import axios from "axios";
+import { Redirect } from "react-router";
 import LoginNavbar from "./Navbar/loginnavbar";
 import validate from '../validate';
 import {CONSTANTS} from '../Constants';
@@ -10,8 +11,10 @@ class Signup extends Component{
         this.state = {
             firstName: "",
             lastName: "",
-            email: "",
-            password: "",
+			loginEmail: "",
+			signUpEmail: "",
+			loginPassword: "",
+			signUpPassword: "",
 			isRegistered: false,
 			isLogged: false,
             messagediv: ''
@@ -100,8 +103,10 @@ class Signup extends Component{
                     this.setState({
                         ...this.state,
                         isLogged : true
-                    })
-                    // this.props.postJobData(jobData,true);
+					})
+					// this.props.postJobData(jobData,true);
+					let loggedInUserDetails = JSON.parse(response.data)[0];
+					console.log("UserDetails:", loggedInUserDetails);
                     console.log("message:", response.data.message);
                     alert("User Logged in successfully");
                 }else{
@@ -126,9 +131,29 @@ class Signup extends Component{
     }
 
 	render() {
+		let redirectVar = null;
+		if(localStorage.getItem("userToken")){
+			return redirectVar = <Redirect to="/"/>;
+		}
+		let message = null;
+		if (this.state.messageDiv !== '') {
+            message = (
+                <div className="clearfix">
+                    <div className="alert alert-info text-center" role="alert">{this.state.messageDiv}</div>
+                </div>
+            );
+        } else {
+            message = (
+                <div></div>
+            );
+        }
 		return (
 			<React.Fragment>
 				<LoginNavbar />
+				<div className="text-center">
+                    {message}
+                </div>
+				{redirectVar}
 				<body>
 					<div class="container container-signup white z-depth-2">
 						<ul class="tabs light-blue">
@@ -141,13 +166,15 @@ class Signup extends Component{
 									<h3 class="light-blue-text">Hello</h3>
 									<div class="row">
 										<div class="input-field col s12">
-											<input id="email" type="email" class="validate" />
+											<input id="email" type="email" name="loginEmail" class="validate" autocapitalize="off" 
+													onChange={(e) => {this.setState({[e.target.name]: e.target.value})}}/>
 											<label for="email">Email</label>
 										</div>
 									</div>
 									<div class="row">
 										<div class="input-field col s12">
-											<input id="password" type="password" class="validate" />
+											<input id="password" type="password" class="validate" name ="loginPassword"
+													onChange={(e) => {this.setState({[e.target.name]: e.target.value})}}/>
 											<label for="password">Password</label>
 										</div>
 									</div>
@@ -167,23 +194,27 @@ class Signup extends Component{
 									<h3 class="light-blue-text">Welcome</h3>
 									<div class="row">
 										<div class="input-field col s6">
-											<input id="last_name" type="text" class="validate" />
+											<input id="last_name" name="firstName" type="text" class="validate" 
+													onChange={(e) => {this.setState({[e.target.name]: e.target.value})}}/>
 											<label for="last_name">First Name</label>
 										</div>
 										<div class="input-field col s6">
-											<input id="last_name" type="text" class="validate" />
+											<input id="last_name" name = "lastName" type="text" class="validate"
+													onChange={(e) => {this.setState({[e.target.name]: e.target.value})}}/>
 											<label for="last_name">Last Name</label>
 										</div>
 									</div>
 									<div class="row">
 										<div class="input-field col s12">
-											<input id="email" type="email" class="validate" />
+											<input id="email" type="email" name="signUpEmail" class="validate" autocapitalize="off" 
+													onChange={(e) => {this.setState({[e.target.name]: e.target.value})}}/>
 											<label for="email">Email</label>
 										</div>
 									</div>
 									<div class="row">
 										<div class="input-field col s12">
-											<input id="password" type="password" class="validate" />
+											<input id="password" name = "signUpPassword" type="password" class="validate"
+													onChange={(e) => {this.setState({[e.target.name]: e.target.value})}}/>
 											<label for="password">Password</label>
 										</div>
 									</div>

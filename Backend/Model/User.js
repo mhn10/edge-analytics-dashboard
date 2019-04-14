@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 var utility = require("../utility");
 
 var userSchema = new mongoose.Schema({
+	_id: mongoose.Schema.Types.ObjectId,	
   firstName: {
     type: String,
     required: true,
@@ -50,18 +51,6 @@ var userSchema = new mongoose.Schema({
 
     }
   ],
-  profileImage: {
-    type: String,
-    required: false,
-    default: ""
-  },
-  
-  gender: {
-    type: String,
-    required: false,
-    set: utility.capitalizeFirstLetter,
-    default: ""
-  },
   memberSince: {
     type: Date,
     default: Date.now
