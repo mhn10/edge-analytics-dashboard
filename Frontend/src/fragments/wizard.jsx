@@ -70,6 +70,7 @@ const ProgressBarList = styled.li`
 		box-shadow: 0px 0px 0px 7px #efefef;
 		position: relative;
 		z-index: 2;
+		transition: 0.5s ease-in;
 	}
 
 	&::after {

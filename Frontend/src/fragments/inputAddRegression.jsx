@@ -64,7 +64,7 @@ const InputAddRegression = props => {
 
       <Form onSubmit={e => submitHandler(e)}>
         <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
-          <Row>
+          <Row className="justify-content-md-center">
             <Col>
               <Form.Label> Model File </Form.Label>
             </Col>
@@ -81,7 +81,7 @@ const InputAddRegression = props => {
         </Form.Group>
 
         <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
-          <Row>
+          <Row className="justify-content-md-center">
             <Col>
               <Form.Label> Requirement File </Form.Label>
             </Col>
@@ -117,7 +117,7 @@ const InputAddRegression = props => {
         </Form.Group> */}
 
         <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
-          <Row>
+          <Row className="justify-content-md-center">
             <Col>
               <Form.Label> Data File </Form.Label>
             </Col>
@@ -135,7 +135,7 @@ const InputAddRegression = props => {
         </Form.Group>
 
         <Form.Group controlId="formBasicFile">
-          <Row>
+          <Row className="justify-content-md-center">
             <Col>
               <Form.Label> Input File </Form.Label>
             </Col>
