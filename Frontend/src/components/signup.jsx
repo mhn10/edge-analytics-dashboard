@@ -31,7 +31,7 @@ class Signup extends Component{
 	//SignUp Handler
     doSignUp = (event) => {
         //prevent page from refresh
-        // event.preventDefault();
+        event.preventDefault();
         let valid = '';
         // let valid = validate(this.state);
         if(valid === '') {
