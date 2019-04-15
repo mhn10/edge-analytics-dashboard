@@ -41,13 +41,13 @@ const HeaderTittleWrapper = styled.h1`
 	color: #444444;
 	font-weight: 300;
 	font-size: 3rem;
-	margin-top: 3rem;
+	margin-top: 1rem;
 	padding-top: 1rem;
 
 `;
 
 const PageContainer = styled.div`
 	color: #444444;
-	margin : 4rem;
+	margin : 2.5rem;
 
 `;

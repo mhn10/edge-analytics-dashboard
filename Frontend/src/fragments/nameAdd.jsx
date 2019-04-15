@@ -3,6 +3,7 @@ import { PageHeader, PageWrapper } from "../components/Page";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import AddContext from "../context/addContext";
+import styled from "styled-components";
 
 const NamesAdd = props => {
  
@@ -18,8 +19,8 @@ const NamesAdd = props => {
     context.dispatch({ type: "changeState", value: 2 });
   };
   return (
-    <PageWrapper>
-      <section className="page-content">
+    <NameWrapper>
+
         <Form onSubmit={e => submitHandler(e)}>
           <Form.Group className="row">
             <Form.Label>Name of Task</Form.Label>
@@ -31,12 +32,34 @@ const NamesAdd = props => {
 
           
           <Button variant="primary" type="submit">
-            Submit
+            Next
           </Button>
         </Form>
-      </section>
-    </PageWrapper>
+
+    </ NameWrapper>
   );
 };
 
 export default NamesAdd;
+
+
+
+const NameWrapper = styled.div`
+  background: white;
+  border: 2px solid #f8f8f8;
+  margin-top: 2rem;
+  padding: 2rem;
+  box-sizing: border-box;
+  border-radius: 10px;
+  color: #606060;
+  /* font-size: 1.2rem; */
+  text-align: center;
+
+  .item-name {
+    font-size: 1rem;
+    /* text-transform: uppercase; */
+    color: #008fda;
+    font-weight: lighter;
+    text-align: center;
+  }
+`;

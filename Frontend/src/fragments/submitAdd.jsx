@@ -1,13 +1,16 @@
 import * as React from "react";
-import { PageHeader, PageWrapper } from "../components/Page";
 import AddContext from "../context/addContext";
 import styled from "styled-components";
+// import Button from "react-bootstrap/Button";
 
 const SubmitAdd = props => {
   const context = React.useContext(AddContext);
   // const {} = context
   console.log("All context is ", context, "ADDState is: ", context.addState);
 
+  const clickHandler = () => {
+    console.log("Button Clicked");
+  };
   return (
     <SubmitWrapper>
       {/* <section className="page-content"> */}
@@ -48,6 +51,15 @@ const SubmitAdd = props => {
         <span className="item-name" style={{ margin: "1rem 0" }}>
           {context.addState.requirement.name}
         </span>
+		<div />
+        <Button
+		
+          as="input"
+          type="submit"
+          value="Submit"
+		  onClick={clickHandler}
+		//   style={{position:'inherit', right : '0'}}
+        />
       </div>
       {/* <div classname="item-name">Under Construction...</div> */}
       {/* </section> */}
@@ -82,4 +94,21 @@ const SubmitWrapper = styled.div`
     font-weight: lighter;
     text-align: center;
   }
+`;
+
+
+
+const Button = styled.button`
+  background-color: transparent;
+  background-repeat: no-repeat;
+  padding: 2rem;
+  margin: 1rem;
+  border: 1px;
+  overflow: hidden;
+  outline: none ;
+  color: #2196f3;
+  font-size: 1.5rem;
+  cursor: pointer;
+  float: right;
+
 `;

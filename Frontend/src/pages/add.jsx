@@ -10,7 +10,7 @@ import NamesAdd from "../fragments/nameAdd";
 import InputAdd from "../fragments/inputAdd";
 import TypeAdd from "../fragments/typeAdd";
 import SubmitAdd from "../fragments/submitAdd";
-
+import Wizard from "../fragments/wizard";
 const reducer = (state, action) => {
   const { type } = action;
 
@@ -105,7 +105,7 @@ const AddPage = ({ props }) => {
                       Next Step
                     </Button>
                   )}
-
+                  <Wizard />
                   {addState.step === 1 && <NamesAdd />}
                   {addState.step === 2 && <TypeAdd />}
                   {addState.step === 3 && <InputAdd />}
