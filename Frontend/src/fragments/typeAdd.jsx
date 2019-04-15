@@ -34,3 +34,5 @@ const TypeAdd = (props) => {
 };
 
 export default TypeAdd;
+
+

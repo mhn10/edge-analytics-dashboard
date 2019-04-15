@@ -6,22 +6,62 @@ import Button from "react-bootstrap/Button";
 
 const InputAdd = props => {
   // const [type, setType] = React.useState("");
-  const [model, setModel] = React.useState(null);
+//   const [model, setModel] = React.useState(undefined);
+//   const [requirement, setRequirement] = React.useState('');
+//   const [code, setCode] = React.useState('');
+//   const [data, setData] = React.useState('');
+//   const [input, setInput] = React.useState('');
   const context = React.useContext(AddContext);
 
-  const changeHandler = files => {
+  const modelHandler = files => {
 	  console.log("Types in changehandle", files[0])
-	  setModel(files[0]);
-	  console.log("Model is ", model)
+	  const modelfile = files[0]
+	//   setModel(files[0]);
+	  console.log("Model is ", modelfile);
+	  context.dispatch({ type: "setModel", modelfile});
 
-    // context.dispatch({ type: "setInput", value });
-    //context.dispatch({ type: "changeState", value: 3 });
   };
-  const submitHandler = values => {
-   console.log("Submit Handler for model");
+  const requirementHandler = files => {
+	console.log("Types in changehandle", files[0])
+	const reqfile = files[0]
+	// setRequirement(files[0]);
+	console.log("requirement is ", reqfile)
+	context.dispatch({ type: "setRequirement", reqfile});
 
-    context.dispatch({ type: "setModel", model });
-    //   context.dispatch({ type: "changeState", value: 2 });
+};
+const codeHandler = files => {
+	console.log("Types in changehandle", files[0])
+	const codefile = files[0]
+	// setCode(files[0]);
+	console.log("Model is ", codefile)
+	context.dispatch({ type: "setCode", codefile });
+
+
+};
+const dataHandler = files => {
+	console.log("Types in changehandle", files[0])
+	const datafile = files[0]
+	// setData(files[0]);
+	console.log("Model is ", datafile)
+	context.dispatch({ type: "setData", datafile });
+
+
+};
+const inputHandler = files => {
+	console.log("Types in changehandle", files[0])
+	const inputfile = files[0]
+	// setInput(files[0]);
+	console.log("Model is ", inputfile)
+	context.dispatch({ type: "setInput", inputfile });
+
+
+};
+
+  const submitHandler = values => {
+   console.log("Submit Handler for model" );
+
+    
+      context.dispatch({ type: "changeState", value: 4 });
   };
   return (
     <PageWrapper>
@@ -34,7 +74,31 @@ const InputAdd = props => {
             name="model"
             label="upload model"
             type="file"
-            onChange={e => changeHandler(e.target.files)}
+            onChange={e => modelHandler(e.target.files)}
+          />
+		   <input
+            name="requirement"
+            label="upload requirement"
+            type="file"
+            onChange={e => requirementHandler(e.target.files)}
+          />
+		   <input
+            name="code"
+            label="upload code"
+            type="file"
+            onChange={e => codeHandler(e.target.files)}
+          />
+		   <input
+            name="data"
+            label="upload data"
+            type="file"
+            onChange={e => dataHandler(e.target.files)}
+          />
+		   <input
+            name="input"
+            label="upload input"
+            type="file"
+            onChange={e => inputHandler(e.target.files)}
           />
           <Button variant="primary" type="submit">
             Submit

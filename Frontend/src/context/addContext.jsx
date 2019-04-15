@@ -7,11 +7,11 @@ const addContext = {
         type: '',
         username: '',
 
-        requirement : null,
-        data : null,
-        input : null,
-        result : null,
-        code: null,
+        requirement : '',
+        data : '',
+        input : '',
+        result : '',
+        code: '',
         model: '',
 
         step  : 1
