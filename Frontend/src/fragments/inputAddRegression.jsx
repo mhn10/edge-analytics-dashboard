@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-const InputAdd = props => {
+const InputAddRegression = props => {
   // const [type, setType] = React.useState("");
   //   const [model, setModel] = React.useState(undefined);
   //   const [requirement, setRequirement] = React.useState('');
@@ -99,7 +99,7 @@ const InputAdd = props => {
           </Row>
         </Form.Group>
 
-        <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
+        {/* <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
           <Row>
             <Col>
               <Form.Label> Code File </Form.Label>
@@ -114,7 +114,7 @@ const InputAdd = props => {
               <Form.Text className="text-muted">Upload a Code file</Form.Text>
             </Col>
           </Row>
-        </Form.Group>
+        </Form.Group> */}
 
         <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
           <Row>
@@ -160,7 +160,7 @@ const InputAdd = props => {
   );
 };
 
-export default InputAdd;
+export default InputAddRegression;
 
 const FileWrapper = styled.div`
   background: white;

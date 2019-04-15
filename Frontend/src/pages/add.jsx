@@ -3,11 +3,12 @@ import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 
 import AddContext from "../context/addContext";
-import { PageHeader } from "../components/Page";
 import { PageWrapper } from "../components/Page";
 import Navbar from "../components/Navbar/navbar";
 import NamesAdd from "../fragments/nameAdd";
-import InputAdd from "../fragments/inputAdd";
+import InputAddRegression from "../fragments/inputAddRegression";
+import InputAddClassification from "../fragments/inputAddClassification";
+
 import TypeAdd from "../fragments/typeAdd";
 import SubmitAdd from "../fragments/submitAdd";
 import Wizard from "../fragments/wizard";
@@ -108,7 +109,8 @@ const AddPage = ({ props }) => {
                   <Wizard />
                   {addState.step === 1 && <NamesAdd />}
                   {addState.step === 2 && <TypeAdd />}
-                  {addState.step === 3 && <InputAdd />}
+				  {(addState.step === 3 && addState.type === "classification") && <InputAddClassification />}
+				  {(addState.step === 3 && addState.type === "regression") && <InputAddRegression />}
                   {addState.step === 4 && <SubmitAdd />}
                 </AddDetailsWrapper>
               }
