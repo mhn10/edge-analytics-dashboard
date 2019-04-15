@@ -12,6 +12,7 @@ import InputAddClassification from "../fragments/inputAddClassification";
 import TypeAdd from "../fragments/typeAdd";
 import SubmitAdd from "../fragments/submitAdd";
 import Wizard from "../fragments/wizard";
+
 const reducer = (state, action) => {
   const { type } = action;
 
@@ -25,8 +26,8 @@ const reducer = (state, action) => {
       return { ...state, step: state.step > 1 ? state.step - 1 : state.step };
 
     case "setName":
-      console.log("name: ", action.taskName);
-      return { ...state, name: action.taskName };
+      console.log("name: ", action.values);
+      return { ...state, name: action.values };
 
     // case "getName":
     // 	return  {name: state.name} ;
@@ -97,7 +98,7 @@ const AddPage = ({ props }) => {
                       Previous Step
                     </Button>
                   )}
-                  {addState.step < 4 && (
+                  {addState.step < 4 && addState.step > 1 && (
                     <Button
                       className="next-step"
                       label={"Next Step"}
@@ -112,6 +113,7 @@ const AddPage = ({ props }) => {
 				  {(addState.step === 3 && addState.type === "classification") && <InputAddClassification />}
 				  {(addState.step === 3 && addState.type === "regression") && <InputAddRegression />}
                   {addState.step === 4 && <SubmitAdd />}
+
                 </AddDetailsWrapper>
               }
             </AddContext.Provider>

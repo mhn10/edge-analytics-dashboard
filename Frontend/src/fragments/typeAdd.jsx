@@ -27,7 +27,7 @@ const TypeAdd = (props) => {
 			<section className="page-content">
 				<PageHeader title={'Add Type'} />
 				<div>Type of computation to perform</div>
-				<Select onChange={changeHandler}  options={options} />
+			<Select onChange={changeHandler}  options={options} defaultValue={{value: context.addState.type, label: context.addState.type}}/>
 			</section>
 		</PageWrapper>
 	);

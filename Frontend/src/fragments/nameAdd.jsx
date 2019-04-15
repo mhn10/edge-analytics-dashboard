@@ -8,13 +8,14 @@ const NamesAdd = props => {
  
   const context = React.useContext(AddContext);
 
-  const [taskName, setName] = React.useState("");
-//   console.log("present state", context.dispatch({type: "getName"}));
-
+  
+const changeHandler = values => {
+  console.log("Values, ", values );
+  
+  context.dispatch({ type: "setName", values });
+  
+};
   const submitHandler = values => {
-	  console.log("Values, ", taskName );
-	  setName(taskName);
-    context.dispatch({ type: "setName", taskName });
     context.dispatch({ type: "changeState", value: 2 });
   };
   return (
@@ -23,14 +24,14 @@ const NamesAdd = props => {
         <Form onSubmit={e => submitHandler(e)}>
           <Form.Group className="row">
             <Form.Label>Name of Task</Form.Label>
-            <Form.Control    type="text" placeholder={taskName}   onChange={e => setName(e.target.value)} required="true" />
+            <Form.Control    type="text" placeholder={context.addState.name}   onChange={e => changeHandler(e.target.value)} />
             <Form.Text className="text-muted">
               Must be unique identifier
             </Form.Text>
           </Form.Group>
 
           
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" disabled={context.addState.name=== ''? true : false}>
             Next
           </Button>
         </Form>
