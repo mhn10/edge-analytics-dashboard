@@ -78,7 +78,7 @@ class Signup extends Component{
 	//Login Handler
     doLogin = (event) => {
         //prevent page from refresh
-        event.preventDefault();
+        // event.preventDefault();
         let valid = '';
         // let valid = validate(this.state);
         if(valid === '') {
@@ -107,6 +107,7 @@ class Signup extends Component{
 					console.log("Message", response.data.message);
 					console.log("Data:", response.data.token);
 					localStorage.setItem("userToken", response.data.token);
+					alert("User logged in");
                 }else{
                     this.setState({
                         ...this.state,
