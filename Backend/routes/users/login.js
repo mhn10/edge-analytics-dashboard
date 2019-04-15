@@ -39,13 +39,18 @@ router.post('/', (req,res, next) => {
                         {
                             expiresIn : "1h"
                         }
-                    );
-                    return res.status(200).json( {
+					);
+					console.log("token", token);
+					// res.status = 200;
+					// res.token = token;
+					// res.message = "Success";
+					// return res;
+                   return  res.status(200).json( {
                         message: "Auth Successful",
                         token : token
                         });
                 }
-                res.status(401).json({
+                return res.status(401).json({
                     message: 'Auth failed' 
                 });
         })
@@ -55,7 +60,7 @@ router.post('/', (req,res, next) => {
                 error:err
             });
         });
-    })
+	})
 });
 
 module.exports = router;

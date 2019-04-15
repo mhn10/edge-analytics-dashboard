@@ -1,9 +1,13 @@
 import React, { Component }from 'react';
 import axios from "axios";
 import { Redirect } from "react-router";
-import LoginNavbar from "./Navbar/loginnavbar";
-import validate from '../validate';
 import {CONSTANTS} from '../Constants';
+//Navbar Imports
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 
 class Signup extends Component{
 	constructor(props) {
@@ -27,7 +31,7 @@ class Signup extends Component{
 	//SignUp Handler
     doSignUp = (event) => {
         //prevent page from refresh
-        event.preventDefault();
+        // event.preventDefault();
         let valid = '';
         // let valid = validate(this.state);
         if(valid === '') {
@@ -78,7 +82,7 @@ class Signup extends Component{
 	//Login Handler
     doLogin = (event) => {
         //prevent page from refresh
-        // event.preventDefault();
+         event.preventDefault();
         let valid = '';
         // let valid = validate(this.state);
         if(valid === '') {
@@ -99,6 +103,7 @@ class Signup extends Component{
             .then(response => {
                 console.log("Status Code : ",response.status);
                 if(response.status === 200){
+					localStorage.setItem("userToken", response.data.token);
                     this.setState({
                         ...this.state,
                         isLogged : true
@@ -106,8 +111,7 @@ class Signup extends Component{
 					// this.props.postJobData(jobData,true);
 					console.log("Message", response.data.message);
 					console.log("Data:", response.data.token);
-					localStorage.setItem("userToken", response.data.token);
-					alert("User logged in");
+					// alert("User logged in");
                 }else{
                     this.setState({
                         ...this.state,
@@ -130,8 +134,9 @@ class Signup extends Component{
     }
 
 	render() {
+		const { classes } = this.props;
 		let redirectVar = null;
-		if(localStorage.getItem("userToken")){
+		if(localStorage.getItem("userToken") !== null){
 			return redirectVar = <Redirect to="/"/>;
 		}
 		let message = null;
@@ -145,10 +150,20 @@ class Signup extends Component{
             message = (
                 <div></div>
             );
-        }
+		}
+
 		return (
 			<React.Fragment>
-				<LoginNavbar />
+			  <AppBar style={{ background: '#03a9f4' }} position="static">
+				<Toolbar>
+				  <IconButton  color="inherit" aria-label="Menu">
+					<MenuIcon />
+				  </IconButton>
+				  <Typography variant="h6" color="inherit" >
+				  Vision Analytics on the Edge
+				  </Typography>
+				</Toolbar>
+			  </AppBar>
 				<div className="text-center">
                     {message}
                 </div>

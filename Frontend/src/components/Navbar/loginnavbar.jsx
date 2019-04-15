@@ -55,6 +55,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { Redirect } from "react-router";
+import {extractNameFromEmail,capitalizeFirstLetter} from '../../utility';
+import jwtDecode from "jwt-decode";
 
 const styles = {
   root: {
@@ -70,23 +73,21 @@ const styles = {
 };
 
 class MenuAppBar extends React.Component {
+	// authh = false;
   state = {
-    auth: true,
+    auth: false,
     anchorEl: null,
   };
 
     //handle logout to destroy the cookie
     handleLogout = event => {
         let loggedInUser = localStorage.getItem('userToken');
-		localStorage.clear();
-		this.setState({auth: false});
+		localStorage.removeItem('userToken');
+		window.location.reload();
+		// this.setState({auth: false});
         // alert(`${loggedInUser} logged out successfully.`);
-        console.log("User logged out Successfully.");
+        console.log(`User ${loggedInUser} logged out Successfully.`);
     }
-
-//   handleChange = event => {
-//     this.setState({ auth: event.target.checked });
-//   };
 
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -96,55 +97,67 @@ class MenuAppBar extends React.Component {
     this.setState({ anchorEl: null });
   };
 
-  render() {
-    const { classes } = this.props;
-    const { auth, anchorEl } = this.state;
-    const open = Boolean(anchorEl);
 
-    return (
-      <div className={classes.root}>
-        <AppBar style={{ background: '#03a9f4' }} position="static">
-          <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-			Vision Analytics on the Edge
-            </Typography>
-            {auth && (
-              <div>
-                <IconButton
-                  aria-owns={open ? 'menu-appbar' : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleMenu}
-                  color="inherit"
-                >
-                <AccountCircle /> &nbsp;
-				<Typography variant = "h6" color="inherit" className={classes.grow}>Howdy! Raghav</Typography>
-                </IconButton>
-                <Menu	
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={open}
-                  onClose={this.handleClose}
-                >
-                  <MenuItem onClick={this.handleClose}>Dashboard</MenuItem>
-				  <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-                </Menu>
-              </div>
-            )}
-          </Toolbar>
-        </AppBar>
-      </div>
-    );
+  render() {
+	const { classes } = this.props;
+    const { auth, anchorEl } = this.state;
+	const open = Boolean(anchorEl);  
+	let userLogin = null;
+	if(localStorage.getItem('userToken') !== null){
+		console.log('Able to read session.');
+		userLogin =(
+			<div>
+			<IconButton
+			  aria-owns={open ? 'menu-appbar' : undefined}
+			  aria-haspopup="true"
+			  onClick={this.handleMenu}
+			  color="inherit"
+			>
+			<AccountCircle /> &nbsp;
+			<Typography variant = "h6" color="inherit" className={classes.grow}>Howdy! {capitalizeFirstLetter(extractNameFromEmail(jwtDecode(localStorage.getItem('userToken')).email))}</Typography>
+			</IconButton>
+			<Menu	
+			  id="menu-appbar"
+			  anchorEl={anchorEl}
+			  anchorOrigin={{
+				vertical: 'top',
+				horizontal: 'right',
+			  }}
+			  transformOrigin={{
+				vertical: 'top',
+				horizontal: 'right',
+			  }}
+			  open={open}
+			  onClose={this.handleClose}
+			>
+			  <MenuItem onClick={this.handleClose}>Dashboard</MenuItem>
+			  <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+			</Menu>
+		  </div>
+		);
+	} else {
+		userLogin = (<div></div>);
+	}
+	let redirectVar = null;  
+	if(localStorage.getItem('userToken') === null){
+		return redirectVar = <Redirect to="/signup"/>;
+	} else {
+		return (
+			<div className={classes.root}>
+			  <AppBar style={{ background: '#03a9f4' }} position="static">
+				<Toolbar>
+				  <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+					<MenuIcon />
+				  </IconButton>
+				  <Typography variant="h6" color="inherit" className={classes.grow}>
+				  Vision Analytics on the Edge
+				  </Typography>
+				  {userLogin}
+				</Toolbar>
+			  </AppBar>
+			</div>
+		  );
+	}
   }
 }
 
