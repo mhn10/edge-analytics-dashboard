@@ -16,7 +16,7 @@ router.post('/', function (req, res) {
 		console.log("Checking if the email already exists");
 		if (user) {
 			console.log("user already exists");
-			res.send(400);
+			res.sendStatus(409);
 		} else {
 			console.log("email not found, creating new user");
 			bcrypt.hash(PASSWORD, 10, (err, hash) => {

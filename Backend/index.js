@@ -42,59 +42,6 @@
 //   return s3.upload(params).promise();
 // };
 
-// // Body parser middleware
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
-
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//     credentials: true
-//   })
-// );
-
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
-
-// //Allow Access Control
-// app.use(function(req, res, next) {
-//   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-//   res.setHeader("Access-Control-Allow-Credentials", "true");
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET,HEAD,OPTIONS,POST,PUT,DELETE"
-//   );
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
-//   );
-//   res.setHeader("Cache-Control", "no-cache");
-//   next();
-// });
-
-// //index.js stores the homepage
-// // var index = require("./routes/api/index");
-// var user = require("./routes/users/user.js");
-// app.use("/users", user);
-// // var jobs = require("./routes/api/jobs");
-// // var recruiter = require("./routes/api/recruiter");
-// // var graphs = require("./routes/api/graph");
-// // //app.use('/', index);
-// // app.use("/jobs", jobs);
-
-// // app.use("/recruiters", recruiter);
-// // app.use("/graphs", graphs);
-// // app.use("/api/photos", photos);
-// // app.use("/api/documentsUpload", doc);
-// app.use;
-
-// app.get("/healthcheck", (req, res) => {
-//   console.log("health check success");
-//   res.status(200);
-//   res.send();
-
-// });
-
 // // Define POST route
 // app.post("/uploaddata", (request, response) => {
 //   console.log("tEst upload data", request);
