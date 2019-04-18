@@ -10,6 +10,7 @@ const SubmitAdd = props => {
 
   const clickHandler = () => {
     console.log("Button Clicked");
+    
   };
   return (
     <SubmitWrapper>
