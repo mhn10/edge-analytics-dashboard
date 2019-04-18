@@ -35,3 +35,16 @@ More on Gossip protocol can be read from [ "SWIM: Scalable Weakly-consistent Inf
 1. Create cluster of nodes.  
 2. Store list of all active and dead nodes.  
 3. Create API to get list of all active and nodes.  
+
+### Running Tattle Node
+1. Clone [_tattle_](https://github.com/kippandrew/tattle) repo.  
+2. Create a file _node.py_ in the cloned repo folder and paste from from [node.py](https://github.com/mhn10/edge-analytics-dashboard/blob/NodesStatus/Jetson/cluster/Tattle/node.py).  
+3. Install dependencies from [requirements.txt](https://github.com/mhn10/edge-analytics-dashboard/blob/NodesStatus/Jetson/cluster/Tattle/requirements.txt).  
+4. Run script first node (let's say it's IP is 192.168.0.1) as follows:
+```console
+foo@bar:~$ python3 node.py -p3000
+```
+for second node (let's say it's IP is 192.168.0.5):
+```console
+bar@foo:~$ python3 node.py -p4000 -j192.168.0.1:3000
+```
