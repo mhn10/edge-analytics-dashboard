@@ -6,6 +6,7 @@ import Navbar from "./Navbar/navbar";
 import Home from "./home";
 import AddPage from "../pages/add";
 import Login from "./login";
+// import Login from "./login";
 import Signup from "./signup";
 // Create a Main Component
 

@@ -16,6 +16,7 @@
     "dotenv": "^7.0.0",
     "formik": "^1.5.1",
     "install": "^0.12.2",
+    "jwt-decode": "^2.2.0",
     "npm": "^6.5.0",
     "react": "^16.7.0",
     "react-bootstrap": "^1.0.0-beta.8",

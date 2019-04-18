@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Navbar from "./Navbar/navbar";
+// import Navbar from "./Navbar/navbar";
+import LoginNavbar from "./Navbar/loginnavbar";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -110,9 +111,10 @@ class FileUpload extends Component {
     var allImgs = Array.prototype.slice.call(this.state.output);
     return (
       <React.Fragment>
-
+		  <LoginNavbar/>
         <Container style={{ marginTop: "100px" }}>      
-        <Navbar />
+		{/* <Navbar /> */}
+		
           <Row>
             <DropdownButton id="dropdown-basic-button" title="Method">
               <Dropdown.Item href="#/action-1">Classification</Dropdown.Item>
