@@ -6,7 +6,7 @@ import AddContext from "../context/addContext";
 import bluecircle from '../assets/Blue_circle_logo.svg';
 import greycircle from '../assets/Grey_circle_logo.svg';
 
-const Wizard= ({ createState }) => {
+const Wizard= ({ addState }) => {
 	const context = React.useContext(AddContext);
 
 
@@ -14,7 +14,7 @@ const Wizard= ({ createState }) => {
 		<WizzardWrapper>
 
 			<ProgressBar>
-				<ProgressBarList completed={ context.addState.step > 1 ? true : false} present={context.addState.step === 1 ? true : false}>
+				<ProgressBarList completed={ addState.step > 1 ? true : false} present={addState.step === 1 ? true : false}>
 					Task Name
 				</ProgressBarList>
 				<ProgressBarList completed={context.addState.step > 2 ? true : false} present={context.addState.step === 2 ? true : false}>
