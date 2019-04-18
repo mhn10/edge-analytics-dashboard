@@ -1,4 +1,3 @@
-
 CONSTANTS = {
 	FRONT_END_URL: "http://localhost:3000",
 	BACKEND_URL: "http://localhost:3001",
