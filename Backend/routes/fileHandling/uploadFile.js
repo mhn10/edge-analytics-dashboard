@@ -6,42 +6,45 @@ const multiparty = require("multiparty");
 
 
 router.post('/', (req, res) => {
-	console.log("test upload data", req);
+	console.log("Formidabel req ",req.fields);
+	console.log(req.files);
+	// console.log("test upload data", req);
 	//Parse the username
 	// const username = req.body.addState.username;
-	const field = req.files.requirement;
+	// const field = req.files.requirement;
 
-	//parse the type of action and taskname to be performed
-	const type = req.body.addState.type;
-	const taskName = req.body.addState.name;
+	// //parse the type of action and taskname to be performed
+	// const type = req.body.addState.type;
+	// const taskName = req.body.addState.name;
 
-	//parse the files from the request
-	const codeFile = req.body.addState.code;
-	const dataFile = req.body.addState.data;
-	const inputFile = req.body.addState.input;
-	const modelFile = req.body.addState.model;
-	const requirementFile = req.body.addState.requirement;
+	// //parse the files from the request
+	// const codeFile = req.body.addState.code;
+	// const dataFile = req.body.addState.data;
+	// const inputFile = req.body.addState.input;
+	// const modelFile = req.body.addState.model;
+	// const requirementFile = req.body.addState.requirement;
 
-	//Add the files in the array
-	var fileArray = [requirementFile,inputFile,dataFile, modelFile];
+	// //Add the files in the array
+	// var fileArray = [requirementFile,inputFile,dataFile, modelFile];
 
-	var filesMap = {};
-	filesMap["Code"].push(codeFile);
-	filesMap["Data"].push(dataFile);
-	filesMap["Input"].push(inputFile);
-	filesMap["Requirement"].push(requirementFile);
+	// var filesMap = {};
+	// filesMap["Code"].push(codeFile);
+	// filesMap["Data"].push(dataFile);
+	// filesMap["Input"].push(inputFile);
+	// filesMap["Requirement"].push(requirementFile);
 
-	var keyNames = ["Code", "Data", "Input", "Requirement", "Model"];
+	// var keyNames = ["Code", "Data", "Input", "Requirement", "Model"];
 
-	if(type === 'classification'){
-		filesMap["Model"].push(modelFile);
-	}
+	// if(type === 'classification'){
+	// 	filesMap["Model"].push(modelFile);
+	// }
 	const form = new multiparty.Form();
 	form.parse(req, async (error, fields, files) => {
 		if (error) throw new Error(error);
 		try {
-			console.log( "fields: ", fields );
+			console.log( "    fields: ", fields );
 			console.log( "files: ", files );
+
 			const path = files.file[0].path;
 			const buffer = fs.readFileSync(path);
 			const type = fileType(buffer);
