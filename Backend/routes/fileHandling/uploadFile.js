@@ -9,29 +9,6 @@ AWS.config.setPromisesDependency(bluebird);
 const s3 = new AWS.S3();
 
 router.post('/', (req, res) => {
-	// console.log("test upload data", req);
-
-	// //parse the files from the request
-	// const codeFile = req.body.addState.code;
-	// const dataFile = req.body.addState.data;
-	// const inputFile = req.body.addState.input;
-	// const modelFile = req.body.addState.model;
-	// const requirementFile = req.body.addState.requirement;
-
-	// //Add the files in the array
-	// var fileArray = [requirementFile,inputFile,dataFile, modelFile];
-
-	// var filesMap = {};
-	// filesMap["Code"].push(codeFile);
-	// filesMap["Data"].push(dataFile);
-	// filesMap["Input"].push(inputFile);
-	// filesMap["Requirement"].push(requirementFile);
-
-	// var keyNames = ["Code", "Data", "Input", "Requirement", "Model"];
-
-	// if(type === 'classification'){
-	// 	filesMap["Model"].push(modelFile);
-	// }
 	const form = new multiparty.Form();
 	form.parse(req, async(error, fields, files) => {
 		if (error) throw new Error(error);
@@ -44,23 +21,42 @@ router.post('/', (req, res) => {
 			const username = "raghav";
 			console.log("username", username);
 
-			//parse the type of action and taskname to be performed
+			//parse the type of action and taskname 
 			const actionType = fields.type[0];
 			const taskName = fields.taskname[0];
-			const fileName = files.requirement[0].originalFilename;
 
-			const path = files.requirement[0].path;
-			const buffer = fs.readFileSync(path);
-			console.log("Buffer: ", buffer);
-			const type = fileType(buffer);
-			console.log("type: ", type);
-			const filePath = `${username}/${actionType}/${taskName}/${fileName}`;
-			console.log("fileName", filePath);
-			// const fileName = `Data/001/${timestamp}-lg`;
-			// for(let [key, value] of filesMap){
-			// 	var temp = fileName + `${key}/${value[0]}`;
-			const data = await uploadFile(buffer, filePath);
-			// }
+			// //parse the files from the request
+			const codeFilePath = files.code[0];
+			const dataFilePath = files.data[0];
+			const inputFilePath = files.input[0];
+			const modelFilePath= files.model[0];
+			const requirementFilePath = files.requirement[0];
+
+			//Create a Map and store the values
+			var filesArrPath = [];
+			filesArrPath.push(codeFilePath);
+			filesArrPath.push(dataFilePath);
+			filesArrPath.push(inputFilePath);
+			filesArrPath.push(requirementFilePath);
+
+			//Push the extra model file if the actionType is classification
+			if(actionType === 'classification'){
+				filesArrPath.push(modelFilePath);
+			}
+			
+			for (let value of filesArrPath) {
+				// const path = files.requirement[0].path;
+				var path = value.path;
+				var buffer = await fs.readFileSync(path);
+				console.log("Buffer: ", buffer);
+				var type = fileType(buffer);
+				console.log("type: ", type);
+				var fileName = value.originalFilename;
+				console.log("FileName: ", fileName);
+				var filePath = `${username}/${actionType}/${taskName}/${fileName}`;
+				console.log("fileName", filePath);
+				var data = await uploadFile(buffer, filePath);
+			};
 			return res.status(200).send(data);
 		} catch (error) {
 			console.log(error);
@@ -73,9 +69,9 @@ router.post('/', (req, res) => {
 const uploadFile = (buffer, name) => {
 	console.log("Uploading file to s3");
 	const params = {
-		// ACL: "public-read",
+		ACL: "public-read",
 		Body: buffer,
-		Bucket: process.env.S3_BUCKET,
+		Bucket: process.env.S3_BUCKET_BAK,
 		Key: `${name}`
 	};
 	console.log("params: ", params);
