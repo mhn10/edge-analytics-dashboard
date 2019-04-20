@@ -8,7 +8,6 @@ import { PageWrapper } from "../components/Page";
 import NamesAdd from "../fragments/nameAdd";
 import InputAddRegression from "../fragments/inputAddRegression";
 import InputAddClassification from "../fragments/inputAddClassification";
-import jwtDecode from "jwt-decode";
 import TypeAdd from "../fragments/typeAdd";
 import SubmitAdd from "../fragments/submitAdd";
 import Wizard from "../fragments/wizard";
@@ -40,7 +39,7 @@ const reducer = (state, action) => {
         // 	return  {name: state.name} ;
 
         case "setUsername":
-            return { ...state, username: jwtDecode(localStorage.getItem('userToken').firstName)};
+            return { ...state, username: action.email};
 
         case "setRequirement":
             return { ...state, requirement: action.reqfile };

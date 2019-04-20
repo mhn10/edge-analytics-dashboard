@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import AddContext from "../context/addContext";
 import styled from "styled-components";
+import jwtDecode from "jwt-decode";
 
 const NamesAdd = props => {
  
@@ -13,9 +14,14 @@ const changeHandler = values => {
   console.log("Values, ", values );
   
   context.dispatch({ type: "setName", values });
+
+  
   
 };
   const submitHandler = values => {
+    const {email} = jwtDecode(localStorage.getItem('userToken'));
+    console.log("Username decoded",email)
+    context.dispatch({type: "setUsername", email})
     context.dispatch({ type: "changeState", value: 2 });
   };
   return (
