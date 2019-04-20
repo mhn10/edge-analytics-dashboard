@@ -1,10 +1,10 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
+import LoginNavbar from "../components/Navbar/loginnavbar";
 
 import AddContext from "../context/addContext";
 import { PageWrapper } from "../components/Page";
-import Navbar from "../components/Navbar/navbar";
 import NamesAdd from "../fragments/nameAdd";
 import InputAddRegression from "../fragments/inputAddRegression";
 import InputAddClassification from "../fragments/inputAddClassification";
@@ -93,7 +93,7 @@ const AddPage = ({ props }) => {
 
     return (
         <>
-            <Navbar />
+            <LoginNavbar />
             <BodyWrapper>
                 <PageWrapper>
                     <section className="page-content">

@@ -13,7 +13,7 @@ class Main extends Component {
     return (
       <div>
         {/*Render Different Component based on Route*/}
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" component={AddPage} />
         <Route exact path="/test" component={AddPage} />
         <Route exact path="/signup" component={Signup} />
       </div>
