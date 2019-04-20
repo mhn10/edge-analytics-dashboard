@@ -65,7 +65,7 @@ router.post('/', (req, res) => {
 const uploadFile = (buffer, name) => {
 	console.log("Uploading file to s3");
 	const params = {
-		ACL: "public-read",
+		// ACL: "public-read",
 		Body: buffer,
 		Bucket: process.env.S3_BUCKET,
 		Key: `${name}`
