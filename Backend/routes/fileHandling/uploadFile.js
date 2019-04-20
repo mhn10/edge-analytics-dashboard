@@ -67,7 +67,7 @@ const uploadFile = (buffer, name) => {
 	const params = {
 		ACL: "public-read",
 		Body: buffer,
-		Bucket: process.env.S3_BUCKET_BAK,
+		Bucket: process.env.S3_BUCKET,
 		Key: `${name}`
 	};
 	console.log("params: ", params);
