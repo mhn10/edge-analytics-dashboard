@@ -1,6 +1,8 @@
 import * as React from "react";
 import AddContext from "../context/addContext";
 import styled from "styled-components";
+import axios from "axios";
+
 // import Button from "react-bootstrap/Button";
 
 const SubmitAdd = props => {
@@ -8,9 +10,37 @@ const SubmitAdd = props => {
   // const {} = context
   console.log("All context is ", context, "ADDState is: ", context.addState);
 
-  const clickHandler = () => {
+  const clickHandler = event => {
     console.log("Button Clicked");
-    
+    event.preventDefault();
+    const formData = new FormData();
+    const {name, type, username, requirement, data, input, code, model} = context.addState
+    formData.append("taskname", name);
+    formData.append("type", type);
+    formData.append("username", username);
+    formData.append("requirement", requirement);
+    formData.append("data", data);
+    formData.append("input", input);
+    formData.append("code", code);
+    formData.append("model", model);
+
+    console.log("FormData before upload ", formData);
+    axios.post(`http://localhost:3001/uploadfile`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    })
+    .then(response => {
+      console.log("data upload success", response);
+
+    })
+    .catch( error => {
+      console.log("error", error);
+    })
+
+
+
+
   };
   return (
     <SubmitWrapper>
