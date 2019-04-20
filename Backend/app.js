@@ -7,7 +7,6 @@ const { mongoose } = require('./Mongo/connect');
 const AWS = require("aws-sdk");
 const bluebird = require("bluebird");
 const { CONSTANTS } = require('./Constants');
-const formidable = require('express-formidable');
 require("dotenv").config();
 
 
@@ -35,7 +34,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(cors({ origin: `${CONSTANTS.FRONT_END_URL}`, credentials: true }));
-app.use(formidable());
+// app.use(formidable());
 //Allow Access Control
 app.use(function (req, res, next) {
 	res.setHeader("Access-Control-Allow-Origin", `${CONSTANTS.FRONT_END_URL}`);

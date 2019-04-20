@@ -21,12 +21,3 @@ const addContext = {
 };
 
 export default React.createContext(addContext);
-
-
-// Classification FileF
-// code
-// data
-// input (JSON)
-// model
-// req
-// result

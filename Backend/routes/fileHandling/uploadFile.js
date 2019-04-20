@@ -3,19 +3,13 @@ const router = express.Router();
 const fs = require('fs');
 const fileType = require("file-type");
 const multiparty = require("multiparty");
-
+const AWS = require("aws-sdk");
+const bluebird = require("bluebird");
+AWS.config.setPromisesDependency(bluebird);
+const s3 = new AWS.S3();
 
 router.post('/', (req, res) => {
-	console.log("Formidabel req ",req.fields);
-	console.log(req.files);
 	// console.log("test upload data", req);
-	//Parse the username
-	// const username = req.body.addState.username;
-	// const field = req.files.requirement;
-
-	// //parse the type of action and taskname to be performed
-	// const type = req.body.addState.type;
-	// const taskName = req.body.addState.name;
 
 	// //parse the files from the request
 	// const codeFile = req.body.addState.code;
@@ -39,36 +33,50 @@ router.post('/', (req, res) => {
 	// 	filesMap["Model"].push(modelFile);
 	// }
 	const form = new multiparty.Form();
-	form.parse(req, async (error, fields, files) => {
+	form.parse(req, async(error, fields, files) => {
 		if (error) throw new Error(error);
 		try {
-			console.log( "    fields: ", fields );
+			console.log( "fields: ", fields );
 			console.log( "files: ", files );
 
-			const path = files.file[0].path;
+			// Parse the username
+			// const username = fields.username[0];
+			const username = "raghav";
+			console.log("username", username);
+
+			//parse the type of action and taskname to be performed
+			const actionType = fields.type[0];
+			const taskName = fields.taskname[0];
+			const fileName = files.requirement[0].originalFilename;
+
+			const path = files.requirement[0].path;
 			const buffer = fs.readFileSync(path);
+			console.log("Buffer: ", buffer);
 			const type = fileType(buffer);
-			const fileName = `${username}/${type}/${taskName}/`;
+			console.log("type: ", type);
+			const filePath = `${username}/${actionType}/${taskName}/${fileName}`;
+			console.log("fileName", filePath);
 			// const fileName = `Data/001/${timestamp}-lg`;
-			for(let [key, value] of filesMap){
-				var temp = fileName + `${key}/${value[0]}`;
-				var data = await uploadFile(buffer, temp, type);
-			}
+			// for(let [key, value] of filesMap){
+			// 	var temp = fileName + `${key}/${value[0]}`;
+			const data = await uploadFile(buffer, filePath);
+			// }
 			return res.status(200).send(data);
 		} catch (error) {
+			console.log(error);
 			return res.status(400).send(error);
 		}
 	});
 });
 
 // abstracts function to upload a file returning a promise
-const uploadFile = (buffer, name, type) => {
+const uploadFile = (buffer, name) => {
 	console.log("Uploading file to s3");
 	const params = {
-		ACL: "public-read",
+		// ACL: "public-read",
 		Body: buffer,
 		Bucket: process.env.S3_BUCKET,
-		Key: `${name}.${type.ext}`
+		Key: `${name}`
 	};
 	console.log("params: ", params);
 	return s3.upload(params).promise();
