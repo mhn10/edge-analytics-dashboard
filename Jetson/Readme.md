@@ -29,22 +29,36 @@ Let's consider a case where we have multiple edge nodes, how would we know which
 
 To reduce this consumption of network bandwidth, we adopted Gossip protocol. In this, we create cluster of all edge nodes, and each node will maintain list of active and dead nodes. In this, each node will ping randomly selected subset of nodes (say 4 nodes in a cluster of 50 nodes), while pinging, each node will send metadata that could be list of active nodes or addition of new nodes or removal of nodes. When those 4 nodes receive data, they will pass on to their subset, in this way the information will be dissipated in the cluster and eventually all nodes will have the information. So when a server needs to get list of active nodes, any one node can provide the information. Same clustering will occur at server side where they will share information of active nodes among themselves in similar fashion.  
 
-More on Gossip protocol can be read from [ "SWIM: Scalable Weakly-consistent Infection-style Process Group Membership Protocol"](https://ieeexplore.ieee.org/document/1028914/)(SWIM). We are using **[Tattle](https://github.com/kippandrew/tattle)**, which is a Python based implementation of SWIM protocol.
+More on Gossip protocol can be read from [ "SWIM: Scalable Weakly-consistent Infection-style Process Group Membership Protocol"](https://ieeexplore.ieee.org/document/1028914/)(SWIM).  
+~~We are using **[Tattle](https://github.com/kippandrew/tattle)**, which is a Python based implementation of SWIM protocol.~~
+
+With Tattle we faced issues since it was not currently being supported and dependencies were out of date. We moved towards HashiCorp's implementation of SWIM protocol as **memberlist** which is their implementation of Gossip protocol. More about it can be read from [website](https://www.serf.io/docs/internals/gossip.html) and their implementation can be read from their [Github](https://github.com/hashicorp/memberlist).
 
 ### What we have to do
 1. Create cluster of nodes.  
 2. Store list of all active and dead nodes.  
 3. Create API to get list of all active and nodes.  
 
-### Running Tattle Node
-1. Clone [_tattle_](https://github.com/kippandrew/tattle) repo.  
-2. Create a file _node.py_ in the cloned repo folder and paste from from [node.py](https://github.com/mhn10/edge-analytics-dashboard/blob/NodesStatus/Jetson/cluster/Tattle/node.py).  
-3. Install dependencies from [requirements.txt](https://github.com/mhn10/edge-analytics-dashboard/blob/NodesStatus/Jetson/cluster/Tattle/requirements.txt).  
-4. Run script first node (let's say it's IP is 192.168.0.1) as follows:
-```console
-foo@bar:~$ python3 node.py -p3000
+### How to use [cluster.go](https://github.com/mhn10/edge-analytics-dashboard/blob/NodesStatus/Jetson/cluster/cluster.go)
+1. Put file in a directory and name it properly, say, _cluster_.
+2. Do `go get` to install all the dependencies.  
+3. Build the project using `go build`  
+4. Run first node using 
+```cluster
+foo@bar:~$ ./cluster
+Local member 192.168.0.119:8000
+Listening on :4001
 ```
-for second node (let's say it's IP is 192.168.0.5):
+5. For any subsequent nodes run
 ```console
-bar@foo:~$ python3 node.py -p4000 -j192.168.0.1:3000
+foo@bar:~$ ./cluster --members=192.168.119:8000 --port=4002 --bindPort=7000
+```
+This will create another node creating a cluster with first node.
+6. To get list of members
+```console
+foo@bar:~$ curl -X GET http://localhost:4001/members
+```
+7. To get detail of current member
+```console
+foo@bar:~$ curl -X GET http://localhost:4001/info
 ```
