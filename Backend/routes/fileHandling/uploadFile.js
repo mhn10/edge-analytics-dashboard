@@ -13,9 +13,6 @@ router.post('/', (req, res) => {
 	form.parse(req, async(error, fields, files) => {
 		if (error) throw new Error(error);
 		try {
-			console.log( "fields: ", fields );
-			console.log( "files: ", files );
-
 			// Parse the username
 			// const username = fields.username[0];
 			const username = "raghav";
@@ -48,13 +45,9 @@ router.post('/', (req, res) => {
 				// const path = files.requirement[0].path;
 				var path = value.path;
 				var buffer = await fs.readFileSync(path);
-				console.log("Buffer: ", buffer);
 				var type = fileType(buffer);
-				console.log("type: ", type);
 				var fileName = value.originalFilename;
-				console.log("FileName: ", fileName);
 				var filePath = `${username}/${actionType}/${taskName}/${fileName}`;
-				console.log("fileName", filePath);
 				var data = await uploadFile(buffer, filePath);
 			};
 			return res.status(200).send(data);
