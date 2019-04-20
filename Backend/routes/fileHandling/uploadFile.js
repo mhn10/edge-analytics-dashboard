@@ -41,11 +41,11 @@ router.post('/', (req, res) => {
 				filesArrPath.push(modelFilePath);
 			}
 			
+			//Loop through each file object and upload in S3 bucket
 			for (let value of filesArrPath) {
 				// const path = files.requirement[0].path;
 				var path = value.path;
 				var buffer = await fs.readFileSync(path);
-				var type = fileType(buffer);
 				var fileName = value.originalFilename;
 				var filePath = `${username}/${actionType}/${taskName}/${fileName}`;
 				var data = await uploadFile(buffer, filePath);
