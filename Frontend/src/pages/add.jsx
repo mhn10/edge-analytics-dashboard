@@ -117,7 +117,7 @@ const AddPage = ({ props }) => {
                                             Next Step
                                         </Button>
                                     )}
-                                    <Wizard />
+                                    <Wizard {...{addState : addState}}/>
                                     {addState.step === 1 && <NamesAdd />}
                                     {addState.step === 2 && <TypeAdd />}
                                     {addState.step === 3 &&
