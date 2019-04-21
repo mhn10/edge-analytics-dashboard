@@ -98,6 +98,7 @@ const [buttonToggle, setButtonToggle] = useState(false);
                 <td>{file.name}</td>
                 <td><Moment>{file.timeStamp.date}</Moment></td>
                 <td>{file.data}</td>
+                <td></td>
             </tr>
         );
 
@@ -154,6 +155,7 @@ const [buttonToggle, setButtonToggle] = useState(false);
                     <th>Task Name</th>
                     <th>Uploaded</th>
                     <th>Data</th>
+                    <th>Deploy</th>
                 </tr>
                 {playerRows}
             </table>
