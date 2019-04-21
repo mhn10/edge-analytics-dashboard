@@ -62,9 +62,12 @@ const NamesAdd = props => {
             console.groupEnd();
             setDefaultOption([...defaultOption, newOption]);
             setLoading(false);
-            setValue(newOption);
-            const newValue = value;
+            setValue(newOption.value);
+            const newValue = newOption.value;
+			console.log("TCL: newValue", newValue)
+
             context.dispatch({ type: "setName", newValue });
+
 
             //   this.setState({
             //     isLoading: false,
