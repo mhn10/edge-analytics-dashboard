@@ -2,6 +2,7 @@ import * as React from 'react';
 import { PageHeader, PageWrapper } from '../components/Page';
 import Select from 'react-select';
 import AddContext from "../context/addContext";
+import jwtDecode from "jwt-decode";
 
 
 
@@ -15,11 +16,14 @@ const TypeAdd = (props) => {
 	const context = React.useContext(AddContext);
 
 	const changeHandler = types => {
-	  
+		const {email} = jwtDecode(localStorage.getItem('userToken'));
+    console.log("Username decoded",email)
+		context.dispatch({type: "setUsername", email})
+		
 	  const { value } = types;
 	  console.log("Values, ", value );
 	  context.dispatch({ type: "setType", value });
-	  context.dispatch({ type: "changeState", value: 3 });
+	  context.dispatch({ type: "changeState", value: 2 });
   
   };
 	return (

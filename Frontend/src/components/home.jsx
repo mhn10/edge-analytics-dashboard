@@ -7,9 +7,11 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Dropdown from "react-bootstrap/Dropdown";
+
 import {CONSTANTS} from '../Constants';
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Input from "@material-ui/core/Input";
+
 
 
 class FileUpload extends Component {
@@ -107,10 +109,12 @@ class FileUpload extends Component {
     var allImgs = Array.prototype.slice.call(this.state.output);
     return (
       <React.Fragment>
+
 		  <LoginNavbar/>
         <Container style={{ marginTop: "100px" }}>      
 		{/* <Navbar /> */}
 		
+
           <Row>
             <DropdownButton id="dropdown-basic-button" title="Method">
               <Dropdown.Item href="#/action-1">Classification</Dropdown.Item>
