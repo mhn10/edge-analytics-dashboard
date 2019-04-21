@@ -26,6 +26,9 @@ const signupRoutes = require('./routes/users/signup');
 const uploadFile = require('./routes/fileHandling/uploadFile');
 const downloadResult = require('./routes/fileHandling/downloadResult');
 const sendTask = require('./routes/Task/sendTask');
+const userDetail = require('./routes/users/userDetails');
+const taskDetail = require('./routes/Task/taskDetails');
+const fileDetail = require('./routes/fileHandling/fileDetails');
 
 //Use middleware
 app.use(morgan('dev'));
@@ -57,6 +60,9 @@ app.use('/signup', signupRoutes);
 app.use('/uploadfile', uploadFile);
 app.use('/output', downloadResult);
 app.use('/sendtask', sendTask);
+app.use('/userdetail', userDetail);
+app.use('/taskdetail', taskDetail);
+app.use('/filedetail', fileDetail);
 
 
 //Handle the errors of the application
