@@ -117,8 +117,9 @@ const AddPage = ({ props }) => {
                                         </Button>
                                     )}
                                     <Wizard {...{addState : addState}}/>
-                                    {addState.step === 1 && <NamesAdd />}
-                                    {addState.step === 2 && <TypeAdd />}
+                                    {addState.step === 1 && <TypeAdd />}
+                                    {addState.step === 2 && <NamesAdd />}
+                                  
                                     {addState.step === 3 &&
                                         addState.type === "classification" && (
                                             <InputAddClassification />
