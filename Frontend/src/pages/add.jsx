@@ -28,12 +28,12 @@ const reducer = (state, action) => {
         case "decrementState":
             return {
                 ...state,
-                step: state.step > 1 ? state.step - 1 : state.step
+                step: state.step > 0 ? state.step - 1 : state.step
             };
 
         case "setName":
-            console.log("name: ", action.values);
-            return { ...state, name: action.values };
+            console.log("name: ", action.newValue.value);
+            return { ...state, name: action.newValue.value };
 
         // case "getName":
         // 	return  {name: state.name} ;
@@ -92,7 +92,7 @@ const AddPage = ({ props }) => {
 
     return (
         <>
-            <LoginNavbar />
+            {/* <LoginNavbar /> */}
             <BodyWrapper>
                 <PageWrapper>
                     <section className="page-content">

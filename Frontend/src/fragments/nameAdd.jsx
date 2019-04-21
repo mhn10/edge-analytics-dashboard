@@ -1,53 +1,95 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import AddContext from "../context/addContext";
 import styled from "styled-components";
 import CreatableSelect from "react-select/lib/Creatable";
-import axios from 'axios';
-
+import axios from "axios";
+const { CONSTANTS } = require("../Constants");
 const NamesAdd = props => {
     const context = React.useContext(AddContext);
+    const [defaultOption, setDefaultOption] = useState([]);
+    const [value, setValue] = useState("");
+    const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        console.log("fetch Task here");
+        axios
+            .get(`${CONSTANTS.BACKEND_URL}/taskdetail`, {
+                params: {
+                    username: context.addState.username,
+                    type: context.addState.type
+                }
+            })
+            .then(response => {
+                console.log("Response taskdetails", response.data);
+                //create option map to setDeafultoption
+                const { data } = response;
+                let result = data.map(task => createOption(task));
+                console.log("Default options", result);
+                setDefaultOption(result);
+            })
+            .catch(error => {
+                console.log("Error in useEffect nameAdd", error);
+                alert("Data fetch failed, reload");
+            });
+    }, []);
 
-    useEffect(async () => {
-      console.log("fetch data here");
-      //setData();
-
-  }, []);
-
-
-    const changeHandler = values => {
-        console.log("Values, ", values);
-
-        context.dispatch({ type: "setName", values });
+    const changeHandler = (newValue, actionMeta) => {
+        console.log("Values, ", newValue);
+        console.log(`action: ${actionMeta.action}`);
+        setValue(newValue);
+        context.dispatch({ type: "setName", newValue });
+        // context.dispatch({ type: "changeState", value: 3 });
     };
     const submitHandler = values => {
         context.dispatch({ type: "changeState", value: 3 });
     };
+
+    const createOption = label => ({
+        label,
+        value: label.toLowerCase().replace(/\W/g, "")
+    });
+
+    const handleCreate = inputValue => {
+        setLoading(true);
+        console.group("Option created");
+        console.log("Wait a moment...");
+        setTimeout(() => {
+            //const { options } = this.state;
+            const newOption = createOption(inputValue);
+            console.log(newOption);
+            console.groupEnd();
+            setDefaultOption([...defaultOption, newOption]);
+            setLoading(false);
+            setValue(newOption);
+            const newValue = value;
+            context.dispatch({ type: "setName", newValue });
+
+            //   this.setState({
+            //     isLoading: false,
+            //     options: [...options, newOption],
+            //     value: newOption,
+            //   });
+        }, 500);
+        setTimeout(() => {
+            console.log("Moving to next step, ", context.addState);
+            context.dispatch({ type: "changeState", value: 3 });
+        }, 1000);
+    };
+
     return (
         <NameWrapper>
-            <Form onSubmit={e => submitHandler(e)}>
-                <Form.Group className="row">
-                    <Form.Label>Name of Task</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder={context.addState.name}
-                        onChange={e => changeHandler(e.target.value)}
-                    />
-                    <Form.Text className="text-muted">
-                        Must be unique identifier
-                    </Form.Text>
-                </Form.Group>
-
-                <Button
-                    variant="primary"
-                    type="submit"
-                    disabled={context.addState.name === "" ? true : false}
-                >
-                    Next
-                </Button>
-            </Form>
+            <CreatableSelect
+                isClearable
+                isDisabled={loading}
+                isLoading={loading}
+                onChange={changeHandler}
+                onCreateOption={handleCreate}
+                options={defaultOption}
+                value={value}
+            />
+           
         </NameWrapper>
     );
 };
