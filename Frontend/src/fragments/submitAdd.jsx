@@ -1,4 +1,5 @@
 import * as React from "react";
+import {withRouter} from "react-router-dom";
 import AddContext from "../context/addContext";
 import styled from "styled-components";
 import axios from "axios";
@@ -32,6 +33,7 @@ const SubmitAdd = props => {
     })
     .then(response => {
       console.log("data upload success", response);
+      props.history.push('/task')
 
     })
     .catch( error => {
@@ -98,7 +100,7 @@ const SubmitAdd = props => {
   );
 };
 
-export default SubmitAdd;
+export default withRouter(SubmitAdd);
 
 const SubmitWrapper = styled.div`
   background: white;
