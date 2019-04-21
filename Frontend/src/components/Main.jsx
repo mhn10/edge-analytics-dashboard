@@ -5,6 +5,7 @@ import { Route } from "react-router-dom";
 import Navbar from "./Navbar/navbar";
 import Home from "./home";
 import AddPage from "../pages/add";
+import TaskPage from "../pages/task";
 import Signup from "./signup";
 // Create a Main Component
 
@@ -15,6 +16,7 @@ class Main extends Component {
         {/*Render Different Component based on Route*/}
         <Route exact path="/" component={AddPage} />
         <Route exact path="/test" component={AddPage} />
+        <Route exact path="/task" component={TaskPage} />
         <Route exact path="/signup" component={Signup} />
       </div>
     );
