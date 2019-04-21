@@ -7,13 +7,13 @@ var userSchema = new mongoose.Schema({
 	firstName: {
 		type: String,
 		required: true,
-		set: utility.capitalizeFirstLetter,
+		// set: utility.capitalizeFirstLetter,
 		default: ""
 	},
 	lastName: {
 		type: String,
 		required: true,
-		set: utility.capitalizeFirstLetter,
+		// set: utility.capitalizeFirstLetter,
 		default: ""
 	},
 	email: {
@@ -27,13 +27,13 @@ var userSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-
 	classification: [{
 		name: { type: String, required: false, default: "" },
-		timeStamp: { type: Date, default: Date.now },
+		timeStamp: { type: Date, default: Date.now() },
 
 		requirement: { type: String, required: false, default: "" },
 		code: { type: String, required: false, default: "" },
+		model: { type: String, required: false, default: "" },
 		data: { type: String, required: false, default: "" },
 		input: { type: String, required: false, default: "" },
 		result: { type: String, required: false, default: "" },
@@ -42,7 +42,7 @@ var userSchema = new mongoose.Schema({
 	],
 	regression: [{
 		name: { type: String, required: false, default: "" },
-		timeStamp: { type: Date, default: Date.now },
+		timeStamp: { type: Date, default: Date.now() },
 
 		requirement: { type: String, required: false, default: "" },
 		code: { type: String, required: false, default: "" },
