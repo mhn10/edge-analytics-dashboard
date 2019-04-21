@@ -33,6 +33,7 @@ var userSchema = new mongoose.Schema({
 
 		requirement: { type: String, required: false, default: "" },
 		code: { type: String, required: false, default: "" },
+		model: { type: String, required: false, default: "" },
 		data: { type: String, required: false, default: "" },
 		input: { type: String, required: false, default: "" },
 		result: { type: String, required: false, default: "" },

@@ -23,7 +23,7 @@ router.post('/', (req, res) => {
 
 			//if taskName exists already then it's a update request
 			// var temp = (actionType === 'classification')? classification : regression;
-			userModel.findOne({classification : {$elemMatch:{name: taskName}}}, function (err, task) {
+			userModel.findOne({actionType : {$elemMatch:{name: taskName}}}, function (err, task) {
 				if (task) {
 					//Same task cannot be added
 					console.log(`Taskname : ${taskName} already exists, edit the existing task`);
