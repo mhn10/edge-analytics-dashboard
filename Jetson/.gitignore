@@ -1,3 +1,5 @@
 env/
 .vscode/
 Dockerfile
+__pycache__/
+mqtt_pub.py
