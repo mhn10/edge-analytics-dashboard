@@ -19,7 +19,7 @@ const changeHandler = values => {
 };
   const submitHandler = values => {
 
-    context.dispatch({ type: "changeState", value: 2 });
+    context.dispatch({ type: "changeState", value: 3 });
   };
   return (
     <NameWrapper>

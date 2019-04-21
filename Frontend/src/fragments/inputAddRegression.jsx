@@ -1,9 +1,6 @@
 import * as React from "react";
 import AddContext from "../context/addContext";
 import styled from "styled-components";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -63,12 +60,12 @@ const InputAddRegression = props => {
         <PageHeader title={"Add Files"} /> */}
 
       <Form onSubmit={e => submitHandler(e)}>
-        <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
-          <Row className="justify-content-md-center">
-            <Col>
+        {/* <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
+          <ul>
+            <li>
               <Form.Label> Model File </Form.Label>
-            </Col>
-            <Col>
+            </li>
+            <li>
               <input
                 name="model"
                 label="upload model"
@@ -76,16 +73,16 @@ const InputAddRegression = props => {
                 onChange={e => modelHandler(e.target.files)}
               />
               <Form.Text className="text-muted">Upload a model file</Form.Text>
-            </Col>
-          </Row>
-        </Form.Group>
+            </li>
+          </ul>
+        </Form.Group> */}
 
         <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
-          <Row className="justify-content-md-center">
-            <Col>
+          <ul>
+            <li>
               <Form.Label> Requirement File </Form.Label>
-            </Col>
-            <Col>
+            </li>
+            <li>
               <input
                 name="requirement"
                 label="upload requirement"
@@ -93,18 +90,18 @@ const InputAddRegression = props => {
                 onChange={e => requirementHandler(e.target.files)}
               />
               <Form.Text className="text-muted">
-                Upload a Requirement file
+                Upload  Requirement file
               </Form.Text>
-            </Col>
-          </Row>
+            </li>
+          </ul>
         </Form.Group>
 
-        {/* <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
-          <Row>
-            <Col>
+        <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
+          <ul >
+            <li>
               <Form.Label> Code File </Form.Label>
-            </Col>
-            <Col>
+            </li>
+            <li>
               <input
                 name="code"
                 label="upload code"
@@ -112,16 +109,16 @@ const InputAddRegression = props => {
                 onChange={e => codeHandler(e.target.files)}
               />
               <Form.Text className="text-muted">Upload a Code file</Form.Text>
-            </Col>
-          </Row>
-        </Form.Group> */}
+            </li>
+          </ul>
+        </Form.Group>
 
         <Form.Group controlId="formBasicFile" style={{ marginBottom: "2rem" }}>
-          <Row className="justify-content-md-center">
-            <Col>
+          <ul >
+            <li>
               <Form.Label> Data File </Form.Label>
-            </Col>
-            <Col>
+            </li>
+            <li>
               <input
                 name="data"
                 label="upload data"
@@ -130,16 +127,16 @@ const InputAddRegression = props => {
                 
               />
               <Form.Text className="text-muted">Upload a Data file</Form.Text>
-            </Col>
-          </Row>
+            </li>
+          </ul>
         </Form.Group>
 
         <Form.Group controlId="formBasicFile">
-          <Row className="justify-content-md-center">
-            <Col>
+          <ul >
+            <li>
               <Form.Label> Input File </Form.Label>
-            </Col>
-            <Col>
+            </li>
+            <li>
               <input
                 name="input"
                 label="upload input"
@@ -147,11 +144,11 @@ const InputAddRegression = props => {
                 onChange={e => inputHandler(e.target.files)}
               />
               <Form.Text className="text-muted">Upload a Input file</Form.Text>
-            </Col>
-          </Row>
+            </li>
+          </ul>
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" onClick={submitHandler}>
           Next
         </Button>
       </Form>
@@ -172,7 +169,17 @@ const FileWrapper = styled.div`
   color: #606060;
   /* font-size: 1.2rem; */
   text-align: center;
-
+  ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        display: grid;
+        grid-template-columns: 1fr 4fr;
+        grid-gap: 1rem;
+        height: 100%;
+        justify-items: center;
+        align-items: center;
+    }
   .item-name {
     font-size: 1rem;
     /* text-transform: uppercase; */

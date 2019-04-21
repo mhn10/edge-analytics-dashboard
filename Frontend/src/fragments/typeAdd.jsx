@@ -23,7 +23,7 @@ const TypeAdd = (props) => {
 	  const { value } = types;
 	  console.log("Values, ", value );
 	  context.dispatch({ type: "setType", value });
-	  context.dispatch({ type: "changeState", value: 3 });
+	  context.dispatch({ type: "changeState", value: 2 });
   
   };
 	return (
