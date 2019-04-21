@@ -103,7 +103,11 @@ const [buttonToggle, setButtonToggle] = useState(false);
             console.log("Expanded rows " + newExpandedRows.length);
         }
     };
-
+    const handleDeploy= (file, key) =>{
+        console.log("deploy these ",file," key - " ,key);
+        //change the step to next fragment, and  set context state to new deploy state
+        // 
+    }
     const getRows = (file, key) => {
         let rows = [];
 
@@ -116,7 +120,7 @@ const [buttonToggle, setButtonToggle] = useState(false);
                 <td><Moment>{file.timeStamp.date}</Moment></td>
                 <td>{file.data}</td>
                 <td>{file.type}</td>
-                <td></td>
+                <td><Button onClick={() => handleDeploy(file,key)}>-></Button> </td>
             </tr>
         );
 
