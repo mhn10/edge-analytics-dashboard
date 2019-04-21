@@ -30,7 +30,7 @@ client.on('message', (topic, message) => {
 })
 
 function handleNodeInfo( message ) {
-	console.log( 'Message received:' );
+	console.log( 'NODE INFO' );
 	js = JSON.parse( message )
 	for ( key in js ) {
 		console.log( '%s: %s', key, js[key] );
@@ -38,7 +38,13 @@ function handleNodeInfo( message ) {
 }
 
 function handleActiveNodes( message ) {
-	console.log( 'Message received for Active Node %s', message );
+	console.log( 'ACTIVE NODES' )
+	js = JSON.parse( message )
+	for ( i in js['Active'] ) {
+		for ( key in js['Active'][i] ) {
+			console.log( '%s: %s', key, js['Active'][i][key] );
+		}
+	}
 }
 
 function handleResults( message ) {
