@@ -2,37 +2,54 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Moment from 'react-moment';
 import React from "react";
+import jwtDecode from "jwt-decode";
+import TaskContext from "../context/taskContext";
+import axios from "axios";
+
+const { CONSTANTS } = require("../Constants");
 
 const MyTable = () => {
-    useEffect(async () => {
+    const context = React.useContext(TaskContext);
+    const [files,setFiles] = useState([]);
+
+    useEffect(() => {
         console.log("fetch data here");
         //setData();
-    }, []);
-    const [files] = useState([
-        {
-            name: "ttt",
-            requirement: "req",
-            code: "code",
-            data: "data",
-            input: "i/p",
-            result: "result output",
-            timeStamp: {
-                date: "2019-04-21T06:33:04.382Z"
+        const {email} = jwtDecode(localStorage.getItem('userToken'));
+    console.log("Username decoded",email)
+        context.dispatch({type: "setUsername", email})
+        
+        axios
+        .get(`${CONSTANTS.BACKEND_URL}/userdetail`, {
+            params: {
+                username: email
             }
-        },
-        {
-            name: "sss",
-            timeStamp: {
-                date: "2019-04-21T07:58:51.715Z"
-            },
-            requirement: "requirements12.txt",
-            code: "code123.py",
-            model: "Constants.txt",
-            data: "fileapi.json",
-            input: "adminer.php",
-            result: "2nd result"
-        }
-    ]);
+        })
+        .then(response => {
+            console.log("Response taskdetails", response.data);
+            //create option map to setDeafultoption
+            const  data  = response.data[0];
+            console.log("Data ",data);
+            const {classification, regression} = data;
+            console.log("Classification array, " ,classification, "regression", regression);
+            context.dispatch({type: "setClassification", classification});
+            context.dispatch({type:"setRegression", regression})
+            let classifiertype = classification.map(taskclassifier => ({...taskclassifier, type:'classification'}))
+            console.log("Classifier type ",classifiertype)
+            let regressiontype = regression.map(taskregression => ({...taskregression, type:'regression'}))
+			console.log("TCL: MyTable -> regressiontype", regressiontype)
+
+            const taskArray = [...classifiertype, ...regressiontype];
+            setFiles(taskArray);
+			console.log("TCL: MyTable -> taskArray", taskArray);
+        })
+        .catch(error => {
+            console.log("Error in useEffect nameAdd", error);
+            alert("Data fetch failed, reload");
+        });
+
+
+    }, []);
 
     const [expandedRows, setExpandedRows] = useState([]);
 const [buttonToggle, setButtonToggle] = useState(false);
@@ -98,6 +115,7 @@ const [buttonToggle, setButtonToggle] = useState(false);
                 <td>{file.name}</td>
                 <td><Moment>{file.timeStamp.date}</Moment></td>
                 <td>{file.data}</td>
+                <td>{file.type}</td>
                 <td></td>
             </tr>
         );
@@ -155,6 +173,7 @@ const [buttonToggle, setButtonToggle] = useState(false);
                     <th>Task Name</th>
                     <th>Uploaded</th>
                     <th>Data</th>
+                    <th>Type</th>
                     <th>Deploy</th>
                 </tr>
                 {playerRows}

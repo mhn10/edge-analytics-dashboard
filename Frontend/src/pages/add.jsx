@@ -92,7 +92,7 @@ const AddPage = ({ props }) => {
 
     return (
         <>
-            {/* <LoginNavbar /> */}
+            <LoginNavbar />
             <BodyWrapper>
                 <PageWrapper>
                     <section className="page-content">

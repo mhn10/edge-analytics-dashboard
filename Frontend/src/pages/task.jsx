@@ -7,6 +7,7 @@ import LoginNavbar from "../components/Navbar/loginnavbar";
 import { PageWrapper } from "../components/Page";
 import NamesAdd from "../fragments/nameAdd";
 import MyTable from "../components/table";
+import TaskContext from "../context/taskContext";
 
 const reducer = (state, action) => {
     const { type } = action;
@@ -25,35 +26,53 @@ const reducer = (state, action) => {
                 ...state,
                 step: state.step > 1 ? state.step - 1 : state.step
             };
-
-
-
+        case "setUsername":
+            return { ...state, username: action.email };
+        case "setClassification":
+            return { ...state, classification: action.classification };
+        case "setRegression":
+            return { ...state, regression: action.regression };
         default:
             return state;
     }
 };
 
 const TaskPage = ({ props }) => {
-    const [addState, dispatch] = React.useReducer(reducer, {
-        name: "",
+    const [taskState, dispatch] = React.useReducer(reducer, {
         username: "",
-        type: "",
-        requirement: "",
-        data: "",
-        input: "",
-        result: "",
-        code: "",
-        model: "",
+        classification: [
+            {
+                name: "",
+                requirement: "",
+                data: "",
+                input: "",
+                result: "",
+                code: "",
+                model: "",
+                timeStamp: ""
+            }
+        ],
+        regression: [
+            {
+                name: "",
+                requirement: "",
+                data: "",
+                input: "",
+                result: "",
+                code: "",
+                timeStamp: ""
+            }
+        ],
         step: 1
     });
     const incrementState = () => {
         dispatch({ type: "incrementState" });
-        console.log(addState);
+        console.log(taskState);
     };
 
     const decrementState = () => {
         dispatch({ type: "decrementState" });
-        console.log(addState);
+        console.log(taskState);
     };
 
     return (
@@ -62,11 +81,15 @@ const TaskPage = ({ props }) => {
             <BodyWrapper>
                 <PageWrapper>
                     <section className="page-content">
-                    <AddDetailsWrapper>
-<MyTable />
- </AddDetailsWrapper>
+                    <TaskContext.Provider value={{ taskState, dispatch }}>
+
+                        <AddDetailsWrapper>
+                            <MyTable />
+                        </AddDetailsWrapper>
+                        </TaskContext.Provider>
+
                     </section>
-                 </PageWrapper>
+                </PageWrapper>
             </BodyWrapper>
         </>
     );

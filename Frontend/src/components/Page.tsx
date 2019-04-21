@@ -40,7 +40,7 @@ export const PageHeader: React.FunctionComponent<IpropsHeader> = ({ title }): Re
 const HeaderTittleWrapper = styled.h1`
 	color: #444444;
 	font-weight: 300;
-	font-size: 3rem;
+	font-size: 2rem;
 	margin-top: 1rem;
 	padding-top: 1rem;
 

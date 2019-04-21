@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import { PageHeader} from '../components/Page';
+
 import AddContext from "../context/addContext";
 import styled from "styled-components";
 import CreatableSelect from "react-select/lib/Creatable";
@@ -80,6 +80,8 @@ const NamesAdd = props => {
 
     return (
         <NameWrapper>
+            <section className="page-content">
+            		<PageHeader title={'Add Task Name'} />
             <CreatableSelect
                 isClearable
                 isDisabled={loading}
@@ -88,8 +90,9 @@ const NamesAdd = props => {
                 onCreateOption={handleCreate}
                 options={defaultOption}
                 value={value}
+                defaultValue = {{value:context.addState.name, label:context.addState.name}}
             />
-           
+           			</section>
         </NameWrapper>
     );
 };
