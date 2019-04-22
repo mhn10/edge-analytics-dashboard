@@ -1,19 +1,15 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const AWS = require("aws-sdk");
-// create S3 instance
-const s3 = new AWS.S3();
-// Create an SQS service object
-const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
-const { CONSTANTS } = require('../../Constants');
+const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 router.post("/", (req, res) => {
-	console.log("Inside send task API");
+	console.log("Inside run task API");
 
 	//parse the details from the request object
-	var USER = req.body.userName;
-	var MODEL = req.body.model;
-	var TASKNAME = req.body.taskName;
+	var username = req.body.userName;
+	var model = req.body.model;
+	var taskName = req.body.name;
 
 	// create parameters
 	var params = {
@@ -22,16 +18,16 @@ router.post("/", (req, res) => {
 			User: {
 				// First attribute name is username / UID
 				DataType: "String",
-				StringValue: USER // Value is username or id
+				StringValue: username // Value is username or id
 			},
 			Type: {
 				// Second attribute name is Type ( indicates if its classification or regression )
 				DataType: "String",
-				StringValue: MODEL // Value is classification or regression
+				StringValue: model // Value is classification or regression
 			}
 		},
-		MessageBody: TASKNAME, // Its the name given by user for their upload
-		QueueUrl: `${CONSTANTS.QUEUE_URL}+taskQ1` // URL of our queue
+		MessageBody: taskName, // Its the name given by user for their upload
+		QueueUrl: `${process.env.QUEUE_URL}taskQ1` // URL of our queue
 	};
 
 	sqs.sendMessage(params, function (err, data) {
