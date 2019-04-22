@@ -30,6 +30,7 @@ const userDetail = require('./routes/users/userDetails');
 const taskDetail = require('./routes/Task/taskDetails');
 const fileDetail = require('./routes/fileHandling/fileDetails');
 const activeNodes = require('./routes/nodes/activeNodes');
+const nodeDetail = require('./routes/nodes/nodeDetail');
 
 //Use middleware
 app.use(morgan('dev'));
@@ -65,6 +66,7 @@ app.use('/userdetail', userDetail);
 app.use('/taskdetail', taskDetail);
 app.use('/filedetail', fileDetail);
 app.use('/activenodes', activeNodes);
+app.use('/nodedetail', nodeDetail);
 
 
 //Handle the errors of the application

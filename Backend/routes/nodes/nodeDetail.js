@@ -5,10 +5,12 @@ const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 const Node = require('../../Mqtt/mqtt_sub');
 
 router.get('/', (req, res, next) => {
-	console.log("Inside active Nodes API");
+	console.log("Inside Node Detail API");
+	var nodeId = req.body.nodeid;
 	// create parameters
 	var data = {
-		action : "Active"
+		nodeId : nodeId,
+		action: "Info" 
 	}
 	var dataTobeSent = JSON.stringify(data);
 	var params = {
@@ -21,7 +23,7 @@ router.get('/', (req, res, next) => {
 			return res.status(400).send(err);
 		} else {
 			// console.log("Success", data.MessageId);
-			var result = Node.getNodesInfo();
+			var result = Node.getNodeDetail();
 			return res.status(200).send(result);
 		}
 	});
