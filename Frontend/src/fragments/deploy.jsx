@@ -99,7 +99,7 @@ const Deploy = props => {
                 <Select
                     options={defaultOption}
                     onChange={changeHandler}
-                    defaultValue={{ value: "none", label: "None" }}
+                    defaultValue={{ value: "none", label: "Any Node" }}
                 />
                 <Button
                     as="input"
