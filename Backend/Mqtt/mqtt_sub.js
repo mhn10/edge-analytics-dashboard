@@ -11,7 +11,7 @@ var NodeDetails = new Map();
 // console.log( 'Connected to broker at: %s', process.env.MQTT_BROKER )
 console.log( 'Connected to broker at: %s', broker );
 
-var topics = ['NodeInfo', 'ActiveNodes', 'TestResults'];
+var topics = ['NodeInfo', 'ActiveNodes', 'TaskResults'];
 
 client.on('connect', () => {
 	for( var i = 0; i < topics.length; i++ )
@@ -26,9 +26,8 @@ client.on('message', (topic, message) => {
 		case 'NodeInfo':
 			return handleNodeInfo( message )
 		case 'ActiveNodes':
-			console.log("case : ActiveNodes");
 			return handleActiveNodes( message )
-		case 'TestResults':
+		case 'TaskResults':
 			return handleResults( message )
 	}
 	console.log( 'No handler for this topic %s', topic )
@@ -40,7 +39,7 @@ function handleNodeInfo( message ) {
 	js = JSON.parse( message )
 	for ( key in js ) {
 		NodeDetails.set( key, js[key] );
-		console.log( '%s: %s', key, js[key] );
+		// console.log( '%s: %s', key, js[key] );
 	}
 }
 
@@ -58,13 +57,13 @@ function handleActiveNodes( message ) {
 		// console.log("i: ", NodeInfoMap);
 		var obj = strMapToObj(NodeInfoMap);
 		allNodes.push( obj );
-		console.log("allNode: ", allNodes);
+		// console.log("allNode: ", allNodes);
 	}
-	console.log( 'Message received for Active Node %s', message );
+	// console.log( 'Message received for Active Node %s', message );
 }
 
 function handleResults( message ) {
-	console.log( 'Message received for Resutls %s', message );
+	// console.log( 'Message received for Resutls %s', message );
 }
 
 function getNodeInfo() {
