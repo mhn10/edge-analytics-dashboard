@@ -5,28 +5,24 @@ const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 router.post("/", (req, res) => {
 	console.log("Inside run task API");
-
 	//parse the details from the request object
 	var username = req.body.userName;
-	var model = req.body.model;
-	var taskName = req.body.name;
+	var nodeid = req.body.nodeid;
+	var taskname = req.body.name;
+	var actiontype = req.body.type;
+	var isCamera = req.body.isCamera;
 
+	var data = {
+		userName : username,
+		taskName : taskname,
+		nodeId : nodeid,
+		actionType : actiontype,
+		isCamera : isCamera
+	}
+	var dataTobeSent = JSON.stringify(data);
 	// create parameters
 	var params = {
-		DelaySeconds: 10,
-		MessageAttributes: {
-			User: {
-				// First attribute name is username / UID
-				DataType: "String",
-				StringValue: username // Value is username or id
-			},
-			Type: {
-				// Second attribute name is Type ( indicates if its classification or regression )
-				DataType: "String",
-				StringValue: model // Value is classification or regression
-			}
-		},
-		MessageBody: taskName, // Its the name given by user for their upload
+		MessageBody: dataTobeSent,
 		QueueUrl: `${process.env.QUEUE_URL}taskQ1` // URL of our queue
 	};
 

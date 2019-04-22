@@ -44,6 +44,7 @@ function handleNodeInfo( message ) {
 }
 
 function handleActiveNodes( message ) {
+	// console.log("lund",message);
 	allNodes = [];
 	js = JSON.parse( message );
 	for ( i in js['Active'] ) {
