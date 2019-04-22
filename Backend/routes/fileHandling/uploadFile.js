@@ -40,7 +40,6 @@ router.post('/', (req, res) => {
 					const codeFilePath = files.code[0];
 					const dataFilePath = files.data[0];
 					const inputFilePath = files.input[0];
-					const modelFilePath = files.model[0];
 					const requirementFilePath = files.requirement[0];
 
 					//Create a Map and store the values
@@ -52,7 +51,7 @@ router.post('/', (req, res) => {
 
 					//Push the extra model file if the actionType is classification
 					if (actionType === 'classification') {
-						// filesArrPath.push(modelFilePath);
+						const modelFilePath = files.model[0];
 						filesMap.set("Model", modelFilePath);
 					}
 					var fileNamesMap = new Map();
@@ -111,7 +110,7 @@ const uploadFilesInSchema = (fileNamesMap, username, actionType, taskName) => {
 			});
 	} else {
 		userModel.findOneAndUpdate({ email: username },
-			{ $push: { classification: obj } },
+			{ $push: { regression: obj } },
 			function (error, success) {
 				if (error) {
 					console.log(error);
