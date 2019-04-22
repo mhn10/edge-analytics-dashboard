@@ -3,8 +3,7 @@ import { withRouter } from "react-router-dom";
 import TaskContext from "../context/taskContext";
 import styled from "styled-components";
 import axios from "axios";
-import CreatableSelect from "react-select/lib/Creatable";
-
+import Select from 'react-select'
 
 const { CONSTANTS } = require("../Constants");
 
@@ -18,16 +17,39 @@ const Deploy = props => {
     // const {} = context
     console.log("All context is ", context);
 
+
+    // const nodeDetails = [
+    //     {
+    //         "Name": "localhost.localdomain-8cbb5f83-6487-11e9-b81f-94e979ea0593",
+    //         "IP": "192.168.0.119",
+    //         "Port": 9000
+    //     },
+    //     {
+    //         "Name": "localhost.localdomain-17ddae66-6475-11e9-ba6a-94e979ea0593",
+    //         "IP": "192.168.0.119",
+    //         "Port": 8000
+    //     }
+    // ]
+
     useEffect(() => {
         console.log("fetch Task here");
+
+
+
+        // let result = nodeDetails.map(task => createOption(task.name));
+        //         console.log("Default options", result);
+        //         setDefaultOption(result);
+        // console.log("TCL: result", result)
+
         axios
             .get(`${CONSTANTS.BACKEND_URL}/activenodes`)
             .then(response => {
                 console.log("Response nodedetails", response.data);
                 //create option map to setDeafultoption
                 const { data } = response;
-                let result = data.map(task => createOption(task));
-                console.log("Default options", result);
+        let result = data.map(task => createOption(task));
+        console.log("TCL: result", result)
+                // console.log("Default options", result);
                 setDefaultOption(result);
             })
             .catch(error => {
@@ -41,9 +63,21 @@ const Deploy = props => {
 
     };
     const createOption = label => ({
-        label,
-        value: label.toLowerCase().replace(/\W/g, "")
+        label: label.Name.split(".", 2)[1],
+        value: label.Name
     });
+
+
+    const changeHandler = types => {
+	
+		
+	  const { value } = types;
+	  console.log("Values, ", value );
+      context.dispatch({ type: "setNode", value });
+      console.log("Context set", context)
+	//   context.dispatch({ type: "changeState", value: 2 });
+  
+  };
 
     return (
         <SubmitWrapper>
@@ -86,6 +120,7 @@ const Deploy = props => {
                     {context.taskState.requirement}
                 </span>
                 <div />
+                <Select options={defaultOption} onChange={changeHandler}  defaultValue={{value: "none", label: "None"}} />
                 <Button
                     as="input"
                     type="submit"

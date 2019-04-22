@@ -12,6 +12,8 @@ const taskContext = {
     code: "",
     model: "",
     timeStamp: "",
+    node: "",
+    webcam : "",
 
     step: 1,
 

@@ -45,6 +45,10 @@ const reducer = (state, action) => {
             return { ...state, input: action.input };
         case "setType":
             return { ...state, type: action.actionType };
+        case "setNode":
+            return { ...state, node: action.value };
+        case "setWebcam":
+            return { ...state, webcam: action.webcam };
         default:
             return state;
     }
@@ -62,6 +66,8 @@ const TaskPage = ({ props }) => {
         code: "",
         model: "",
         timeStamp: "",
+        node : "",
+        webcam : "",
         step: 1
     });
     const incrementState = () => {
