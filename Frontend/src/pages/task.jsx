@@ -66,8 +66,8 @@ const TaskPage = ({ props }) => {
         code: "",
         model: "",
         timeStamp: "",
-        node : "",
-        webcam : "",
+        node : "none",
+        webcam : "false",
         step: 1
     });
     const incrementState = () => {
