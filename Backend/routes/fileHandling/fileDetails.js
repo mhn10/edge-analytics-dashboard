@@ -35,9 +35,17 @@ router.get('/', (req, res) => {
 					}
 				});
 			}
-			return res.status(200).send(JSON.stringify([...filesMap]));
+			var result = strMapToObj(filesMap);
+			return res.status(200).send(result);
 		}
 	})
 });
 
+function strMapToObj(temp) {
+	let obj = Object.create(null);
+	for (let [k,v] of temp) {
+		obj[k] = v;
+	}
+	return obj;
+}
 module.exports = router;
