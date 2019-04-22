@@ -14,11 +14,12 @@ const Wizard= ({ addState }) => {
 		<WizzardWrapper>
 
 			<ProgressBar>
-				<ProgressBarList completed={ addState.step > 1 ? true : false} present={addState.step === 1 ? true : false}>
-					Task Name
-				</ProgressBarList>
-				<ProgressBarList completed={context.addState.step > 2 ? true : false} present={context.addState.step === 2 ? true : false}>
+
+				<ProgressBarList completed={context.addState.step > 1 ? true : false} present={context.addState.step === 1 ? true : false}>
 					Type
+				</ProgressBarList>
+				<ProgressBarList completed={ addState.step > 2 ? true : false} present={addState.step === 2 ? true : false}>
+					Task Name
 				</ProgressBarList>
 				<ProgressBarList completed={context.addState.step > 3 ? true : false} present={context.addState.step === 3 ? true : false}>
 					Files
