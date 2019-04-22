@@ -155,7 +155,9 @@ const MyTable = () => {
                 </td>
                 <td>{file.name}</td>
                 <td>
-                    <Moment>{file.timeStamp.date}</Moment>
+
+                    <Moment fromNow>{file.timeStamp}
+                    </Moment>
                 </td>
                 <td>{file.data}</td>
                 <td>{file.type}</td>
