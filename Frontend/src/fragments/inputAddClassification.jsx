@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-const InputAddClassification = props => {
+const InputAddClassification = () => {
   // const [type, setType] = React.useState("");
   //   const [model, setModel] = React.useState(undefined);
   //   const [requirement, setRequirement] = React.useState('');

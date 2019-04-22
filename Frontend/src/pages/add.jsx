@@ -32,8 +32,8 @@ const reducer = (state, action) => {
             };
 
         case "setName":
-        console.log("action setname", action.newValue);
-            return { ...state, name: (action.newValue === null? "none" : action.newValue)};
+            return { ...state, name: action.newVal};
+            // return { ...state, name: (action.newValue === null? "none" : action.newValue)};
 
         // case "getName":
         // 	return  {name: state.name} ;
