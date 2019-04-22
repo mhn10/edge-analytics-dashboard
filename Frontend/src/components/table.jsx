@@ -106,6 +106,7 @@ const [buttonToggle, setButtonToggle] = useState(false);
     const handleDeploy= (file, key) =>{
         console.log("deploy these ",file," key - " ,key);
         const {name, timeStamp, requirement, data, input, code, model, type} = file;
+        const actionType = type;
 		console.log("TCL: handleDeploy -> file.name", name)
 		console.log("TCL: handleDeploy -> timeStamp", timeStamp)
 		console.log("TCL: handleDeploy -> requirement", requirement)
@@ -121,7 +122,7 @@ const [buttonToggle, setButtonToggle] = useState(false);
         context.dispatch({type:"setData", data});
         context.dispatch({type:"setInput", input});
         context.dispatch({type:"setCode", code});
-        context.dispatch({type:"setType", type});
+        context.dispatch({type:"setType", actionType});
         context.dispatch({type:"changeState" , value: 2})
         //change the step to next fragment, and  set context state to new deploy state
         // 

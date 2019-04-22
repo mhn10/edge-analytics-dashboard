@@ -44,7 +44,7 @@ const reducer = (state, action) => {
         case "setInput":
             return { ...state, input: action.input };
         case "setType":
-            return { ...state, type: action.type };
+            return { ...state, type: action.actionType };
         default:
             return state;
     }
