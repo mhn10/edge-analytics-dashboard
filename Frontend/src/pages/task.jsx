@@ -66,8 +66,8 @@ const TaskPage = ({ props }) => {
         code: "",
         model: "",
         timeStamp: "",
-        node : "none",
-        webcam : "false",
+        node: "none",
+        webcam: "false",
         step: 1
     });
     const incrementState = () => {
@@ -108,7 +108,6 @@ const TaskPage = ({ props }) => {
 
                                 {taskState.step === 1 && <MyTable />}
                                 {taskState.step === 2 && <Deploy />}
-
                             </AddDetailsWrapper>
                         </TaskContext.Provider>
                     </section>
@@ -164,3 +163,35 @@ const BodyWrapper = styled.div`
         }
     }
 `;
+
+const Table = styled.table`
+    position: relative;
+    height: 100px;
+    background-image: linear-gradient(#ff9d2f, #ff6126);
+    border-bottom-left-radius: 50% 20%;
+    border-bottom-right-radius: 50% 20%;
+`;
+
+// const AddDetailsWrapper = styled.div`
+//     /* background: white; */
+
+//     border: 2px solid #f8f8f8;
+//     margin-top: 2rem;
+//     margin-left: 2rem;
+//     padding: 2rem;
+//     box-sizing: border-box;
+//     border-radius: 10px;
+//     color: #606060;
+   
+//     .background__skew {
+//         background-image: linear-gradient(#ff9d2f, #ff6126);
+        
+//         position: relative;
+//         top: 0;
+//         bottom: 0;
+//         right: 0;
+//         left: 0;
+//         width: 100%;
+//         height: 65px;
+//     }
+// `;

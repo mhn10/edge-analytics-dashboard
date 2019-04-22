@@ -36,12 +36,13 @@ const NamesAdd = props => {
             });
     }, []);
 
-    const changeHandler = (newValue, actionMeta) => {
-        console.log("Values, ", newValue);
+    const changeHandler = (Value, actionMeta) => {
+        console.log("Values, ", Value);
         console.log(`action: ${actionMeta.action}`);
         // const newVal = newValue.value;
-		console.log("TCL: changeHandler -> newVal", newValue)
-        setValue(newValue);
+		console.log("TCL: changeHandler -> newVal", Value)
+        setValue(Value.value);
+        const newValue = Value.value;
         context.dispatch({ type: "setName", newValue });
         context.dispatch({ type: "changeState", value: 3 });
     };

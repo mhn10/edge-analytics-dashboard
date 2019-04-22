@@ -5,12 +5,19 @@ import React from "react";
 import jwtDecode from "jwt-decode";
 import TaskContext from "../context/taskContext";
 import axios from "axios";
+import { useSpring, animated, config } from "react-spring";
 
 const { CONSTANTS } = require("../Constants");
 
 const MyTable = () => {
     const context = React.useContext(TaskContext);
     const [files, setFiles] = useState([]);
+    const animatedProps = useSpring({
+        opacity: 1,
+        marginLeft: 0,
+        config: config.default,
+        from: { opacity: 0.25, marginLeft: -50 }
+    });
 
     useEffect(() => {
         console.log("fetch data here");
@@ -155,9 +162,7 @@ const MyTable = () => {
                 </td>
                 <td>{file.name}</td>
                 <td>
-
-                    <Moment fromNow>{file.timeStamp}
-                    </Moment>
+                    <Moment fromNow>{file.timeStamp}</Moment>
                 </td>
                 <td>{file.data}</td>
                 <td>{file.type}</td>
@@ -212,11 +217,12 @@ const MyTable = () => {
         });
 
         return (
-            <table className="my-table">
+            <table>
                 <tr>
                     <th onClick={() => expandAll(files)}>
                         <RoundButton
                             status={buttonToggle}
+                            style={animatedProps}
                             onClick={() => setButtonToggle(!buttonToggle)}
                         >
                             {files.length === expandedRows.length ? "-" : "+"}
@@ -238,6 +244,8 @@ const MyTable = () => {
 
 export default MyTable;
 
+
+
 const Button = styled.button`
     background-color: transparent;
     background-repeat: no-repeat;
@@ -254,7 +262,7 @@ const Button = styled.button`
     }
 `;
 
-const RoundButton = styled.button`
+const RoundButton = styled(animated.button)`
     background: ${props => (props.status === true ? "#c5d8d3" : "#2196F3")};
     text-align: center;
     width: 35px;
