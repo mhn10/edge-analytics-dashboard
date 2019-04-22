@@ -7,8 +7,12 @@ const Node = require('../../Mqtt/mqtt_sub');
 router.get('/', (req, res, next) => {
 	console.log("Inside active Nodes API");
 	// create parameters
+	var data = {
+		action : "Active"
+	}
+	var dataTobeSent = JSON.stringify(data);
 	var params = {
-		MessageBody: "Active", // Its the name given by user for their upload
+		MessageBody: dataTobeSent, // Its the name given by user for their upload
 		QueueUrl: `${process.env.QUEUE_URL}NodeCommunication` // URL of our queue
 	};
 	sqs.sendMessage(params, (err, data) => {
