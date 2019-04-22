@@ -4,9 +4,8 @@ var broker = 'mqtt://iot.eclipse.org:1883'
 // const client = mqtt.connect(process.env.MQTT_BROKER);
 const client = mqtt.connect(broker);
 // const {client} = require('../index');
-var NodeInfoMap = new Map();
 var allNodes = [];
-var NodeDetails = new Map();
+var nodeDetail ={};
 
 // console.log( 'Connected to broker at: %s', process.env.MQTT_BROKER )
 console.log( 'Connected to broker at: %s', broker );
@@ -34,17 +33,11 @@ client.on('message', (topic, message) => {
 })
 
 function handleNodeInfo( message ) {
-	NodeDetails.clear();
-	console.log( 'Message received:' );
-	js = JSON.parse( message )
-	for ( key in js ) {
-		NodeDetails.set( key, js[key] );
-		// console.log( '%s: %s', key, js[key] );
-	}
+	console.log( 'Message received:', message);
+	nodeDetail = strMapToObj(message);
 }
 
 function handleActiveNodes( message ) {
-	// console.log("lund",message);
 	allNodes = [];
 	js = JSON.parse( message );
 	for ( i in js['Active'] ) {
@@ -64,13 +57,19 @@ function handleActiveNodes( message ) {
 }
 
 function handleResults( message ) {
-	// console.log( 'Message received for Resutls %s', message );
+	console.log("Inside handle Result, message received", message);
 }
 
-function getNodeInfo() {
+function getNodesInfo() {
 	console.log("Inside getNodeInfo");
 	console.log("NodeInfoMap", allNodes);
 	return allNodes;
+}
+
+function getNodeDetail() {
+	console.log("Inside getNodeDetail");
+	console.log("NodeDetail", nodeDetail);
+	return nodeDetail;
 }
 
 function strMapToObj(temp) {
@@ -81,4 +80,5 @@ function strMapToObj(temp) {
 	return obj;
 }
 
-module.exports = {getNodeInfo};
+module.exports = {getNodesInfo};
+module.exports = {getNodeDetail};
