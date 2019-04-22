@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from "react-router-dom";
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -43,6 +45,12 @@ class MenuAppBar extends React.Component {
         console.log(`User ${loggedInUser} logged out Successfully.`);
     }
 
+		handleTask = event => {
+		this.props.history.push('/add')
+	}
+	handleDeploy = event =>{
+		this.props.history.push('/task')
+	}
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
@@ -85,6 +93,8 @@ class MenuAppBar extends React.Component {
 			  onClose={this.handleClose}
 			>
 			  <MenuItem onClick={this.handleClose}>Dashboard</MenuItem>
+				<MenuItem onClick={this.handleTask}>New Task</MenuItem>
+				<MenuItem onClick={this.handleDeploy}>Deploy Task</MenuItem>
 			  <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
 			</Menu>
 		  </div>
@@ -119,4 +129,4 @@ MenuAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(MenuAppBar);
+export default withRouter(withStyles(styles)(MenuAppBar));

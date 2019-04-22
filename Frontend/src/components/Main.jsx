@@ -15,7 +15,7 @@ class Main extends Component {
       <div>
         {/*Render Different Component based on Route*/}
         <Route exact path="/" component={AddPage} />
-        <Route exact path="/test" component={AddPage} />
+        <Route exact path="/add" component={AddPage} />
         <Route exact path="/task" component={TaskPage} />
         <Route exact path="/signup" component={Signup} />
       </div>

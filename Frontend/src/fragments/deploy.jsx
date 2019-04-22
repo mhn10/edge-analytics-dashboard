@@ -3,6 +3,8 @@ import { withRouter } from "react-router-dom";
 import TaskContext from "../context/taskContext";
 import styled from "styled-components";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
+
 import Select from "react-select";
 
 const { CONSTANTS } = require("../Constants");
@@ -40,7 +42,31 @@ const Deploy = props => {
     }, []);
 
     const clickHandler = event => {
-        console.log("Button Clicked");
+        console.log("Deploy Clicked", context.taskState);
+        const { firstName } = jwtDecode(localStorage.getItem("userToken"));
+		console.log("TCL: firstName", firstName)
+        const {username, name, type, webcam,node} = context.taskState;
+        const data = { 
+            "userName" : firstName, 
+            "name": name,
+            "type": type,
+            "isCamera" : webcam,
+            "node" : node
+        }
+        console.log("data body ", data);
+        axios.post(`${CONSTANTS.BACKEND_URL}/runtask`,data)
+        .then( response => {
+        console.log("TCL: response", response);
+        context.dispatch({type : "changeState", value : 1});
+
+        })
+        .catch(error => {
+            
+			console.log("TCL: error", error)
+        })
+
+
+
     };
     const createOption = label => ({
         label: label.Name.split(".", 2)[1],
@@ -96,11 +122,14 @@ const Deploy = props => {
                     {context.taskState.requirement}
                 </span>
                 <div />
+                <div style={{textAlign:"left"}}>select node to perform compute
                 <Select
                     options={defaultOption}
                     onChange={changeHandler}
                     defaultValue={{ value: "none", label: "Any Node" }}
                 />
+                </div>
+   
                 <Button
                     as="input"
                     type="submit"

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import Moment from 'react-moment';
+import Moment from "react-moment";
 import React from "react";
 import jwtDecode from "jwt-decode";
 import TaskContext from "../context/taskContext";
@@ -10,49 +10,58 @@ const { CONSTANTS } = require("../Constants");
 
 const MyTable = () => {
     const context = React.useContext(TaskContext);
-    const [files,setFiles] = useState([]);
+    const [files, setFiles] = useState([]);
 
     useEffect(() => {
         console.log("fetch data here");
         //setData();
-        const {email} = jwtDecode(localStorage.getItem('userToken'));
-    console.log("Username decoded",email)
-        context.dispatch({type: "setUsername", email})
-        
+        const { email } = jwtDecode(localStorage.getItem("userToken"));
+        console.log("Username decoded", email);
+        context.dispatch({ type: "setUsername", email });
+
         axios
-        .get(`${CONSTANTS.BACKEND_URL}/userdetail`, {
-            params: {
-                username: email
-            }
-        })
-        .then(response => {
-            console.log("Response taskdetails", response.data);
-            //create option map to setDeafultoption
-            const  data  = response.data[0];
-            console.log("Data ",data);
-            const {classification, regression} = data;
-            console.log("Classification array, " ,classification, "regression", regression);
-            //context.dispatch({type: "setClassification", classification});
-            //context.dispatch({type:"setRegression", regression})
-            let classifiertype = classification.map(taskclassifier => ({...taskclassifier, type:'classification'}))
-            console.log("Classifier type ",classifiertype)
-            let regressiontype = regression.map(taskregression => ({...taskregression, type:'regression'}))
-			console.log("TCL: MyTable -> regressiontype", regressiontype)
+            .get(`${CONSTANTS.BACKEND_URL}/userdetail`, {
+                params: {
+                    username: email
+                }
+            })
+            .then(response => {
+                console.log("Response taskdetails", response.data);
+                //create option map to setDeafultoption
+                const data = response.data[0];
+                console.log("Data ", data);
+                const { classification, regression } = data;
+                console.log(
+                    "Classification array, ",
+                    classification,
+                    "regression",
+                    regression
+                );
+                //context.dispatch({type: "setClassification", classification});
+                //context.dispatch({type:"setRegression", regression})
+                let classifiertype = classification.map(taskclassifier => ({
+                    ...taskclassifier,
+                    type: "classification"
+                }));
+                console.log("Classifier type ", classifiertype);
+                let regressiontype = regression.map(taskregression => ({
+                    ...taskregression,
+                    type: "regression"
+                }));
+                console.log("TCL: MyTable -> regressiontype", regressiontype);
 
-            const taskArray = [...classifiertype, ...regressiontype];
-            setFiles(taskArray);
-			console.log("TCL: MyTable -> taskArray", taskArray);
-        })
-        .catch(error => {
-            console.log("Error in useEffect nameAdd", error);
-            alert("Data fetch failed, reload");
-        });
-
-
+                const taskArray = [...classifiertype, ...regressiontype];
+                setFiles(taskArray);
+                console.log("TCL: MyTable -> taskArray", taskArray);
+            })
+            .catch(error => {
+                console.log("Error in useEffect nameAdd", error);
+                alert("Data fetch failed, reload");
+            });
     }, []);
 
     const [expandedRows, setExpandedRows] = useState([]);
-const [buttonToggle, setButtonToggle] = useState(false);
+    const [buttonToggle, setButtonToggle] = useState(false);
     const handleExpand = (file, key) => {
         console.log(
             "Handle Exapnd ",
@@ -103,30 +112,39 @@ const [buttonToggle, setButtonToggle] = useState(false);
             console.log("Expanded rows " + newExpandedRows.length);
         }
     };
-    const handleDeploy= (file, key) =>{
-        console.log("deploy these ",file," key - " ,key);
-        const {name, timeStamp, requirement, data, input, code, model, type} = file;
+    const handleDeploy = (file, key) => {
+        console.log("deploy these ", file, " key - ", key);
+        const {
+            name,
+            timeStamp,
+            requirement,
+            data,
+            input,
+            code,
+            model,
+            type
+        } = file;
         const actionType = type;
-		console.log("TCL: handleDeploy -> file.name", name)
-		console.log("TCL: handleDeploy -> timeStamp", timeStamp)
-		console.log("TCL: handleDeploy -> requirement", requirement)
-		console.log("TCL: handleDeploy -> data", data)
-		console.log("TCL: handleDeploy -> input", input)
-		console.log("TCL: handleDeploy -> code", code)
-		console.log("TCL: handleDeploy -> model", model)
-        console.log("TCL: handleDeploy -> type", type)
-        context.dispatch({type:"setName", name});
-        context.dispatch({type:"setModel", model});
-        context.dispatch({type:"setTimeStamp", timeStamp});
-        context.dispatch({type:"setRequirement", requirement});
-        context.dispatch({type:"setData", data});
-        context.dispatch({type:"setInput", input});
-        context.dispatch({type:"setCode", code});
-        context.dispatch({type:"setType", actionType});
-        context.dispatch({type:"changeState" , value: 2})
+        console.log("TCL: handleDeploy -> file.name", name);
+        // console.log("TCL: handleDeploy -> timeStamp", timeStamp);
+        // console.log("TCL: handleDeploy -> requirement", requirement);
+        // console.log("TCL: handleDeploy -> data", data);
+        // console.log("TCL: handleDeploy -> input", input);
+        // console.log("TCL: handleDeploy -> code", code);
+        // console.log("TCL: handleDeploy -> model", model);
+        // console.log("TCL: handleDeploy -> type", type);
+        context.dispatch({ type: "setName", name });
+        context.dispatch({ type: "setModel", model });
+        context.dispatch({ type: "setTimeStamp", timeStamp });
+        context.dispatch({ type: "setRequirement", requirement });
+        context.dispatch({ type: "setData", data });
+        context.dispatch({ type: "setInput", input });
+        context.dispatch({ type: "setCode", code });
+        context.dispatch({ type: "setType", actionType });
+        context.dispatch({ type: "changeState", value: 2 });
         //change the step to next fragment, and  set context state to new deploy state
-        // 
-    }
+        //
+    };
     const getRows = (file, key) => {
         let rows = [];
 
@@ -136,10 +154,14 @@ const [buttonToggle, setButtonToggle] = useState(false);
                     <Button>{isExpanded(file, key) ? "-" : "+"}</Button>
                 </td>
                 <td>{file.name}</td>
-                <td><Moment>{file.timeStamp.date}</Moment></td>
+                <td>
+                    <Moment>{file.timeStamp.date}</Moment>
+                </td>
                 <td>{file.data}</td>
                 <td>{file.type}</td>
-                <td><Button onClick={() => handleDeploy(file,key)}>-></Button> </td>
+                <td>
+                    <Button onClick={() => handleDeploy(file, key)}>-></Button>{" "}
+                </td>
             </tr>
         );
 
@@ -152,7 +174,9 @@ const [buttonToggle, setButtonToggle] = useState(false);
                         <br />
                         <div className="attribute">
                             <div className="attribute-name">Requirement: </div>
-                            <div className="attribute-value">{file.requirement}</div>
+                            <div className="attribute-value">
+                                {file.requirement}
+                            </div>
                         </div>
                         <br />
                         <div className="attribute">
@@ -189,7 +213,10 @@ const [buttonToggle, setButtonToggle] = useState(false);
             <table className="my-table">
                 <tr>
                     <th onClick={() => expandAll(files)}>
-                        <RoundButton status={buttonToggle} onClick={() => setButtonToggle(!buttonToggle)}>
+                        <RoundButton
+                            status={buttonToggle}
+                            onClick={() => setButtonToggle(!buttonToggle)}
+                        >
                             {files.length === expandedRows.length ? "-" : "+"}
                         </RoundButton>
                     </th>
@@ -209,8 +236,6 @@ const [buttonToggle, setButtonToggle] = useState(false);
 
 export default MyTable;
 
-
-
 const Button = styled.button`
     background-color: transparent;
     background-repeat: no-repeat;
@@ -227,10 +252,8 @@ const Button = styled.button`
     }
 `;
 
-
 const RoundButton = styled.button`
-    background: ${(props) =>
-			props.status === true ? '#c5d8d3':'#2196F3' };
+    background: ${props => (props.status === true ? "#c5d8d3" : "#2196F3")};
     text-align: center;
     width: 35px;
     height: 35px;
