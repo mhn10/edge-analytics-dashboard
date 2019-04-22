@@ -12,6 +12,7 @@ import requests
 import time
 import sys, os
 import json
+import boto3
 
 # Constants
 BROKER_ADDR = "iot.eclipse.org"
@@ -20,24 +21,31 @@ TOPIC = "ActiveNodes"
 
 REQUEST_URL = "http://localhost:4001/members"
 
+sqs = boto3.resource( 'sqs' )
+queue = sqs.get_queue_by_name( QueueName = 'NodeCommunication' )
+
 
 def main():
     # activeNodes = []
     client = mqtt.Client()
     client.connect(BROKER_ADDR, BROKER_PORT )
     print( "Client connected" )
-
+    i = 0
     while True:
-        # Call to get list of members
-        r = requests.get( REQUEST_URL )
-        # Get JSON response
-        js = r.json()
-        print( js )
-        
-        client.publish(topic = TOPIC, payload = json.dumps( js ) )
-        
-        time.sleep( 3 )
-        # print( "----" )
+        for message in queue.receive_messages():
+            print( message.body )
+            if ( message.body == "Active" ):
+                # Call to get list of members
+                r = requests.get( REQUEST_URL )
+                # # Get JSON response
+                js = r.json()
+                print( i, js )
+                i+=1
+                
+                client.publish(topic = TOPIC, payload = json.dumps( js ) )
+
+            message.delete()
+        # client.publish(topic = TOPIC, payload="hello")
 
 
 if __name__ == '__main__':
