@@ -1,20 +1,50 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import TaskContext from "../context/taskContext";
 import styled from "styled-components";
 import axios from "axios";
+import CreatableSelect from "react-select/lib/Creatable";
+
+
+const { CONSTANTS } = require("../Constants");
 
 // import Button from "react-bootstrap/Button";
 
 const Deploy = props => {
     const context = React.useContext(TaskContext);
+    const [defaultOption, setDefaultOption] = useState([]);
+    const [value, setValue] = useState("");
+    const [loading, setLoading] = useState(false);
     // const {} = context
     console.log("All context is ", context);
+
+    useEffect(() => {
+        console.log("fetch Task here");
+        axios
+            .get(`${CONSTANTS.BACKEND_URL}/activenodes`)
+            .then(response => {
+                console.log("Response nodedetails", response.data);
+                //create option map to setDeafultoption
+                const { data } = response;
+                let result = data.map(task => createOption(task));
+                console.log("Default options", result);
+                setDefaultOption(result);
+            })
+            .catch(error => {
+                console.log("Error in useEffect nameAdd", error);
+                alert("Data fetch failed, reload");
+            });
+    }, []);
 
     const clickHandler = event => {
         console.log("Button Clicked");
 
     };
+    const createOption = label => ({
+        label,
+        value: label.toLowerCase().replace(/\W/g, "")
+    });
+
     return (
         <SubmitWrapper>
             {/* <section className="page-content"> */}
