@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const AWS = require("aws-sdk");
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
-const Node = require('../../Mqtt/mqtt_sub');
+const {getNodesInfo} = require('../../Mqtt/mqtt_sub');
 
 router.get('/', (req, res, next) => {
 	console.log("Inside active Nodes API");
@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => {
 			return res.status(400).send(err);
 		} else {
 			// console.log("Success", data.MessageId);
-			var result = Node.getNodesInfo();
+			var result = getNodesInfo();
 			return res.status(200).send(result);
 		}
 	});
