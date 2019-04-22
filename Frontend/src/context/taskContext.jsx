@@ -2,25 +2,17 @@ import * as React from "react";
 
 const taskContext = {
     username: "",
-    classification: [{
-        name: "",
-        requirement: "",
-        data: "",
-        input: "",
-        result: "",
-        code: "",
-        model: "",
-        timeStamp:""
-    }],
-    regression : [{
-        name: "",
-        requirement: "",
-        data: "",
-        input: "",
-        result: "",
-        code: "",
-        timeStamp:""
-    }],
+
+    name: "",
+    type: "",
+    requirement: "",
+    data: "",
+    input: "",
+    result: "",
+    code: "",
+    model: "",
+    timeStamp: "",
+
     step: 1,
 
     dispatch: action => action

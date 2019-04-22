@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { PageHeader} from '../components/Page';
+import { PageHeader } from "../components/Page";
 
 import AddContext from "../context/addContext";
 import styled from "styled-components";
 import CreatableSelect from "react-select/lib/Creatable";
 import axios from "axios";
 const { CONSTANTS } = require("../Constants");
+
 const NamesAdd = props => {
     const context = React.useContext(AddContext);
     const [defaultOption, setDefaultOption] = useState([]);
@@ -42,9 +43,6 @@ const NamesAdd = props => {
         context.dispatch({ type: "setName", newValue });
         // context.dispatch({ type: "changeState", value: 3 });
     };
-    const submitHandler = values => {
-        context.dispatch({ type: "changeState", value: 3 });
-    };
 
     const createOption = label => ({
         label,
@@ -64,16 +62,9 @@ const NamesAdd = props => {
             setLoading(false);
             setValue(newOption.value);
             const newValue = newOption.value;
-			console.log("TCL: newValue", newValue)
+            console.log("TCL: newValue", newValue);
 
             context.dispatch({ type: "setName", newValue });
-
-
-            //   this.setState({
-            //     isLoading: false,
-            //     options: [...options, newOption],
-            //     value: newOption,
-            //   });
         }, 500);
         setTimeout(() => {
             console.log("Moving to next step, ", context.addState);
@@ -84,18 +75,21 @@ const NamesAdd = props => {
     return (
         <NameWrapper>
             <section className="page-content">
-            		<PageHeader title={'Add Task Name'} />
-            <CreatableSelect
-                isClearable
-                isDisabled={loading}
-                isLoading={loading}
-                onChange={changeHandler}
-                onCreateOption={handleCreate}
-                options={defaultOption}
-                value={value}
-                defaultValue = {{value:context.addState.name, label:context.addState.name}}
-            />
-           			</section>
+                <PageHeader title={"Add Task Name"} />
+                <CreatableSelect
+                    isClearable
+                    isDisabled={loading}
+                    isLoading={loading}
+                    onChange={changeHandler}
+                    onCreateOption={handleCreate}
+                    options={defaultOption}
+                    value={value}
+                    defaultValue={{
+                        value: context.addState.name,
+                        label: context.addState.name
+                    }}
+                />
+            </section>
         </NameWrapper>
     );
 };

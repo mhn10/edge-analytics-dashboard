@@ -1,53 +1,19 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
-import AddContext from "../context/addContext";
+import TaskContext from "../context/taskContext";
 import styled from "styled-components";
 import axios from "axios";
 
 // import Button from "react-bootstrap/Button";
 
-const SubmitAdd = props => {
-    const context = React.useContext(AddContext);
+const Deploy = props => {
+    const context = React.useContext(TaskContext);
     // const {} = context
-    console.log("All context is ", context, "ADDState is: ", context.addState);
+    console.log("All context is ", context);
 
     const clickHandler = event => {
         console.log("Button Clicked");
-        event.preventDefault();
-        const formData = new FormData();
-        const {
-            name,
-            type,
-            username,
-            requirement,
-            data,
-            input,
-            code,
-            model
-        } = context.addState;
-        formData.append("taskname", name);
-        formData.append("type", type);
-        formData.append("username", username);
-        formData.append("requirement", requirement);
-        formData.append("data", data);
-        formData.append("input", input);
-        formData.append("code", code);
-        formData.append("model", model);
 
-        console.log("FormData before upload ", formData);
-        axios
-            .post(`http://localhost:3001/uploadfile`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            })
-            .then(response => {
-                console.log("data upload success", response);
-                props.history.push("/task");
-            })
-            .catch(error => {
-                console.log("error", error);
-            });
     };
     return (
         <SubmitWrapper>
@@ -57,37 +23,37 @@ const SubmitAdd = props => {
                 <h3>TASK</h3>
                 <label>Name :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.addState.name}
+                    {context.taskState.name}
                 </span>
                 <div />
                 <label>Type of Task :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.addState.type}
+                    {context.taskState.type}
                 </span>
                 <div />
                 <label>Model :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.addState.model.name}
+                    {context.taskState.model}
                 </span>
                 <div />
                 <label>Input :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.addState.input.name}
+                    {context.taskState.input}
                 </span>
                 <div />
                 <label>Data :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.addState.data.name}
+                    {context.taskState.data}
                 </span>
                 <div />
                 <label>Code :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.addState.code.name}
+                    {context.taskState.code}
                 </span>
                 <div />
                 <label>Requirement :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.addState.requirement.name}
+                    {context.taskState.requirement}
                 </span>
                 <div />
                 <Button
@@ -102,7 +68,7 @@ const SubmitAdd = props => {
     );
 };
 
-export default withRouter(SubmitAdd);
+export default withRouter(Deploy);
 
 const SubmitWrapper = styled.div`
     background: white;

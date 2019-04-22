@@ -5,8 +5,9 @@ import LoginNavbar from "../components/Navbar/loginnavbar";
 
 // import AddContext from "../context/addContext";
 import { PageWrapper } from "../components/Page";
-import NamesAdd from "../fragments/nameAdd";
 import MyTable from "../components/table";
+import Deploy from "../fragments/deploy";
+
 import TaskContext from "../context/taskContext";
 
 const reducer = (state, action) => {
@@ -28,10 +29,22 @@ const reducer = (state, action) => {
             };
         case "setUsername":
             return { ...state, username: action.email };
-        case "setClassification":
-            return { ...state, classification: action.classification };
-        case "setRegression":
-            return { ...state, regression: action.regression };
+        case "setName":
+            return { ...state, name: action.name };
+        case "setModel":
+            return { ...state, model: action.model };
+        case "setTimeStamp":
+            return { ...state, timeStamp: action.timeStamp };
+        case "setRequirement":
+            return { ...state, requirement: action.requirement };
+        case "setData":
+            return { ...state, data: action.data };
+        case "setCode":
+            return { ...state, code: action.code };
+        case "setInput":
+            return { ...state, input: action.input };
+        case "setType":
+            return { ...state, type: action.type };
         default:
             return state;
     }
@@ -40,29 +53,15 @@ const reducer = (state, action) => {
 const TaskPage = ({ props }) => {
     const [taskState, dispatch] = React.useReducer(reducer, {
         username: "",
-        classification: [
-            {
-                name: "",
-                requirement: "",
-                data: "",
-                input: "",
-                result: "",
-                code: "",
-                model: "",
-                timeStamp: ""
-            }
-        ],
-        regression: [
-            {
-                name: "",
-                requirement: "",
-                data: "",
-                input: "",
-                result: "",
-                code: "",
-                timeStamp: ""
-            }
-        ],
+        name: "",
+        type: "",
+        requirement: "",
+        data: "",
+        input: "",
+        result: "",
+        code: "",
+        model: "",
+        timeStamp: "",
         step: 1
     });
     const incrementState = () => {
@@ -81,13 +80,31 @@ const TaskPage = ({ props }) => {
             <BodyWrapper>
                 <PageWrapper>
                     <section className="page-content">
-                    <TaskContext.Provider value={{ taskState, dispatch }}>
+                        <TaskContext.Provider value={{ taskState, dispatch }}>
+                            <AddDetailsWrapper>
+                                {taskState.step > 1 && (
+                                    <Button
+                                        label={"Previous Step"}
+                                        onClick={decrementState}
+                                    >
+                                        Previous Step
+                                    </Button>
+                                )}
+                                {taskState.step < 4 && taskState.step > 1 && (
+                                    <Button
+                                        className="next-step"
+                                        label={"Next Step"}
+                                        onClick={incrementState}
+                                    >
+                                        Next Step
+                                    </Button>
+                                )}
 
-                        <AddDetailsWrapper>
-                            <MyTable />
-                        </AddDetailsWrapper>
+                                {taskState.step === 1 && <MyTable />}
+                                {taskState.step === 2 && <Deploy />}
+
+                            </AddDetailsWrapper>
                         </TaskContext.Provider>
-
                     </section>
                 </PageWrapper>
             </BodyWrapper>

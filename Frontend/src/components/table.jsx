@@ -32,8 +32,8 @@ const MyTable = () => {
             console.log("Data ",data);
             const {classification, regression} = data;
             console.log("Classification array, " ,classification, "regression", regression);
-            context.dispatch({type: "setClassification", classification});
-            context.dispatch({type:"setRegression", regression})
+            //context.dispatch({type: "setClassification", classification});
+            //context.dispatch({type:"setRegression", regression})
             let classifiertype = classification.map(taskclassifier => ({...taskclassifier, type:'classification'}))
             console.log("Classifier type ",classifiertype)
             let regressiontype = regression.map(taskregression => ({...taskregression, type:'regression'}))
@@ -105,6 +105,24 @@ const [buttonToggle, setButtonToggle] = useState(false);
     };
     const handleDeploy= (file, key) =>{
         console.log("deploy these ",file," key - " ,key);
+        const {name, timeStamp, requirement, data, input, code, model, type} = file;
+		console.log("TCL: handleDeploy -> file.name", name)
+		console.log("TCL: handleDeploy -> timeStamp", timeStamp)
+		console.log("TCL: handleDeploy -> requirement", requirement)
+		console.log("TCL: handleDeploy -> data", data)
+		console.log("TCL: handleDeploy -> input", input)
+		console.log("TCL: handleDeploy -> code", code)
+		console.log("TCL: handleDeploy -> model", model)
+        console.log("TCL: handleDeploy -> type", type)
+        context.dispatch({type:"setName", name});
+        context.dispatch({type:"setModel", model});
+        context.dispatch({type:"setTimeStamp", timeStamp});
+        context.dispatch({type:"setRequirement", requirement});
+        context.dispatch({type:"setData", data});
+        context.dispatch({type:"setInput", input});
+        context.dispatch({type:"setCode", code});
+        context.dispatch({type:"setType", type});
+        context.dispatch({type:"changeState" , value: 2})
         //change the step to next fragment, and  set context state to new deploy state
         // 
     }
