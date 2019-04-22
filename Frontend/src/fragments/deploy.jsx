@@ -11,35 +11,14 @@ const { CONSTANTS } = require("../Constants");
 
 const Deploy = props => {
     const context = React.useContext(TaskContext);
-    const [defaultOption, setDefaultOption] = useState([]);
+    const [defaultOption, setDefaultOption] = useState([{label: "None", value : "none"}]);
     const [value, setValue] = useState("");
     const [loading, setLoading] = useState(false);
     // const {} = context
     console.log("All context is ", context);
 
-
-    // const nodeDetails = [
-    //     {
-    //         "Name": "localhost.localdomain-8cbb5f83-6487-11e9-b81f-94e979ea0593",
-    //         "IP": "192.168.0.119",
-    //         "Port": 9000
-    //     },
-    //     {
-    //         "Name": "localhost.localdomain-17ddae66-6475-11e9-ba6a-94e979ea0593",
-    //         "IP": "192.168.0.119",
-    //         "Port": 8000
-    //     }
-    // ]
-
     useEffect(() => {
         console.log("fetch Task here");
-
-
-
-        // let result = nodeDetails.map(task => createOption(task.name));
-        //         console.log("Default options", result);
-        //         setDefaultOption(result);
-        // console.log("TCL: result", result)
 
         axios
             .get(`${CONSTANTS.BACKEND_URL}/activenodes`)
@@ -50,7 +29,7 @@ const Deploy = props => {
         let result = data.map(task => createOption(task));
         console.log("TCL: result", result)
                 // console.log("Default options", result);
-                setDefaultOption(result);
+                setDefaultOption([ ...defaultOption, ...result ]);
             })
             .catch(error => {
                 console.log("Error in useEffect nameAdd", error);
