@@ -32,8 +32,8 @@ const reducer = (state, action) => {
             };
 
         case "setName":
-            return { ...state, name: action.newVal};
-            // return { ...state, name: (action.newValue === null? "none" : action.newValue)};
+            // return { ...state, name: action.newVal};
+            return { ...state, name: (action.newValue === null? "none" : action.newValue)};
 
         // case "getName":
         // 	return  {name: state.name} ;
@@ -97,7 +97,7 @@ const AddPage = ({ props }) => {
                 <PageWrapper>
                     <section className="page-content">
                         <AddContext.Provider value={{ addState, dispatch }}>
-                            {
+                            {<>
                                 <AddDetailsWrapper>
                                     {addState.step > 1 && (
                                         <Button
@@ -129,8 +129,10 @@ const AddPage = ({ props }) => {
                                             <InputAddRegression />
                                         )}
                                     {addState.step === 4 && <SubmitAdd />}
-                                    {/* <Cards /> */}
+                                   
                                 </AddDetailsWrapper>
+                                 {/* <Cards /> */}
+                                 </>
                             }
                         </AddContext.Provider>
                     </section>

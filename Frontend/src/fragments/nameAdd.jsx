@@ -39,10 +39,10 @@ const NamesAdd = props => {
     const changeHandler = (newValue, actionMeta) => {
         console.log("Values, ", newValue);
         console.log(`action: ${actionMeta.action}`);
-        const newVal = newValue.value;
-		console.log("TCL: changeHandler -> newVal", newVal)
-        setValue(newVal);
-        context.dispatch({ type: "setName", newVal });
+        // const newVal = newValue.value;
+		console.log("TCL: changeHandler -> newVal", newValue)
+        setValue(newValue);
+        context.dispatch({ type: "setName", newValue });
         context.dispatch({ type: "changeState", value: 3 });
     };
 
@@ -63,10 +63,10 @@ const NamesAdd = props => {
             setDefaultOption([...defaultOption, newOption]);
             setLoading(false);
             setValue(newOption.value);
-            const newVal = newOption.value;
-            console.log("TCL: newValue", newVal);
+            const newValue = newOption.value;
+            console.log("TCL: newValue", newValue);
 
-            context.dispatch({ type: "setName", newVal });
+            context.dispatch({ type: "setName", newValue });
         }, 500);
         setTimeout(() => {
             console.log("Moving to next step, ", context.addState);

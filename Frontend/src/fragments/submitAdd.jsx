@@ -3,14 +3,14 @@ import { withRouter } from "react-router-dom";
 import AddContext from "../context/addContext";
 import styled from "styled-components";
 import axios from "axios";
-
+import {useSpring, animated, config} from 'react-spring'
 // import Button from "react-bootstrap/Button";
 
 const SubmitAdd = props => {
     const context = React.useContext(AddContext);
     // const {} = context
     console.log("All context is ", context, "ADDState is: ", context.addState);
-
+    const animatedProps = useSpring({opacity: 1,marginRight:0, config:config.default, from: {opacity: 0, marginRight:-200}});
     const clickHandler = event => {
         console.log("Button Clicked");
         event.preventDefault();
@@ -53,7 +53,7 @@ const SubmitAdd = props => {
         <SubmitWrapper>
             {/* <section className="page-content"> */}
             {/* <PageHeader title={'Review All the Details'} /> */}
-            <div>
+            <animated.div style={animatedProps}>
                 <h3>TASK</h3>
                 <label>Name :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
@@ -97,7 +97,7 @@ const SubmitAdd = props => {
                     onClick={clickHandler}
                     //   style={{position:'inherit', right : '0'}}
                 />
-            </div>
+            </animated.div>
         </SubmitWrapper>
     );
 };
