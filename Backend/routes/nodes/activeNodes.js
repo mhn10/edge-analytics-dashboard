@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => {
 			return res.status(400).send(err);
 		} else {
 			// console.log("Success", data.MessageId);
-			var result = Node.getNodeInfo();
+			var result = Node.getNodesInfo();
 			return res.status(200).send(result);
 		}
 	});
