@@ -173,3 +173,6 @@ const app = require('./app');
 const server = http.createServer(app);
 server.listen(port);
 console.log("Server Listening on port 3001");
+// const mqtt = require('mqtt');
+// export const client = mqtt.connect(process.env.MQTT_BROKER);
+

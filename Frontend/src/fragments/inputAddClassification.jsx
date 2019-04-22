@@ -2,9 +2,9 @@ import * as React from "react";
 import AddContext from "../context/addContext";
 import styled from "styled-components";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import {useSpring, animated, config} from 'react-spring'
 
-const InputAddClassification = props => {
+const InputAddClassification = () => {
   // const [type, setType] = React.useState("");
   //   const [model, setModel] = React.useState(undefined);
   //   const [requirement, setRequirement] = React.useState('');
@@ -12,6 +12,7 @@ const InputAddClassification = props => {
   //   const [data, setData] = React.useState('');
   //   const [input, setInput] = React.useState('');
   const context = React.useContext(AddContext);
+  const animatedProps = useSpring({opacity: 1,marginRight:0, config:config.default, from: {opacity: 0, marginRight:-200}});
 
   const modelHandler = files => {
     console.log("Types in changehandle", files[0]);
@@ -148,7 +149,7 @@ const InputAddClassification = props => {
           </ul>
         </Form.Group>
 
-        <Button variant="primary" type="submit" onClick={submitHandler}>
+        <Button variant="primary" type="submit" onClick={submitHandler} style={animatedProps}>
           Next
         </Button>
       </Form>
@@ -187,4 +188,19 @@ const FileWrapper = styled.div`
     font-weight: lighter;
     text-align: center;
   }
+`;
+
+
+const Button = styled(animated.button)`
+    background-color: transparent;
+    background-repeat: no-repeat;
+    padding: 2rem;
+    margin: 1rem;
+    border: 1px;
+    overflow: hidden;
+    outline: none;
+    color: #2196f3;
+    font-size: 1.5rem;
+    cursor: pointer;
+    float: right;
 `;

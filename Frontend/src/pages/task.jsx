@@ -5,8 +5,10 @@ import LoginNavbar from "../components/Navbar/loginnavbar";
 
 // import AddContext from "../context/addContext";
 import { PageWrapper } from "../components/Page";
-import NamesAdd from "../fragments/nameAdd";
 import MyTable from "../components/table";
+import Deploy from "../fragments/deploy";
+
+import TaskContext from "../context/taskContext";
 
 const reducer = (state, action) => {
     const { type } = action;
@@ -18,25 +20,44 @@ const reducer = (state, action) => {
         case "incrementState":
             return {
                 ...state,
-                step: state.step < 4 ? state.step + 1 : state.step
+                step: state.step < 2 ? state.step + 1 : state.step
             };
         case "decrementState":
             return {
                 ...state,
                 step: state.step > 1 ? state.step - 1 : state.step
             };
-
-
-
+        case "setUsername":
+            return { ...state, username: action.email };
+        case "setName":
+            return { ...state, name: action.name };
+        case "setModel":
+            return { ...state, model: action.model };
+        case "setTimeStamp":
+            return { ...state, timeStamp: action.timeStamp };
+        case "setRequirement":
+            return { ...state, requirement: action.requirement };
+        case "setData":
+            return { ...state, data: action.data };
+        case "setCode":
+            return { ...state, code: action.code };
+        case "setInput":
+            return { ...state, input: action.input };
+        case "setType":
+            return { ...state, type: action.actionType };
+        case "setNode":
+            return { ...state, node: action.value };
+        case "setWebcam":
+            return { ...state, webcam: action.webcam };
         default:
             return state;
     }
 };
 
 const TaskPage = ({ props }) => {
-    const [addState, dispatch] = React.useReducer(reducer, {
-        name: "",
+    const [taskState, dispatch] = React.useReducer(reducer, {
         username: "",
+        name: "",
         type: "",
         requirement: "",
         data: "",
@@ -44,16 +65,19 @@ const TaskPage = ({ props }) => {
         result: "",
         code: "",
         model: "",
+        timeStamp: "",
+        node: "none",
+        webcam: "false",
         step: 1
     });
     const incrementState = () => {
         dispatch({ type: "incrementState" });
-        console.log(addState);
+        console.log(taskState);
     };
 
     const decrementState = () => {
         dispatch({ type: "decrementState" });
-        console.log(addState);
+        console.log(taskState);
     };
 
     return (
@@ -62,11 +86,32 @@ const TaskPage = ({ props }) => {
             <BodyWrapper>
                 <PageWrapper>
                     <section className="page-content">
-                    <AddDetailsWrapper>
-<MyTable />
- </AddDetailsWrapper>
+                        <TaskContext.Provider value={{ taskState, dispatch }}>
+                            <AddDetailsWrapper>
+                                {taskState.step > 1 && (
+                                    <Button
+                                        label={"Previous Step"}
+                                        onClick={decrementState}
+                                    >
+                                        Previous Step
+                                    </Button>
+                                )}
+                                {/* {taskState.step < 2 && taskState.step > 1 && (
+                                    <Button
+                                        className="next-step"
+                                        label={"Next Step"}
+                                        onClick={incrementState}
+                                    >
+                                        Next Step
+                                    </Button>
+                                )} */}
+
+                                {taskState.step === 1 && <MyTable />}
+                                {taskState.step === 2 && <Deploy />}
+                            </AddDetailsWrapper>
+                        </TaskContext.Provider>
                     </section>
-                 </PageWrapper>
+                </PageWrapper>
             </BodyWrapper>
         </>
     );
@@ -118,3 +163,35 @@ const BodyWrapper = styled.div`
         }
     }
 `;
+
+const Table = styled.table`
+    position: relative;
+    height: 100px;
+    background-image: linear-gradient(#ff9d2f, #ff6126);
+    border-bottom-left-radius: 50% 20%;
+    border-bottom-right-radius: 50% 20%;
+`;
+
+// const AddDetailsWrapper = styled.div`
+//     /* background: white; */
+
+//     border: 2px solid #f8f8f8;
+//     margin-top: 2rem;
+//     margin-left: 2rem;
+//     padding: 2rem;
+//     box-sizing: border-box;
+//     border-radius: 10px;
+//     color: #606060;
+   
+//     .background__skew {
+//         background-image: linear-gradient(#ff9d2f, #ff6126);
+        
+//         position: relative;
+//         top: 0;
+//         bottom: 0;
+//         right: 0;
+//         left: 0;
+//         width: 100%;
+//         height: 65px;
+//     }
+// `;

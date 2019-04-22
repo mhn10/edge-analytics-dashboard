@@ -28,12 +28,12 @@ const reducer = (state, action) => {
         case "decrementState":
             return {
                 ...state,
-                step: state.step > 1 ? state.step - 1 : state.step
+                step: state.step > 0 ? state.step - 1 : state.step
             };
 
         case "setName":
-            console.log("name: ", action.values);
-            return { ...state, name: action.values };
+            // return { ...state, name: action.newVal};
+            return { ...state, name: (action.newValue === null? "none" : action.newValue)};
 
         // case "getName":
         // 	return  {name: state.name} ;
@@ -97,7 +97,7 @@ const AddPage = ({ props }) => {
                 <PageWrapper>
                     <section className="page-content">
                         <AddContext.Provider value={{ addState, dispatch }}>
-                            {
+                            {<>
                                 <AddDetailsWrapper>
                                     {addState.step > 1 && (
                                         <Button
@@ -129,8 +129,10 @@ const AddPage = ({ props }) => {
                                             <InputAddRegression />
                                         )}
                                     {addState.step === 4 && <SubmitAdd />}
-                                    {/* <Cards /> */}
+                                   
                                 </AddDetailsWrapper>
+                                 {/* <Cards /> */}
+                                 </>
                             }
                         </AddContext.Provider>
                     </section>

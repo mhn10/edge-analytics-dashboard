@@ -7,6 +7,7 @@ import Home from "./home";
 import AddPage from "../pages/add";
 import TaskPage from "../pages/task";
 import Signup from "./signup";
+import Dashboard from "../pages/dashboard"
 // Create a Main Component
 
 class Main extends Component {
@@ -15,9 +16,10 @@ class Main extends Component {
       <div>
         {/*Render Different Component based on Route*/}
         <Route exact path="/" component={AddPage} />
-        <Route exact path="/test" component={AddPage} />
+        <Route exact path="/add" component={AddPage} />
         <Route exact path="/task" component={TaskPage} />
         <Route exact path="/signup" component={Signup} />
+        <Route exact path="/dashboard" component={Dashboard} />
       </div>
     );
   }
