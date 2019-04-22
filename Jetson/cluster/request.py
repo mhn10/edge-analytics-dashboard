@@ -3,11 +3,20 @@ import json
 import paho.mqtt.client as mqtt
 import platform
 import psutil
+import boto3
+
+
+# Constants
+BROKER_ADDR = "iot.eclipse.org"
+BROKER_PORT = 1883
+TOPIC = "NodeInfo"
+
+REQUEST_URL = "http://localhost:4001/info"
 
 node_details = dict()
 
 # Call to get info of Nodes
-r = requests.get("http://localhost:4001/info")
+r = requests.get( REQUEST_URL )
 # Get JSON response
 js = r.json()
 # print(r.headers)
@@ -30,12 +39,9 @@ node_details['memory_used'] = round (memory.used / ( 1024 * 1024 * 1024 ), 2)
 node_details['memory_available'] = round (memory.available / ( 1024 * 1024 * 1024 ), 2)
 
 
-# Broker for our pub-sub
-broker_address = "iot.eclipse.org"
-broker_portno = 1883
 # Start the client
 client = mqtt.Client()
 # Connect to broker
-client.connect(broker_address, broker_portno)
+client.connect( BROKER_ADDR, BROKER_PORT )
 # Publish the message
-client.publish( topic = "NodeInfo", payload = json.dumps( node_details ) )
+client.publish( topic = TOPIC, payload = json.dumps( node_details ) )
