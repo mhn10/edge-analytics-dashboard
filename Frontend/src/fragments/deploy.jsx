@@ -122,11 +122,14 @@ const Deploy = props => {
                     {context.taskState.requirement}
                 </span>
                 <div />
+                <div style={{textAlign:"left"}}>select node to perform compute
                 <Select
                     options={defaultOption}
                     onChange={changeHandler}
                     defaultValue={{ value: "none", label: "Any Node" }}
                 />
+                </div>
+   
                 <Button
                     as="input"
                     type="submit"

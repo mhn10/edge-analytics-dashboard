@@ -20,7 +20,7 @@ const reducer = (state, action) => {
         case "incrementState":
             return {
                 ...state,
-                step: state.step < 4 ? state.step + 1 : state.step
+                step: state.step < 2 ? state.step + 1 : state.step
             };
         case "decrementState":
             return {
@@ -96,7 +96,7 @@ const TaskPage = ({ props }) => {
                                         Previous Step
                                     </Button>
                                 )}
-                                {taskState.step < 3 && taskState.step > 1 && (
+                                {/* {taskState.step < 2 && taskState.step > 1 && (
                                     <Button
                                         className="next-step"
                                         label={"Next Step"}
@@ -104,7 +104,7 @@ const TaskPage = ({ props }) => {
                                     >
                                         Next Step
                                     </Button>
-                                )}
+                                )} */}
 
                                 {taskState.step === 1 && <MyTable />}
                                 {taskState.step === 2 && <Deploy />}
