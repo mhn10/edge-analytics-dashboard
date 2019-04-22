@@ -61,7 +61,7 @@ function handleResults( message ) {
 }
 
 function getNodesInfo() {
-	console.log("Inside getNodeInfo");
+	console.log("Inside getNodesInfo");
 	console.log("NodeInfoMap", allNodes);
 	return allNodes;
 }
@@ -71,6 +71,7 @@ function getNodeDetail() {
 	console.log("NodeDetail", nodeDetail);
 	return nodeDetail;
 }
+module.exports = {getNodesInfo, getNodeDetail};
 
 function strMapToObj(temp) {
 	let obj = Object.create(null);
@@ -79,6 +80,3 @@ function strMapToObj(temp) {
 	}
 	return obj;
 }
-
-module.exports = {getNodesInfo};
-module.exports = {getNodeDetail};
