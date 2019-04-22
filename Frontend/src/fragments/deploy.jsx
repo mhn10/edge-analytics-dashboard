@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import TaskContext from "../context/taskContext";
 import styled from "styled-components";
 import axios from "axios";
-import Select from 'react-select'
+import Select from "react-select";
 
 const { CONSTANTS } = require("../Constants");
 
@@ -11,7 +11,9 @@ const { CONSTANTS } = require("../Constants");
 
 const Deploy = props => {
     const context = React.useContext(TaskContext);
-    const [defaultOption, setDefaultOption] = useState([{label: "None", value : "none"}]);
+    const [defaultOption, setDefaultOption] = useState([
+        { label: "Any Node", value: "none" }
+    ]);
     const [value, setValue] = useState("");
     const [loading, setLoading] = useState(false);
     // const {} = context
@@ -26,10 +28,10 @@ const Deploy = props => {
                 console.log("Response nodedetails", response.data);
                 //create option map to setDeafultoption
                 const { data } = response;
-        let result = data.map(task => createOption(task));
-        console.log("TCL: result", result)
+                let result = data.map(task => createOption(task));
+                console.log("TCL: result", result);
                 // console.log("Default options", result);
-                setDefaultOption([ ...defaultOption, ...result ]);
+                setDefaultOption([...defaultOption, ...result]);
             })
             .catch(error => {
                 console.log("Error in useEffect nameAdd", error);
@@ -39,24 +41,19 @@ const Deploy = props => {
 
     const clickHandler = event => {
         console.log("Button Clicked");
-
     };
     const createOption = label => ({
         label: label.Name.split(".", 2)[1],
         value: label.Name
     });
 
-
     const changeHandler = types => {
-	
-		
-	  const { value } = types;
-	  console.log("Values, ", value );
-      context.dispatch({ type: "setNode", value });
-      console.log("Context set", context)
-	//   context.dispatch({ type: "changeState", value: 2 });
-  
-  };
+        const { value } = types;
+        console.log("Values, ", value);
+        context.dispatch({ type: "setNode", value });
+        console.log("Context set", context);
+        //   context.dispatch({ type: "changeState", value: 2 });
+    };
 
     return (
         <SubmitWrapper>
@@ -99,7 +96,11 @@ const Deploy = props => {
                     {context.taskState.requirement}
                 </span>
                 <div />
-                <Select options={defaultOption} onChange={changeHandler}  defaultValue={{value: "none", label: "None"}} />
+                <Select
+                    options={defaultOption}
+                    onChange={changeHandler}
+                    defaultValue={{ value: "none", label: "None" }}
+                />
                 <Button
                     as="input"
                     type="submit"

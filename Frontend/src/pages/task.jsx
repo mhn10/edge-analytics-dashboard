@@ -96,7 +96,7 @@ const TaskPage = ({ props }) => {
                                         Previous Step
                                     </Button>
                                 )}
-                                {taskState.step < 4 && taskState.step > 1 && (
+                                {taskState.step < 3 && taskState.step > 1 && (
                                     <Button
                                         className="next-step"
                                         label={"Next Step"}
