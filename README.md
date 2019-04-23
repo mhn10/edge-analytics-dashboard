@@ -66,6 +66,7 @@ node index.js
 ```
 
 #### Jetson
+[Refer Jetson Reeadme](https://github.com/mhn10/edge-analytics-dashboard/blob/master/Jetson/Readme.md)
 
 ## Credits
 Mentor - Kaikai Liu
