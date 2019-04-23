@@ -121,11 +121,11 @@ const AddPage = ({ props }) => {
                                     {addState.step === 2 && <NamesAdd />}
                                   
                                     {addState.step === 3 &&
-                                        addState.type === "classification" && (
+                                        addState.type === "Classification" && (
                                             <InputAddClassification />
                                         )}
                                     {addState.step === 3 &&
-                                        addState.type === "regression" && (
+                                        addState.type === "Regression" && (
                                             <InputAddRegression />
                                         )}
                                     {addState.step === 4 && <SubmitAdd />}

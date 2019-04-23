@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 			return res.status(404).send(err);
 		} else {
 			var tasks = [];
-			if(actionType === "classification") {
+			if(actionType === "Classification") {
 				user[0].classification.forEach(item =>{
 					var task = item.name;
 					tasks.push(task); 
