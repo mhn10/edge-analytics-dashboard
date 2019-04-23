@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
 const getFilesWithTaskNameFromS3 = (parentFolder) => {
 	return new Promise((resolve, reject) => {
 		console.log("entered getFiles with task name from s3");
-		s3.listObjects({ Bucket: process.env.S3_BUCKET_BAK, Prefix: parentFolder }, function (err, data) {
+		s3.listObjects({ Bucket: process.env.S3_BUCKET, Prefix: parentFolder }, function (err, data) {
 			if (err) {
 				console.log(err);
 				reject(err);
@@ -77,7 +77,7 @@ const getFilesWithTaskNameFromS3 = (parentFolder) => {
 						var taskName = tempSplit[2];
 						var fileName = tempSplit[4];
 						var actionType = tempSplit[1];
-						var resultPath = `${process.env.S3_PREFIX_PATH_BAK}${process.env.S3_BUCKET_BAK}/${temp}`;
+						var resultPath = `${process.env.S3_PREFIX_PATH_BAK}${process.env.S3_BUCKET}/${temp}`;
 						var fileObj = {
 							"result": fileName,
 							"resultPath": resultPath,
