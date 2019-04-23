@@ -12,7 +12,7 @@ The app has been structured in a way to take advantage of the context api. We us
 Each of the main pages will have a few fragments that are rendered on the basis of the 'step' state in appropriate context. The useReducer hook binds the context states to the reducer actions to change the state.
 By doing so, we are able to rerender only the fragment inside a page, avoiding unnecessary rerenders in react [reconciliation](https://reactjs.org/docs/reconciliation.html).  
 
-![Architecture Diagram](https://github.com/mhn10/edge-analytics-dashboard/blob/master/readme_assets/React.png)
+![Architecture Diagram](https://github.com/mhn10/edge-analytics-dashboard/blob/DeployTaskPage/readme_assets/React.png)
 
 ### Styling
 Styling has been done through [styled components](https://www.styled-components.com).Most fragments and pages have their own styled components. 
