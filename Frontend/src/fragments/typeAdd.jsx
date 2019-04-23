@@ -7,8 +7,8 @@ import jwtDecode from "jwt-decode";
 
 
 const options = [
-	{ value: 'classification', label: 'Classification' },
-	{ value: 'regression', label: 'Regression' },
+	{ value: 'Classification', label: 'Classification' },
+	{ value: 'Regression', label: 'Regression' },
   ]
   
 const TypeAdd = (props) => {

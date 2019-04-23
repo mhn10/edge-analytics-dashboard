@@ -36,7 +36,7 @@ const reducer = (state, action) => {
         case "setTimeStamp":
             return { ...state, timeStamp: action.timeStamp };
         case "setRequirement":
-            return { ...state, requirement: action.requirement };
+            return { ...state, requirement: action.requirements };
         case "setData":
             return { ...state, data: action.data };
         case "setCode":

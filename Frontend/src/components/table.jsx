@@ -48,12 +48,12 @@ const MyTable = () => {
                 //context.dispatch({type:"setRegression", regression})
                 let classifiertype = classification.map(taskclassifier => ({
                     ...taskclassifier,
-                    type: "classification"
+                    type: "Classification"
                 }));
                 console.log("Classifier type ", classifiertype);
                 let regressiontype = regression.map(taskregression => ({
                     ...taskregression,
-                    type: "regression"
+                    type: "Regression"
                 }));
                 console.log("TCL: MyTable -> regressiontype", regressiontype);
 
@@ -124,7 +124,7 @@ const MyTable = () => {
         const {
             name,
             timeStamp,
-            requirement,
+            requirements,
             data,
             input,
             code,
@@ -143,7 +143,7 @@ const MyTable = () => {
         context.dispatch({ type: "setName", name });
         context.dispatch({ type: "setModel", model });
         context.dispatch({ type: "setTimeStamp", timeStamp });
-        context.dispatch({ type: "setRequirement", requirement });
+        context.dispatch({ type: "setRequirement", requirements });
         context.dispatch({ type: "setData", data });
         context.dispatch({ type: "setInput", input });
         context.dispatch({ type: "setCode", code });
@@ -182,7 +182,7 @@ const MyTable = () => {
                         <div className="attribute">
                             <div className="attribute-name">Requirement: </div>
                             <div className="attribute-value">
-                                {file.requirement}
+                                {file.requirements}
                             </div>
                         </div>
                         <br />

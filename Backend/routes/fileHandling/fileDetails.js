@@ -15,10 +15,10 @@ router.get('/', (req, res) => {
 			return res.status(404).send(err);
 		} else {
 			var filesMap = new Map();
-			if(actionType === "classification") {
+			if(actionType === "Classification") {
 				user[0].classification.forEach(item =>{
 					if(item.name === taskName){
-						filesMap.set("requirement", item.requirement);
+						filesMap.set("requirements", item.requirement);
 						filesMap.set("code", item.code);
 						filesMap.set("model", item.model);
 						filesMap.set("data", item.data);
@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
 			} else {
 				user[0].regression.forEach(item =>{
 					if(item.name === taskName){
-						filesMap.set("requirement", item.requirement);
+						filesMap.set("requirements", item.requirement);
 						filesMap.set("code", item.code);
 						filesMap.set("data", item.data);
 						filesMap.set("input", item.input);

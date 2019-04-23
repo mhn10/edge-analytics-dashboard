@@ -31,7 +31,7 @@ var userSchema = new mongoose.Schema({
 		name: { type: String, required: false, default: "" },
 		timeStamp: { type: Date, default: Date.now() },
 
-		requirement: { type: String, required: false, default: "" },
+		requirements: { type: String, required: false, default: "" },
 		code: { type: String, required: false, default: "" },
 		model: { type: String, required: false, default: "" },
 		data: { type: String, required: false, default: "" },
@@ -44,7 +44,7 @@ var userSchema = new mongoose.Schema({
 		name: { type: String, required: false, default: "" },
 		timeStamp: { type: Date, default: Date.now() },
 
-		requirement: { type: String, required: false, default: "" },
+		requirements: { type: String, required: false, default: "" },
 		code: { type: String, required: false, default: "" },
 		data: { type: String, required: false, default: "" },
 		input: { type: String, required: false, default: "" },
