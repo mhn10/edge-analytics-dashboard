@@ -1,85 +1,114 @@
 # Edge Analytics
+
 A single point dashboard for managing Edge devices
 The main objective of this project is to deploy and run machine learning models on the edge.
 
+## Techstack
 
-## Techstack 
-* ReactJS
-* Nodejs
-* AWS SQS
-* MongoDB
-* AWS S3
-* [Jetson TX3](https://devblogs.nvidia.com/jetson-tx2-delivers-twice-intelligence-edge/) 
-* Tensorflow
-  
+-   ReactJS
+-   Nodejs
+-   AWS SQS
+-   MongoDB
+-   AWS S3
+-   [Jetson TX3](https://devblogs.nvidia.com/jetson-tx2-delivers-twice-intelligence-edge/)
+-   Tensorflow
+
 ## Architecture
+
 ### Overall Architectire
+
 ![Architecture Diagram](https://github.com/mhn10/edge-analytics-dashboard/blob/master/readme_assets/Edge_analytics_arch.png)
 
 ### Edge Architecture
+
 ![Edge Architecture](https://github.com/mhn10/edge-analytics-dashboard/blob/master/readme_assets/Edge.png)
 
 ### Server Architecture
-![Server Architecture](https://github.com/mhn10/edge-analytics-dashboard/blob/master/readme_assets/Frontend.png)
-### How to run
-* make sure node and npm in installed. [here](https://nodejs.org/en/)
 
-Clone this repo 
-```bash 
+![Server Architecture](https://github.com/mhn10/edge-analytics-dashboard/blob/master/readme_assets/Frontend.png)
+
+### How to run
+
+-   make sure node and npm in installed. [here](https://nodejs.org/en/)
+
+Clone this repo
+
+```bash
 git clone https://github.com/mhn10/edge-analytics-dashboard
 ```
 
 #### Frontend
+
 Change into directory of frontend
+
 ```bash
 cd Frontend
 ```
-Install node packages 
+
+Install node packages
+
 ```bash
 npm install
 ```
+
 or through yarn
+
 ```bash
 yarn install
 ```
+
 Once the packages are installed, perform npm start
+
 ```bash
 npm start
 ```
 
 #### Server
+
 Change into directory of Backend
+
 ```bash
 cd Backend
 ```
-Install node packages 
+
+Install node packages
+
 ```bash
 npm install
 ```
+
 or through yarn
+
 ```bash
 yarn install
 ```
+
 Once the packages are installed, run the file
+
 ```bash
 node index.js
 ```
 
 #### Jetson
-[Refer Jetson Reeadme](https://github.com/mhn10/edge-analytics-dashboard/blob/master/Jetson/Readme.md)
+
+[Refer Jetson Readme](https://github.com/mhn10/edge-analytics-dashboard/blob/master/Jetson/Readme.md)
+
+#### React
+
+[Refer React Readme](https://github.com/mhn10/edge-analytics-dashboard/blob/master/Frontend/README.md)
 
 ## Credits
+
 Mentor - Kaikai Liu
 
-Lead Developers - 
+Lead Developers -
 Mithun Harikumar Nair (@mhn10)
 Pavan Kumar Shekar (@PavanKumarShekar)
 Ragvendra Dixit (@raghvendra1218)
 Sahil Sharma (@Sahil12S)
 
- 
 ## License
- 
+
 The MIT License (MIT)
 
 Copyright (c) 2015 Chris Kibble
