@@ -176,8 +176,8 @@ const MyTable = () => {
 
         if (isExpanded(file, key)) {
             const detailRow = (
-                <tr className="player-details">
-                    <td colspan="4" className="player-details">
+                <tr className="task-details">
+                    <td colspan="4" className="task-details">
                         <br />
                         <div className="attribute">
                             <div className="attribute-name">Requirement: </div>
@@ -196,11 +196,17 @@ const MyTable = () => {
                             <div className="attribute-value">{file.input}</div>
                         </div>
                         <br />
-                        {/* <div className="attribute">
+                        <br />
+                        <div className="attribute">
+                            <div class="attribute-name">Model: </div>
+                            <div className="attribute-value">{file.model}</div>
+                        </div>
+                        <br />
+                        <div className="attribute">
                             <div class="attribute-name">Output: </div>
                             <div className="attribute-value">{file.result}</div>
                         </div>
-                        <br /> */}
+                        <br />
                     </td>
                 </tr>
             );
