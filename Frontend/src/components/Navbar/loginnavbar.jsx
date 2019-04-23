@@ -53,6 +53,10 @@ class MenuAppBar extends React.Component {
 	}
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
+	};  
+	
+	handleDashboard = event => {
+		this.props.history.push('/dashboard')
   };
 
   handleClose = () => {
@@ -92,7 +96,7 @@ class MenuAppBar extends React.Component {
 			  open={open}
 			  onClose={this.handleClose}
 			>
-			  <MenuItem onClick={this.handleClose}>Dashboard</MenuItem>
+			  <MenuItem onClick={this.handleDashboard}>Dashboard</MenuItem>
 				<MenuItem onClick={this.handleTask}>New Task</MenuItem>
 				<MenuItem onClick={this.handleDeploy}>Deploy Task</MenuItem>
 			  <MenuItem onClick={this.handleLogout}>Logout</MenuItem>

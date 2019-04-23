@@ -47,7 +47,7 @@ const Deploy = props => {
 		console.log("TCL: firstName", firstName)
         const {username, name, type, webcam,node} = context.taskState;
         const data = { 
-            "userName" : firstName, 
+            "userName" : firstName.toLowerCase(), 
             "name": name,
             "type": type,
             "isCamera" : webcam,

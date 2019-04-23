@@ -11,7 +11,7 @@ const utility = require('../../utility');
 
 router.post('/', (req, res) => {
 	const form = new multiparty.Form();
-	form.parse(req, (error, fields, files) => {
+	form.parse(req, async (error, fields, files) => {
 		if (error) throw new Error(error);
 		try {
 			//parse the username, type of action and taskname 
@@ -23,7 +23,7 @@ router.post('/', (req, res) => {
 
 			//if taskName exists already then it's a update request
 			// var temp = (actionType === 'classification')? classification : regression;
-			userModel.findOne({actionType : {$elemMatch:{name: taskName}}}, function (err, task) {
+			userModel.findOne({actionType : {$elemMatch:{name: taskName}}}, async function (err, task) {
 				if (task) {
 					//Same task cannot be added
 					console.log(`Taskname : ${taskName} already exists, edit the existing task`);
@@ -47,10 +47,10 @@ router.post('/', (req, res) => {
 					filesMap.set("Code", codeFilePath);
 					filesMap.set("Data", dataFilePath);
 					filesMap.set("Input", inputFilePath);
-					filesMap.set("Requirement", requirementFilePath);
+					filesMap.set("Requirements", requirementFilePath);
 
 					//Push the extra model file if the actionType is classification
-					if (actionType === 'classification') {
+					if (actionType === 'Classification') {
 						const modelFilePath = files.model[0];
 						filesMap.set("Model", modelFilePath);
 					}
@@ -58,13 +58,13 @@ router.post('/', (req, res) => {
 					//Loop through each file object and upload in S3 bucket
 					for (let [key, value] of filesMap) {
 						var path = value.path;
-						var buffer = fs.readFileSync(path);
+						var buffer = await fs.readFileSync(path);
 						var fileName = value.originalFilename;
 						var filePath = `${userFirstName}/${actionType}/${taskName}/${key}/${fileName}`;
-						var data = uploadFile(buffer, filePath);
+						var data = await uploadFile(buffer, filePath);
 						fileNamesMap.set(key, fileName);
 					};
-					uploadFilesInSchema(fileNamesMap, username, actionType, taskName);
+					await uploadFilesInSchema(fileNamesMap, username, actionType, taskName);
 					return res.status(200).send(data);
 				}
 			});
@@ -79,9 +79,9 @@ router.post('/', (req, res) => {
 const uploadFile = (buffer, name) => {
 	console.log("Uploading file to s3");
 	const params = {
-		ACL: "public-read",
+		// ACL: "public-read",
 		Body: buffer,
-		Bucket: process.env.S3_BUCKET_BAK,
+		Bucket: process.env.S3_BUCKET,
 		Key: `${name}`
 	};
 	console.log("params: ", params);
@@ -98,7 +98,7 @@ const uploadFilesInSchema = (fileNamesMap, username, actionType, taskName) => {
 		obj[key.toLowerCase()] = val;
 	}
 	console.log("Obj: ", obj);
-	if (actionType === "classification") {
+	if (actionType === "Classification") {
 		userModel.findOneAndUpdate({ email: username },
 			{ $push: { classification: obj } },
 			function (error, success) {

@@ -4,7 +4,6 @@ function toLower (str) {
     }
     return str;
   }
-module.exports = {toLower};
 
 function capitalizeFirstLetter (str) {
     if(str === null){
@@ -12,8 +11,6 @@ function capitalizeFirstLetter (str) {
     }
     return str.charAt(0).toUpperCase() + str.toLowerCase().slice(1)
 }
-
-module.exports = {capitalizeFirstLetter};
 
 function extractNameFromEmail(str){
     if(str === null){
@@ -23,4 +20,4 @@ function extractNameFromEmail(str){
     var name = nameParts.length==2 ? nameParts[0] : null;
     return name;
 }
-module.exports = {extractNameFromEmail};
+module.exports = {toLower, capitalizeFirstLetter, extractNameFromEmail};
