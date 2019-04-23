@@ -46,7 +46,6 @@ class Signup extends Component{
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                // 'Authorization': localStorage.getItem('recruiterToken')
             },
             })
             .then(response => {

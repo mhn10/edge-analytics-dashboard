@@ -1,52 +1,8 @@
-// import React from 'react';
-// import PropTypes from 'prop-types';
-// import { withStyles } from '@material-ui/core/styles';
-// import AppBar from '@material-ui/core/AppBar';
-// import Toolbar from '@material-ui/core/Toolbar';
-// import Typography from '@material-ui/core/Typography';
-// import IconButton from '@material-ui/core/IconButton';
-// import MenuIcon from '@material-ui/icons/Menu';
-
-// const styles = {
-//   root: {
-//     flexGrow: 1,
-//   },
-//   grow: {
-//     flexGrow: 1,
-//   },
-//   menuButton: {
-//     marginLeft: -12,
-//     marginRight: 20,
-//   },
-// };
-
-// function ButtonAppBar(props) {
-//   const { classes } = props;
-//   return (
-//     <div className={classes.root}>
-//       <AppBar style={{ background: '#03a9f4' }} position="static">
-//         <Toolbar>
-//           <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-//             <MenuIcon />
-//           </IconButton>
-//           <Typography variant="h6" color="inherit" className={classes.grow}>
-//             Vision Analytics on the Edge
-//           </Typography>
-//           {/* <Button color="inherit">Login</Button> */}
-//         </Toolbar>
-//       </AppBar>
-//     </div>
-//   );
-// }
-
-// ButtonAppBar.propTypes = {
-//   classes: PropTypes.object.isRequired,
-// };
-
-// export default withStyles(styles)(ButtonAppBar);
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from "react-router-dom";
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -89,8 +45,18 @@ class MenuAppBar extends React.Component {
         console.log(`User ${loggedInUser} logged out Successfully.`);
     }
 
+		handleTask = event => {
+		this.props.history.push('/add')
+	}
+	handleDeploy = event =>{
+		this.props.history.push('/task')
+	}
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
+	};  
+	
+	handleDashboard = event => {
+		this.props.history.push('/dashboard')
   };
 
   handleClose = () => {
@@ -130,7 +96,9 @@ class MenuAppBar extends React.Component {
 			  open={open}
 			  onClose={this.handleClose}
 			>
-			  <MenuItem onClick={this.handleClose}>Dashboard</MenuItem>
+			  <MenuItem onClick={this.handleDashboard}>Dashboard</MenuItem>
+				<MenuItem onClick={this.handleTask}>New Task</MenuItem>
+				<MenuItem onClick={this.handleDeploy}>Deploy Task</MenuItem>
 			  <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
 			</Menu>
 		  </div>
@@ -165,4 +133,4 @@ MenuAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(MenuAppBar);
+export default withRouter(withStyles(styles)(MenuAppBar));
