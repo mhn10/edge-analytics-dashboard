@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-// import Navbar from "./Navbar/navbar";
 import LoginNavbar from "./Navbar/loginnavbar";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
@@ -9,9 +8,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Dropdown from "react-bootstrap/Dropdown";
 
+import {CONSTANTS} from '../Constants';
 import DropdownButton from "react-bootstrap/DropdownButton";
-// import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
+
+
+
 class FileUpload extends Component {
   constructor() {
     super();
@@ -44,7 +46,7 @@ class FileUpload extends Component {
     console.log("state before uplaod", this.state);
     console.log("formdata is : ", formData);
     axios
-      .post(`http://localhost:3001/uploaddata`, formData, {
+      .post(`${CONSTANTS.BACKEND_URL}/uploaddata`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
@@ -55,7 +57,7 @@ class FileUpload extends Component {
         this.setState({ dataLocation: response.data.Location });
 
         axios
-          .post(`http://localhost:3001/uploadmodel`, formModel, {
+          .post(`${CONSTANTS.BACKEND_URL}/uploadmodel`, formModel, {
             headers: {
               "Content-Type": "multipart/form-data"
             }
@@ -102,19 +104,17 @@ class FileUpload extends Component {
     });
     console.log("get output");
   };
-  //username
-  //modelname
-  //datafile
-  //type of user
 
   render() {
     var allImgs = Array.prototype.slice.call(this.state.output);
     return (
       <React.Fragment>
+
 		  <LoginNavbar/>
         <Container style={{ marginTop: "100px" }}>      
 		{/* <Navbar /> */}
 		
+
           <Row>
             <DropdownButton id="dropdown-basic-button" title="Method">
               <Dropdown.Item href="#/action-1">Classification</Dropdown.Item>
