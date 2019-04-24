@@ -16,17 +16,11 @@ router.get("/", async (req, res) => {
     console.log("Data", data);
     //and push the output file with name and link of S3 and return the updated content for logged in User
     data.map(obj => {
-        if (obj.actionType === "classification") {
-            var query = {};
-            query[`${obj.actionType}.${obj.taskName}.result`] = obj.resultPath;
+        if (obj.actionType === "Classification") {
             userModel.findOneAndUpdate(
-                {
-                    $and: [
-                        { email: username },
-                        { classification: { name: obj.taskName } }
-                    ]
-                },
-                { $set: { query: obj.resultPath } },
+				{ "classification.name": obj.taskName},
+				{ $set: {"classification.$.result": obj.resultPath}},
+				{new: true},
                 (err, success) => {
                     if (err) {
                         var err = {
@@ -40,13 +34,9 @@ router.get("/", async (req, res) => {
             );
         } else {
             userModel.findOneAndUpdate(
-                {
-                    $and: [
-                        { email: username },
-                        { regression: { name: obj.taskName } }
-                    ]
-                },
-                { $set: { "regression.result": obj.resultPath } },
+				{ "regression.name": obj.taskName},
+				{ $set: {"regression.$.result": obj.resultPath} },
+				{new: true},
                 (err, success) => {
                     if (err) {
                         var err = {
@@ -79,7 +69,7 @@ const getFilesWithTaskNameFromS3 = parentFolder => {
     return new Promise((resolve, reject) => {
         console.log("entered getFiles with task name from s3");
         s3.listObjects(
-            { Bucket: process.env.S3_BUCKET, Prefix: parentFolder },
+            { Bucket: process.env.S3_BUCKET_BAK, Prefix: parentFolder },
             function(err, data) {
                 if (err) {
                     console.log(err);
@@ -95,8 +85,8 @@ const getFilesWithTaskNameFromS3 = parentFolder => {
                             var taskName = tempSplit[2];
                             var fileName = tempSplit[4];
                             var actionType = tempSplit[1];
-                            var resultPath = `${process.env.S3_PREFIX_PATH}${
-                                process.env.S3_BUCKET
+                            var resultPath = `${process.env.S3_PREFIX_PATH_BAK}${
+                                process.env.S3_BUCKET_BAK
                             }/${temp}`;
                             var fileObj = {
                                 result: fileName,

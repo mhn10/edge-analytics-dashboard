@@ -1,6 +1,7 @@
 const mqtt = require('mqtt');
 // require("../dotenv").config();
-var broker = 'mqtt://iot.eclipse.org:1883'
+// var broker = 'mqtt://iot.eclipse.org:1883'
+var broker = 'broker.hivemq.com:1883'
 // const client = mqtt.connect(process.env.MQTT_BROKER);
 const client = mqtt.connect(broker);
 // const {client} = require('../index');
