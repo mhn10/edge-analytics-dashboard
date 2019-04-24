@@ -15,19 +15,18 @@ import json
 import boto3
 import logging
 import argparse
+import platform, psutil
 
 # Constants
 # BROKER_ADDR = "iot.eclipse.org"
 # BROKER_ADDR = "test.mosquitto.org"
-BROKER_ADDR = "broker.hivemq.com"
+
+BROKER_ADDR = "54.67.84.242"
 BROKER_PORT = 1883
 TOPIC_ACTIVE = "ActiveNodes"
 TOPIC_INFO = "NodeInfo"
 
 SQS_QUEUE_NAME = "NodeCommunication"
-
-
-
 
 
 class MqttPublisher:
@@ -38,10 +37,10 @@ class MqttPublisher:
         self.sqs = boto3.resource( 'sqs' )
 
 
-    def __getNodeInfo( self, js ):
+    def __getNodeInfo( self ):
         node_details = dict()
-        for key, value in js.items():
-            node_details[key] = value
+        # for key, value in js.items():
+        #     node_details[key] = value
 
         # Get machine details
         node_details['Aarchitecture'] = platform.machine()
@@ -62,8 +61,7 @@ class MqttPublisher:
 
     def __publish( self, topic, payload ):
         self.client.publish(topic = topic, payload = json.dumps( payload ) )
-        print( payload )
-        print( "Message published for topic {0}".format( topic ) )
+        logging.debug( "Message published for topic {0}".format( topic ) )
 
         
     # Make connection with mqtt broker
@@ -88,31 +86,40 @@ class MqttPublisher:
         while True:
             i = 0
             for message in self.queue.receive_messages():
-                print ( message )
-                print( "Received message: {0}".format( message.body ) )
-                if len( message.body ) == 0:
+                print ( "Received message: {0}".format( message.body ) )
+                if len(message.body) == 0:
                     pass
-
                 js = json.loads( message.body )
-                print( js )
+
+
                 if ( js['action'] == "Active" ):
                     # Call to get list of members
                     r = requests.get( self.activeUrl )
                     # # Get JSON response
                     js = r.json()
-                    logging.debug("Active: {0}, {1}".format( i, js ) )
+                    print("Active: {0}, {1}".format( i, js ) )
                     i+=1
                     self.__publish( self.topicActive, js )
 
+                    # message.delete()
+
+
                 elif ( js['action'] == "Info" ):
+
                     r = requests.get( self.infoUrl )
                     
                     js = r.json()
-                    js = getMoreInfo( js )
-                    print("Info: {0}, {1}".format( i, js ) )
+                    # js = getMoreInfo( js )
+                    print( self.__getNodeInfo() )
+                    js.update( self.__getNodeInfo() )
+                    print( js )
+                    
+                    print ("Info: {0}, {1}".format( i, js ) )
+                    print( "publishing on: ", self.topicInfo )
                     self.__publish( self.topicInfo, js )
                 
                 message.delete()
+                i += 1
 
 
 
