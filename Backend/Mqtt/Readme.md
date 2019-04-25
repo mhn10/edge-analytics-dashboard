@@ -8,6 +8,6 @@ foo@bar:~$ pip3 install -r requirements.txt
 ```
 2. Start server by
 ```console
-python3 server.py
+foo@bar:~$ python3 server.py
 ```
 It will start subscriber as well as Flask server with 2 endpoints for node info (/node) and active nodes (/active). Flask server will run on port 5000.
