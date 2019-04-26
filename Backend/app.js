@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(cors({ origin: `${process.env.FRONT_END_URL}`, credentials: true }));
-// app.use(formidable());
+
 //Allow Access Control
 app.use(function (req, res, next) {
 	res.setHeader("Access-Control-Allow-Origin", `${process.env.FRONT_END_URL}`);

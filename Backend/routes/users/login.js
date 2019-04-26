@@ -7,7 +7,7 @@ const JWT_KEY = "secret";
 
 //Route to handle Post Request Call for Login
 router.post('/', (req,res, next) => {
-    console.log("Inside Login Post Request");
+	console.log("Inside Login Post Request");
     var EMAIL = req.body.loginEmail;
     var PASSWORD = req.body.loginPassword;
     console.log("Email and Password:  : ",EMAIL, PASSWORD);
