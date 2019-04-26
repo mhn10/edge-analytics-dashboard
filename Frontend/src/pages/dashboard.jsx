@@ -1,15 +1,16 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import LoginNavbar from "../components/Navbar/loginnavbar";
+// import LoginNavbar from "../components/Navbar/loginnavbar";
+import Navbar from "../components/Navbar/navbar";
 
 import Cards from "../components/card";
 
 const Dashboard = ({ props }) => {
     return (
         <>
-            <LoginNavbar />
-
+            {/* <LoginNavbar /> */}
+			<Navbar/>
             <Wrapper>
                 {/* <GridContainer> */}
 
