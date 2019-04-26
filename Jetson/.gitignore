@@ -1,0 +1,6 @@
+env/
+.vscode/
+__pycache__/
+mqtt_pub_test.py
+mqtt_sub_test.py
+other/
