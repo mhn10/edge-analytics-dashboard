@@ -1,30 +1,46 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 // import LoginNavbar from "../components/Navbar/loginnavbar";
 import Navbar from "../components/Navbar/navbar";
+import axios from "axios";
 
 import Cards from "../components/card";
+const { CONSTANTS } = require("../Constants");
 
 const Dashboard = ({ props }) => {
+    const [nodes, setNodes] = React.useState([]);
+
+    useEffect(() => {
+        console.log("fetch data here");
+
+        axios
+            .get(`${CONSTANTS.BACKEND_URL}/activenodes`)
+            .then(response => {
+                console.log("Response node details", response.data.Active);
+                //create option map to setDeafultoption
+                setNodes(response.data.Active);
+            })
+            .catch(error => {
+                console.log("Error in useEffect nameAdd", error);
+                alert("No Data available, reload");
+            });
+    }, []);
+
+    const nodeCards = nodes.map((node, key) => {
+        console.log("Node details : Nodekey: ", node, "Key", key);
+        return <Cards IP={node.IP} Value={node.Name} Name ={node.Name.split(".", 2)[1]} Port={node.Port}/>;
+    });
+
     return (
         <>
             {/* <LoginNavbar /> */}
-			<Navbar/>
+            <Navbar />
             <Wrapper>
                 {/* <GridContainer> */}
 
                 {/* <section className="page-content"> */}
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
+                {nodeCards}
                 {/* </section> */}
 
                 {/* </GridContainer> */}
@@ -42,7 +58,7 @@ const Wrapper = styled.div`
     margin-right: 2rem;
     background-color: #fff;
     color: #444;
-    margin-top: 10px;
+    margin-top: 50px;
     border-radius: 18px;
 
     /* Grid styles */
@@ -60,12 +76,14 @@ const Wrapper = styled.div`
         padding-right: 3rem;
         margin-left: 10%;
         margin-right: 10%;
+        margin-top: 60px;
     }
     @media only screen and (min-width: 1400px) {
         padding-left: 3rem;
         padding-right: 3rem;
         margin-left: 20%;
         margin-right: 20%;
+        margin-top: 70px;
     }
 `;
 

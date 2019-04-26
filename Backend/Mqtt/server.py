@@ -17,7 +17,6 @@ import json
 import threading
 import time
 
-
 class MQTT:
     def __init__(self):
         self.topics = ["NodeInfo", "ActiveNodes", "Updates"]

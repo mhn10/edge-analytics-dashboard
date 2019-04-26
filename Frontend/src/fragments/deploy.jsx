@@ -30,7 +30,8 @@ const Deploy = props => {
                 console.log("Response nodedetails", response.data);
                 //create option map to setDeafultoption
                 const { data } = response;
-                let result = data.map(task => createOption(task));
+                const {Active} = data;
+                let result = Active.map(task => createOption(task));
                 console.log("TCL: result", result);
                 // console.log("Default options", result);
                 setDefaultOption([...defaultOption, ...result]);

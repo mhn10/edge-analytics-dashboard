@@ -32,7 +32,7 @@ const NamesAdd = props => {
             })
             .catch(error => {
                 console.log("Error in useEffect nameAdd", error);
-                alert("Data fetch failed, reload");
+                alert("Reload page");
             });
     }, []);
 
