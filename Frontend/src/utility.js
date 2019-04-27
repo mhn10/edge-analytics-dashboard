@@ -115,3 +115,28 @@ export function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   function deg2rad(deg) {
 	return deg * (Math.PI/180)
   }
+
+  export function getAddress (latitude, longitude) {
+    return new Promise(function (resolve, reject) {
+		var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+        var request = new XMLHttpRequest();
+		var method = 'GET';
+        var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&&key=AIzaSyC7hT-UUlRhQnDmDMzNRGPbKgJXU3OqQmk';
+        var async = true;
+
+        request.open(method, url, async);
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                if (request.status == 200) {
+                    var data = JSON.parse(request.responseText);
+					var address = data.results[0];
+                    resolve(address.formatted_address);
+                }
+                else {
+                    reject(request.status);
+                }
+            }
+        };
+        request.send();
+    });
+};
