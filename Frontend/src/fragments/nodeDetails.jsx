@@ -4,6 +4,8 @@ import DashboardContext from "../context/dashboardContext";
 import styled from "styled-components";
 import axios from "axios";
 import ResponsivePieComponent from "../components/donut";
+import ResponsiveBarComponent from "../components/bar";
+
 import { PageWrapper } from "../components/Page";
 import { BodyWrapper } from "../pages/add";
 
@@ -11,20 +13,53 @@ import { useSpring, animated, config } from "react-spring";
 // import Button from "react-bootstrap/Button";
 const { CONSTANTS } = require("../Constants");
 
+const thermalsDummy = [
+    {
+        "component" : "CPU",
+        "critical": "101",
+        "current": "41",
+        "high": "101",
+    },
+    {
+        "component" : "GPU",
+        "critical": "-40",
+        "current": "40.5",
+        "high": "40.5",
+    },
+    {
+        "component" : "NCPU",
+        "critical": "101",
+        "current": "41",
+        "high": "101",
+    },
+
+    {
+        "component" : "TBoard",
+        "critical": "107",
+        "current": "37",
+        "high": "107",
+    },
+
+]
+
+
 const NodeDetailsComponent = props => {
     const context = React.useContext(DashboardContext);
     // const {} = context
     console.log("All context is ", context, "ADDState is: ", context.addState);
     const animatedProps = useSpring({
         opacity: 1,
-        marginRight: 0,
-        config: config.default,
-        from: { opacity: 0, marginRight: -200 }
+
+    
+        from: { opacity: 0}
     });
 
     const [nodeDetails, setNodeDetails] = useState({});
     const [memPie, setMemPie] = useState([]);
     const [cpuPie, setCpuPie] = useState([]);
+    const [thermals, setThermals] = useState([]);
+
+
     useEffect(() => {
         console.log("fetch Task here");
         axios
@@ -60,13 +95,13 @@ const NodeDetailsComponent = props => {
                         id: "cpuUtil",
                         label: "CPU Utilized",
                         value: data.cpu_percent,
-                        color: "hsl(35, 70%, 50%)"
+                        color: "hsl(135, 70%, 50%)"
                     },
                     {
                         id: "cpuFree",
                         label: "CPU Free",
                         value: 100 - data.cpu_percent,
-                        color: "hsl(7, 70%, 50%)"
+                        color: "hsl(270, 100%, 50%)"
                     }
                 ]);
             })
@@ -151,6 +186,9 @@ const NodeDetailsComponent = props => {
                     <div style={{ height: 200 }}>
                         <ResponsivePieComponent data={cpuPie} />
                     </div>
+                    <div style={{ height: 350 }}>
+                        <ResponsiveBarComponent data={thermalsDummy} />
+                    </div>
                     {/* <div style={{ height: 400 }}>
                         <Flex>
                             <div className="chart">
@@ -178,6 +216,8 @@ const SubmitWrapper = styled.div`
     background: white;
     border: 2px solid #f8f8f8;
     margin-top: 2rem;
+    margin-right:3rem;
+    margin-left:6rem;
     padding: 2rem;
     box-sizing: border-box;
     border-radius: 10px;

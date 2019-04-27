@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.1",
+    "@nivo/bar": "^0.56.2",
     "@nivo/pie": "^0.56.2",
     "@types/jest": "^24.0.11",
     "@types/material-ui": "^0.21.6",
@@ -15,7 +16,6 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "dotenv": "^7.0.0",
-    "formik": "^1.5.1",
     "install": "^0.12.2",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
