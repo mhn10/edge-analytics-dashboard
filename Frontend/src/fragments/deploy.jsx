@@ -70,7 +70,7 @@ const Deploy = props => {
 
     };
     const createOption = label => ({
-        label: label.Name.split(".", 2)[1],
+        label: label.Name,
         value: label.Name
     });
 
