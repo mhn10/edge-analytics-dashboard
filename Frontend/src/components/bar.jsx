@@ -20,7 +20,8 @@ const ResponsiveBarComponent = ({ data /* see data tab */ }) => (
             "bottom": 50,
             "left": 60
         }}
-        padding={0.3}
+        padding={0.4}
+        innerPadding={3}
         groupMode="grouped"
         colors={{
             "scheme": "nivo"

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import axios from "axios";
 import ResponsivePieComponent from "../components/donut";
 import ResponsiveBarComponent from "../components/bar";
-
+import MappingComponent from "../components/map";
 import { PageWrapper } from "../components/Page";
 import { BodyWrapper } from "../pages/add";
 
@@ -47,6 +47,7 @@ const NodeDetailsComponent = props => {
     const context = React.useContext(DashboardContext);
     // const {} = context
     console.log("All context is ", context, "ADDState is: ", context.addState);
+	console.log("TCL: process.env.GOOGLE_API_KEY", process.env.REACT_APP_GOOGLE_API_KEY)
     const animatedProps = useSpring({
         opacity: 1,
 
@@ -180,14 +181,28 @@ const NodeDetailsComponent = props => {
                     </div>
          
 
+         <div className="flexwrapper">
+                        <div className="leftcomp">
+                        <ResponsivePieComponent data={memPie} />
+                        </div>
+                        <div className="rightcomp">
+                        <ResponsivePieComponent data={cpuPie} />
+                        </div>
+
+         </div>
+{/* 
                     <div style={{ height: 200 }}>
                         <ResponsivePieComponent data={memPie} />
                     </div>
                     <div style={{ height: 200 }}>
                         <ResponsivePieComponent data={cpuPie} />
-                    </div>
+                    </div> */}
                     <div style={{ height: 350 }}>
                         <ResponsiveBarComponent data={thermalsDummy} />
+                    </div>
+
+                    <div >
+                        <MappingComponent />
                     </div>
                     {/* <div style={{ height: 400 }}>
                         <Flex>
@@ -239,6 +254,20 @@ const SubmitWrapper = styled.div`
         font-weight: lighter;
         text-align: center;
     }
+    .flexwrapper {
+        display: flex;
+        padding-top: 2rem;
+        margin-top:2rem;
+        justify-content: center;
+        .leftcomp {
+            flex: 0 0 50%;
+            height: 300px;
+        }
+        .rightcomp {
+            flex: 1;
+            height: 300px;
+        }
+    }
 `;
 
 const Button = styled.button`
@@ -266,13 +295,4 @@ const Meta = styled.div`
     font-weight: 400;
 `;
 
-const Flex = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    height: 300;
-    .chart {
-        flex: 0 0 50%;
 
-        padding: 10px;
-    }
-`;

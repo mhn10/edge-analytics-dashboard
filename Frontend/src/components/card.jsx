@@ -28,7 +28,7 @@ context.dispatch({ type: "changeState", value: true });
         <h7>
           <b style={{ wordWrap:"break-word"}}>{props.Name}</b>
         </h7>
-        <div/>
+        {/* <div/> give location herev */}
       <Meta> {props.IP}:{props.Port} </Meta>
 {/* 
         <p></p>
@@ -44,7 +44,7 @@ export default Cards;
 const Card = styled(animated.div)`
  width: 25ch;
   height: 25ch;
-  background: #f8f8f8;
+  background: rgba(248, 248, 248, 0.4);
   border-radius: 10px;
   box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
   transition: box-shadow 0.5s;
@@ -59,16 +59,20 @@ const Card = styled(animated.div)`
 
 const CardContainer = styled.div`
   padding: 2px 16px;
+  text-align:center;
+  justify-content:center;
+  padding-top:3rem;
 `;
 
 
 const Meta = styled.div`
-	padding: 0.2rem 1rem;
+	padding: 0.4rem 1rem;
 	background: #eff3fa;
 	border-radius: 50px;
 	color: #b2bddc;
 	text-transform: uppercase;
 	margin-bottom: 2rem;
+  margin-top:2rem;
 	display: inline-block;
 	font-weight: 400;
 `;

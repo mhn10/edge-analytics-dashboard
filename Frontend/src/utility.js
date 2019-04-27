@@ -121,7 +121,7 @@ export function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 		var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
         var request = new XMLHttpRequest();
 		var method = 'GET';
-        var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&&key=AIzaSyC7hT-UUlRhQnDmDMzNRGPbKgJXU3OqQmk';
+        var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&&key='+ process.env.REACT_APP_LOCATION_KEY_RAGHAV;
         var async = true;
 
         request.open(method, url, async);
