@@ -132,16 +132,7 @@ const NodeDetailsComponent = props => {
                         {nodeDetails.cpu_count}
                         </span>
                     </div>
-                    <div>
-                        <label>Total Memory Available</label>
-                        <span
-                            className="item-name"
-                            style={{ margin: "1rem 0" }}
-                        >
-                        {nodeDetails.memory_available}
-                        </span>
-                    </div>
-         
+                
                
                     <div>
                         <label>Total Memory Available</label>
