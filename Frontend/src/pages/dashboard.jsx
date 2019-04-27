@@ -6,10 +6,45 @@ import Navbar from "../components/Navbar/navbar";
 import axios from "axios";
 
 import Cards from "../components/card";
+import Modals from "../components/modal";
+import NodeDetailsComponent from "../fragments/nodeDetails";
+
+import DashboardContext from "../context/dashboardContext";
+
 const { CONSTANTS } = require("../Constants");
+
+const reducer = (state, action) => {
+    const { type } = action;
+
+    switch (type) {
+        case "changeState":
+            return { ...state, show: action.value };
+
+        case "toggleState":
+            return {
+                ...state,
+                step: state.show ? false : true
+            };
+
+        case "setValue":
+            return { ...state, value: action.NodeValue };
+
+        case "setUsername":
+            return { ...state, username: action.email };
+
+        default:
+            return state;
+    }
+};
 
 const Dashboard = ({ props }) => {
     const [nodes, setNodes] = React.useState([]);
+    const [dashboardState, dispatch] = React.useReducer(reducer, {
+        username: "",
+        value: "",
+
+        show: false
+    });
 
     useEffect(() => {
         console.log("fetch data here");
@@ -29,22 +64,32 @@ const Dashboard = ({ props }) => {
 
     const nodeCards = nodes.map((node, key) => {
         console.log("Node details : Nodekey: ", node, "Key", key);
-        return <Cards IP={node.IP} Value={node.Name} Name ={node.Name.split(".", 2)[1]} Port={node.Port}/>;
+        return (
+            <Cards
+                IP={node.IP}
+                Value={node.Name}
+                Name={node.Name}
+                Port={node.Port}
+            />
+        );
     });
 
     return (
         <>
             {/* <LoginNavbar /> */}
-            <Navbar />
-            <Wrapper>
-                {/* <GridContainer> */}
+            <DashboardContext.Provider value={{ dashboardState, dispatch }}>
+                <Navbar />
 
-                {/* <section className="page-content"> */}
-                {nodeCards}
+                {/* <GridContainer> */}
+                <Wrapper>
+                    {/* <section className="page-content"> */}
+                    {dashboardState.show === false && nodeCards}
+                </Wrapper>
                 {/* </section> */}
+                {dashboardState.show === true && <NodeDetailsComponent />}
 
                 {/* </GridContainer> */}
-            </Wrapper>
+            </DashboardContext.Provider>
         </>
     );
 };

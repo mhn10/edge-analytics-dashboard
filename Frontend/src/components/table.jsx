@@ -202,10 +202,11 @@ const MyTable = () => {
                             <div className="attribute-value">{file.model}</div>
                         </div>
                         <br />
+         
                         <div className="attribute">
-                            <div class="attribute-name">
-                                Output: <a href={file.result} rel="noopener noreferrer" target="_blank"> Output </a>{" "}
-                            </div>
+                           
+            {file.result !=="" &&   <div class="attribute-name"> Output: <a href={file.result} rel="noopener noreferrer" target="_blank"> Output </a>  </div>}
+                           
                             {/* <div className="attribute-value">{file.result}</div> */}
                         </div>
                         <br />

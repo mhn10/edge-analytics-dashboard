@@ -173,7 +173,7 @@ const AddDetailsWrapper = styled.div`
     color: #606060;
 `;
 
-const BodyWrapper = styled.div`
+export const BodyWrapper = styled.div`
     padding: 1rem;
     display: grid;
     margin-top: 70px;

@@ -1,25 +1,38 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useSpring, animated } from 'react-spring'
+import DashboardContext from "../context/dashboardContext";
 
 const calc = (x, y) => [(y - window.innerHeight / 2) / 20, -(x - window.innerWidth / 2) / 20, 1.1]
 const trans = (x, y, s) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
 
 const Cards = ( props ) => {
+  const context = React.useContext(DashboardContext);
 
   const [animProps, set] = useSpring(() => ({ xys: [0, 0, 1], config: { mass: 5, tension: 350, friction: 40} }))
+const clickHandler = (NodeValue) =>{
+console.log("Node value is ",NodeValue)
+context.dispatch({ type: "setValue", NodeValue });
+context.dispatch({ type: "changeState", value: true });
 
+
+}
   
   return (
+
     <Card  onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
     onMouseLeave={() => set({ xys: [0, 0, 1] })}
-    style={{ transform: animProps.xys.interpolate(trans) }}>
-      <CardContainer>
-        <h5>
-          <b>{props.Name}}</b>
-        </h5>
-        <p>{props.IP}</p>
-        <p>{props.Port}</p>
+    style={{ transform: animProps.xys.interpolate(trans) }}
+   >
+      <CardContainer  onClick={() => clickHandler(props.Value)}>
+        <h7>
+          <b style={{ wordWrap:"break-word"}}>{props.Name}</b>
+        </h7>
+        <div/>
+      <Meta> {props.IP}:{props.Port} </Meta>
+{/* 
+        <p></p>
+        <p></p> */}
 
       </CardContainer>
     </Card>
@@ -37,7 +50,7 @@ const Card = styled(animated.div)`
   transition: box-shadow 0.5s;
   will-change: transform;
   border: 2px solid white;
-  word-wrap: break-word;
+ 
   &:hover {
     box-shadow: 0px 30px 100px -10px rgba(0, 0, 0, 0.4);
     /* box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); */
@@ -47,3 +60,17 @@ const Card = styled(animated.div)`
 const CardContainer = styled.div`
   padding: 2px 16px;
 `;
+
+
+const Meta = styled.div`
+	padding: 0.2rem 1rem;
+	background: #eff3fa;
+	border-radius: 50px;
+	color: #b2bddc;
+	text-transform: uppercase;
+	margin-bottom: 2rem;
+	display: inline-block;
+	font-weight: 400;
+`;
+
+
