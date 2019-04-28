@@ -92,7 +92,7 @@ const NodeDetailsComponent = props => {
                         id: "memoryFree",
                         label: "memory Free",
                         value: data.memory_available,
-                        color: "hsl(7, 70%, 50%)"
+                        color: "hsl(10, 70%, 50%)"
                     }
                 ]);
 

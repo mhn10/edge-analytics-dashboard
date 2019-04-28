@@ -58,6 +58,16 @@ const ResponsivePieComponent = ({ data }) => (
                 rotation: -45,
                 lineWidth: 6,
                 spacing: 9
+            },
+            {
+                id: "squares-pattern",
+                type: "patternSquares",
+                size: 4,
+                padding: 4,
+                stagger: true,
+                background: "inherit",
+                color: "rgba(255, 255, 255, 0.3)"
+                
             }
         ]}
         fill={[
@@ -76,6 +86,13 @@ const ResponsivePieComponent = ({ data }) => (
             {
                 match: {
                     id: "cpuFree"
+                },
+                id : "squares-pattern"
+               
+            },
+            {
+                match: {
+                    id: "cpuUtil"
                 },
                 id: "lines"
             }
