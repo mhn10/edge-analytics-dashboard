@@ -105,7 +105,7 @@ const Deploy = props => {
                 <div />
                 <label>Input :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.taskState.input}
+                    {context.taskState.input === "" &&  <input type="checkbox" name="LiveData" value="True">Take Live Data </input>}
                 </span>
                 <div />
                 <label>Data :</label>

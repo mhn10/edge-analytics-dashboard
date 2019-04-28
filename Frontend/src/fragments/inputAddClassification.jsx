@@ -144,7 +144,7 @@ const InputAddClassification = () => {
                 type="file"
                 onChange={e => inputHandler(e.target.files)}
               />
-              <Form.Text className="text-muted">Upload a Input file</Form.Text>
+              <Form.Text className="text-muted">Upload a Input file / Leave empty for Object Detection</Form.Text>
             </li>
           </ul>
         </Form.Group>
