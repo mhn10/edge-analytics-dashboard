@@ -9,13 +9,14 @@
 # Import libraries
 import paho.mqtt.client as mqtt
 import requests
-import time
+import time, datetime
 import sys, os
 import json
 import boto3
 import logging
 import argparse
-import platform, psutil
+import platform, psutil 
+import geocoder
 
 # Constants
 # BROKER_ADDR = "iot.eclipse.org"
@@ -29,18 +30,18 @@ TOPIC_INFO = "NodeInfo"
 SQS_QUEUE_NAME = "NodeCommunication"
 
 
-class MqttPublisher:
+class MQTT:
     def __init__( self ):
-        # logging.basicConfig(level=logging.DEBUG)
         self.client = mqtt.Client()
         self.topics = {}
         self.sqs = boto3.resource( 'sqs' )
 
-
+    # Gather all info of the node
     def __getNodeInfo( self ):
         node_details = dict()
-        # for key, value in js.items():
-        #     node_details[key] = value
+        
+        # Node location
+        node_details['location'] = geocoder.ip('me').latlng
 
         # Get machine details
         node_details['Aarchitecture'] = platform.machine()
@@ -56,71 +57,105 @@ class MqttPublisher:
         node_details['memory_used'] = round (memory.used / ( 1024 * 1024 * 1024 ), 2)
         node_details['memory_available'] = round (memory.available / ( 1024 * 1024 * 1024 ), 2)
 
+        temps =  psutil.sensors_temperatures()
+        detail = {}
+        
+        for key, value in temps.items():
+            detail[key] = []
+            for val in value:
+                f = val._fields
+                temp = {}
+                for n, k in zip( f, val ) :
+                    temp[n] = k
+                
+                detail[key].append( temp )
+
+        node_details['temperatue'] = detail
+
         return node_details
 
 
+    # Publish node on topic
     def __publish( self, topic, payload ):
-        self.client.publish(topic = topic, payload = json.dumps( payload ) )
-        logging.debug( "Message published for topic {0}".format( topic ) )
+        self.client.publish(topic=topic, payload=payload, qos=0, retain=True )
+        
+        print( "Message {0} published for topic {1} at {2}".format( topic, payload, datetime.datetime.now() ) )
 
         
     # Make connection with mqtt broker
     def connect( self, broker_addr, port, queue_name ):
         self.client.connect( broker_addr, port )
-        logging.debug( "Client connected with broker" )
+        print("Client connected")
 
         self.queue = self.sqs.get_queue_by_name( QueueName = queue_name )
-        logging.debug( "Listening on queue {}".format( queue_name ) )
+        print( "Listening on queue {}".format( queue_name ) )
 
 
+    # Set topics on which to publish
     def setPublishTopics( self, topic_active, topic_info ):
         self.topicActive = topic_active
         self.topicInfo = topic_info
 
+
+    # set local api url for node info and members list
     def setUrls( self, active_rqst_url, info_rqst_url ):
         self.activeUrl = active_rqst_url
         self.infoUrl = info_rqst_url
     
 
     def start( self ):
+        self.__getNodeInfo()
         while True:
-            i = 0
+            # Get messag from SQS
             for message in self.queue.receive_messages():
-                print ( "Received message: {0}".format( message.body ) )
+                print ( "Received message {0} from SQS at: {1}".format( message.body, datetime.datetime.now() ) )
                 if len(message.body) == 0:
                     pass
                 js = json.loads( message.body )
 
+                try:
+                    # Check if list of active nodes is asked
+                    # If it is, then do a get call to our cluster and 
+                    # get list of active nodes
+                    if ( js['action'].lower()  == "active" ):
+                        print("[DEBUG]: Sending active nodes")
+                        # Call to get list of members
+                        r = requests.get( self.activeUrl )
 
-                if ( js['action'] == "Active" ):
-                    # Call to get list of members
-                    r = requests.get( self.activeUrl )
-                    # # Get JSON response
-                    js = r.json()
-                    print("Active: {0}, {1}".format( i, js ) )
-                    i+=1
-                    self.__publish( self.topicActive, js )
+                        # # Get JSON response
+                        js = json.dumps( r.json() )
+                        
+                        self.__publish( self.topicActive, js )
 
-                    # message.delete()
+                        message.delete()
+
+                    # Check if request if for Node info
+                    elif ( js['action'].lower() == "info" ):
+                        print("[DEBUG]: Sending info")
+                        r = requests.get( self.infoUrl )
+                        js2 = r.json()
+                        
+                        # Validate node info
+                        # If we are the correct node then reply with correct info
+                        try:
+                            if ( js['Node'].lower() == js2['Name'].lower() ):
+                                print( self.__getNodeInfo() )
+                                js2.update( self.__getNodeInfo() )
+
+                                js2 = json.dumps( js2 )
+                                
+                                self.__publish( self.topicInfo, js2 )
+                                message.delete()
+                        except KeyError:
+                            print("ERROR: KEY ERROR")
+                            message.delete()
+                            pass
 
 
-                elif ( js['action'] == "Info" ):
-
-                    r = requests.get( self.infoUrl )
-                    
-                    js = r.json()
-                    # js = getMoreInfo( js )
-                    print( self.__getNodeInfo() )
-                    js.update( self.__getNodeInfo() )
-                    print( js )
-                    
-                    print ("Info: {0}, {1}".format( i, js ) )
-                    print( "publishing on: ", self.topicInfo )
-                    self.__publish( self.topicInfo, js )
-                
-                message.delete()
-                i += 1
-
+                except KeyError:
+                    print("ERROR: KEY ERROR")
+                    message.delete()
+                    pass
 
 
 def main():
@@ -128,14 +163,13 @@ def main():
     parser.add_argument('node_addr', type=str)
     parser.add_argument('node_port', type=str)
     args = parser.parse_args()
-    print(args)
 
     active_rqst_url = "http://{0}:{1}/members".format( args.node_addr, args.node_port )
     info_rqst_url = "http://{0}:{1}/info".format( args.node_addr, args.node_port )
     print( active_rqst_url )
     print( info_rqst_url )
 
-    mqttObj = MqttPublisher()
+    mqttObj = MQTT()
     mqttObj.setPublishTopics( TOPIC_ACTIVE, TOPIC_INFO )
     mqttObj.setUrls( active_rqst_url, info_rqst_url )
     mqttObj.connect( BROKER_ADDR, BROKER_PORT, SQS_QUEUE_NAME )
