@@ -15,51 +15,51 @@ const { CONSTANTS } = require("../Constants");
 
 const thermalsDummy = [
     {
-        "component" : "CPU",
-        "critical": "101",
-        "current": "41",
-        "high": "101",
+        component: "CPU",
+        critical: "101",
+        current: "41",
+        high: "101"
     },
     {
-        "component" : "GPU",
-        "critical": "-40",
-        "current": "40.5",
-        "high": "40.5",
+        component: "GPU",
+        critical: "-40",
+        current: "40.5",
+        high: "40.5"
     },
     {
-        "component" : "NCPU",
-        "critical": "101",
-        "current": "41",
-        "high": "101",
+        component: "NCPU",
+        critical: "101",
+        current: "41",
+        high: "101"
     },
 
     {
-        "component" : "TBoard",
-        "critical": "107",
-        "current": "37",
-        "high": "107",
-    },
-
-]
-
+        component: "TBoard",
+        critical: "107",
+        current: "37",
+        high: "107"
+    }
+];
 
 const NodeDetailsComponent = props => {
     const context = React.useContext(DashboardContext);
     // const {} = context
     console.log("All context is ", context, "ADDState is: ", context.addState);
-	console.log("TCL: process.env.GOOGLE_API_KEY", process.env.REACT_APP_GOOGLE_API_KEY)
+    console.log(
+        "TCL: process.env.GOOGLE_API_KEY",
+        process.env.REACT_APP_GOOGLE_API_KEY
+    );
     const animatedProps = useSpring({
         opacity: 1,
 
-    
-        from: { opacity: 0}
+        from: { opacity: 0 }
     });
 
     const [nodeDetails, setNodeDetails] = useState({});
+    const [location, setLocation] = useState({});
     const [memPie, setMemPie] = useState([]);
     const [cpuPie, setCpuPie] = useState([]);
     const [thermals, setThermals] = useState([]);
-
 
     useEffect(() => {
         console.log("fetch Task here");
@@ -74,7 +74,12 @@ const NodeDetailsComponent = props => {
                 //create option map to setDeafultoption
                 const { data } = response;
                 console.log("TCL: data", data);
+                const latitude = data.location[0];
+                const longitude = data.location[1];
+                context.dispatch({ type: "setLatitude", latitude });
+                context.dispatch({ type: "setLongitude", longitude });
 
+                setLocation({ lat: data.location[0], lng: data.location[1] });
                 setNodeDetails(data);
                 setMemPie([
                     {
@@ -156,7 +161,7 @@ const NodeDetailsComponent = props => {
                             className="item-name"
                             style={{ margin: "1rem 0" }}
                         >
-                          {nodeDetails.OS_Version}
+                            {nodeDetails.OS_Version}
                         </span>
                     </div>
                     <div>
@@ -165,32 +170,29 @@ const NodeDetailsComponent = props => {
                             className="item-name"
                             style={{ margin: "1rem 0" }}
                         >
-                        {nodeDetails.cpu_count}
+                            {nodeDetails.cpu_count}
                         </span>
                     </div>
-                
-               
+
                     <div>
                         <label>Total Memory Available</label>
                         <span
                             className="item-name"
                             style={{ margin: "1rem 0" }}
                         >
-                        {nodeDetails.total_memory}
+                            {nodeDetails.total_memory}
                         </span>
                     </div>
-         
 
-         <div className="flexwrapper">
+                    <div className="flexwrapper">
                         <div className="leftcomp">
-                        <ResponsivePieComponent data={memPie} />
+                            <ResponsivePieComponent data={memPie} />
                         </div>
                         <div className="rightcomp">
-                        <ResponsivePieComponent data={cpuPie} />
+                            <ResponsivePieComponent data={cpuPie} />
                         </div>
-
-         </div>
-{/* 
+                    </div>
+                    {/* 
                     <div style={{ height: 200 }}>
                         <ResponsivePieComponent data={memPie} />
                     </div>
@@ -201,7 +203,7 @@ const NodeDetailsComponent = props => {
                         <ResponsiveBarComponent data={thermalsDummy} />
                     </div>
 
-                    <div >
+                    <div>
                         <MappingComponent />
                     </div>
                     {/* <div style={{ height: 400 }}>
@@ -231,8 +233,8 @@ const SubmitWrapper = styled.div`
     background: white;
     border: 2px solid #f8f8f8;
     margin-top: 2rem;
-    margin-right:3rem;
-    margin-left:6rem;
+    margin-right: 3rem;
+    margin-left: 6rem;
     padding: 2rem;
     box-sizing: border-box;
     border-radius: 10px;
@@ -257,7 +259,7 @@ const SubmitWrapper = styled.div`
     .flexwrapper {
         display: flex;
         padding-top: 2rem;
-        margin-top:2rem;
+        margin-top: 2rem;
         justify-content: center;
         .leftcomp {
             flex: 0 0 50%;
@@ -294,5 +296,3 @@ const Meta = styled.div`
     display: inline-block;
     font-weight: 400;
 `;
-
-

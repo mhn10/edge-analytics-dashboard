@@ -28,6 +28,10 @@ const reducer = (state, action) => {
 
         case "setValue":
             return { ...state, value: action.NodeValue };
+        case "setLatitude":
+            return { ...state, lat: action.latitude };
+        case "setLongitude":
+            return { ...state, lng: action.longitude };
 
         case "setUsername":
             return { ...state, username: action.email };
@@ -42,6 +46,8 @@ const Dashboard = ({ props }) => {
     const [dashboardState, dispatch] = React.useReducer(reducer, {
         username: "",
         value: "",
+        lat: "",
+        lng: "",
 
         show: false
     });

@@ -2,9 +2,12 @@ import * as React from "react";
 
 const dashboardContext = {
     username: "",
-    value : "",
+    value: "",
 
-    show : false,
+    lat: "",
+    lng: "",
+
+    show: false,
 
     dispatch: action => action
 };
