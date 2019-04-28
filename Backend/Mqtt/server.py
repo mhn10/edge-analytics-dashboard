@@ -15,7 +15,7 @@ import sys
 import os
 import json
 import threading
-import time
+import time, datetime
 
 
 class MQTT:
@@ -29,7 +29,7 @@ class MQTT:
         print("Connected With Result Code {}".format(rc))
         for topic in self.topics:
             print( "subscribed to ", topic )
-            client.subscribe(topic)
+            self.client.subscribe(topic)
 
     def __onDisconnect(self, client, userdata, rc):
         print("Disconnected From Broker")
@@ -37,13 +37,12 @@ class MQTT:
     def __onInfoMessage(self, client, userdata, message):
         msg = message.payload.decode()
         self.info = json.loads(msg)
-        print( "got it", self.info )
-        
+        print( "got info {0} at {1}".format(self.info, datetime.datetime.now()) )
 
     def __onActiveMessage(self, client, userdata, message):
         msg = message.payload.decode()
         self.actives = json.loads( msg )
-        print( "got something: ", self.actives )
+        print( "got active: {0} at {1}".format(self.actives, datetime.datetime.now()) )
 
     def __onUpdateMessage(self, client, userdata, message):
         print(message.payload.decode())
@@ -69,18 +68,18 @@ class MQTT:
     def start(self):
         broker_address = "54.67.84.242"
         broker_portno = 1883
-        client = mqtt.Client()
+        self.client = mqtt.Client(client_id="server1")
 
         # Assigning the object attribute to the Callback Function
-        client.on_connect = self.__onConnect
-        client.on_disconnect = self.__onDisconnect
-        client.message_callback_add("NodeInfo", self.__onInfoMessage)
-        client.message_callback_add("ActiveNodes", self.__onActiveMessage)
-        client.message_callback_add("Updates", self.__onUpdateMessage)
+        self.client.on_connect = self.__onConnect
+        self.client.on_disconnect = self.__onDisconnect
+        self.client.message_callback_add("NodeInfo", self.__onInfoMessage)
+        self.client.message_callback_add("ActiveNodes", self.__onActiveMessage)
+        self.client.message_callback_add("Updates", self.__onUpdateMessage)
 
-        client.connect(broker_address, broker_portno)
+        self.client.connect(broker_address, broker_portno)
 
-        client.loop_forever()
+        self.client.loop_forever()
 
 
 threads = []

@@ -9,13 +9,14 @@
 # Import libraries
 import paho.mqtt.client as mqtt
 import requests
-import time
+import time, datetime
 import sys, os
 import json
 import boto3
 import logging
 import argparse
 import platform, psutil 
+import geocoder
 
 # Constants
 # BROKER_ADDR = "iot.eclipse.org"
@@ -29,16 +30,34 @@ TOPIC_INFO = "NodeInfo"
 SQS_QUEUE_NAME = "NodeCommunication"
 
 
-class MqttPublisher:
+class MQTT:
     def __init__( self ):
         # logging.basicConfig(level=logging.DEBUG)
         self.client = mqtt.Client()
         self.topics = {}
         self.sqs = boto3.resource( 'sqs' )
 
+    def __onConnect(self, client, userdata, flags, rc):
+        print("Connected")
+        self.client.loop_start()
+        
+
+    def __onDisconnect(self, client, userdata, rc):
+        print("Disconnected From Broker")
+        self.client.loop_stop()
+
+    # def __onMessage(self, client, userdata, message):
+    #     pritn("received message")
+    #     pass
+        # msg = message.payload.decode()
+        # self.info = json.loads(msg)
+        # print( "got info {0} at {1}".format(self.info, datetime.datetime.now()) )
 
     def __getNodeInfo( self ):
         node_details = dict()
+        
+        # Node location
+        node_details['location'] = geocoder.ip('me').latlng
 
         # Get machine details
         node_details['Aarchitecture'] = platform.machine()
@@ -73,14 +92,19 @@ class MqttPublisher:
 
 
     def __publish( self, topic, payload ):
-        self.client.publish(topic = topic, payload = payload )
-        print( "Message published for topic {0}: {1}".format( topic, payload ) )
+        self.client.publish(topic=topic, payload=payload, qos=0, retain=True )
+        
+        print( "Message {0} published for topic {1} at {2}".format( topic, payload, datetime.datetime.now() ) )
 
         
     # Make connection with mqtt broker
     def connect( self, broker_addr, port, queue_name ):
         self.client.connect( broker_addr, port )
-        print( "Client connected with broker" )
+        # print( "Client connected with broker" )
+        
+        self.client.on_connect = self.__onConnect
+        self.client.on_disconnect = self.__onDisconnect
+        # self.client.message_callback_add("NodeInfo", self.__onMessage)
 
         self.queue = self.sqs.get_queue_by_name( QueueName = queue_name )
         print( "Listening on queue {}".format( queue_name ) )
@@ -97,7 +121,7 @@ class MqttPublisher:
 
     def start( self ):
         self.__getNodeInfo()
-        # while True:
+        while True:
             # time.sleep( 5 )
             # print("ACTIVE")
             # r = requests.get( self.activeUrl )
@@ -118,7 +142,7 @@ class MqttPublisher:
 
 
             for message in self.queue.receive_messages():
-                print ( "Received message: {0}".format( message.body ) )
+                print ( "Received message {0} from SQS at: {1}".format( message.body, datetime.datetime.now() ) )
                 if len(message.body) == 0:
                     pass
                 js = json.loads( message.body )
@@ -127,7 +151,7 @@ class MqttPublisher:
                 # Check if list of active nodes is asked
                 # If it is, then do a get call to our cluster and 
                 # get list of active nodes
-                if ( js['action'] == "Active" ):
+                if ( js['action'].lower()  == "active" ):
                     # Call to get list of members
                     r = requests.get( self.activeUrl )
 
@@ -139,7 +163,7 @@ class MqttPublisher:
                     message.delete()
 
                 # Check if request if for Node info
-                elif ( js['action'] == "Info" ):
+                elif ( js['action'].lower() == "info" ):
 
                     r = requests.get( self.infoUrl )
                     
@@ -160,20 +184,20 @@ class MqttPublisher:
 
 
 def main():
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('node_addr', type=str)
-    # parser.add_argument('node_port', type=str)
-    # args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('node_addr', type=str)
+    parser.add_argument('node_port', type=str)
+    args = parser.parse_args()
 
-    # active_rqst_url = "http://{0}:{1}/members".format( args.node_addr, args.node_port )
-    # info_rqst_url = "http://{0}:{1}/info".format( args.node_addr, args.node_port )
-    # print( active_rqst_url )
-    # print( info_rqst_url )
+    active_rqst_url = "http://{0}:{1}/members".format( args.node_addr, args.node_port )
+    info_rqst_url = "http://{0}:{1}/info".format( args.node_addr, args.node_port )
+    print( active_rqst_url )
+    print( info_rqst_url )
 
-    mqttObj = MqttPublisher()
-    # mqttObj.setPublishTopics( TOPIC_ACTIVE, TOPIC_INFO )
-    # mqttObj.setUrls( active_rqst_url, info_rqst_url )
-    # mqttObj.connect( BROKER_ADDR, BROKER_PORT, SQS_QUEUE_NAME )
+    mqttObj = MQTT()
+    mqttObj.setPublishTopics( TOPIC_ACTIVE, TOPIC_INFO )
+    mqttObj.setUrls( active_rqst_url, info_rqst_url )
+    mqttObj.connect( BROKER_ADDR, BROKER_PORT, SQS_QUEUE_NAME )
     mqttObj.start()
 
 
