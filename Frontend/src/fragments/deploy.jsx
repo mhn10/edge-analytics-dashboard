@@ -113,6 +113,7 @@ const Deploy = props => {
                 <label>Data :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
                 {context.taskState.data === "" && (<React.Fragment> <input type="checkbox" id="LiveData" name="LiveData" value="True" checked={true}/> <label for="LiveData">Live Data</label> </React.Fragment>)}
+                {context.taskState.data !== "" && context.taskState.data}
                 </span>
                 <div />
                 <label>Code :</label>
