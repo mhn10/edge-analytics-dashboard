@@ -6,6 +6,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 
 import Select from "react-select";
+import { truncate } from "fs";
 
 const { CONSTANTS } = require("../Constants");
 
@@ -105,12 +106,13 @@ const Deploy = props => {
                 <div />
                 <label>Input :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.taskState.input === "" &&  <input type="checkbox" name="LiveData" value="True">Take Live Data </input>}
+                {context.taskState.input}
+                    
                 </span>
                 <div />
                 <label>Data :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.taskState.data}
+                {context.taskState.data === "" && (<React.Fragment> <input type="checkbox" id="LiveData" name="LiveData" value="True" checked={true}/> <label for="LiveData">Live Data</label> </React.Fragment>)}
                 </span>
                 <div />
                 <label>Code :</label>
