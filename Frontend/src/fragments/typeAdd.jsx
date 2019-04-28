@@ -7,7 +7,7 @@ import jwtDecode from "jwt-decode";
 
 
 const options = [
-	{ value: 'Classification', label: 'Classification' },
+	{ value: 'Classification', label: 'Classification / Object Detection' },
 	{ value: 'Regression', label: 'Regression' },
   ]
   

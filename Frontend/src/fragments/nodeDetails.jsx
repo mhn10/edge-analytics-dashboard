@@ -147,7 +147,7 @@ const NodeDetailsComponent = props => {
                             className="item-name"
                             style={{ margin: "1rem 0" }}
                         >
-                            {nodeDetails.os}
+                            {nodeDetails.OS}
                         </span>
                     </div>
                     <div>
@@ -156,7 +156,7 @@ const NodeDetailsComponent = props => {
                             className="item-name"
                             style={{ margin: "1rem 0" }}
                         >
-                          {nodeDetails.os_version}
+                          {nodeDetails.OS_Version}
                         </span>
                     </div>
                     <div>
