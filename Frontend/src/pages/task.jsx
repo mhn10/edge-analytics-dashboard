@@ -1,7 +1,8 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import LoginNavbar from "../components/Navbar/loginnavbar";
+// import LoginNavbar from "../components/Navbar/loginnavbar";
+import Navbar from "../components/Navbar/navbar";
 
 // import AddContext from "../context/addContext";
 import { PageWrapper } from "../components/Page";
@@ -82,7 +83,8 @@ const TaskPage = ({ props }) => {
 
     return (
         <>
-            <LoginNavbar />
+			{/* <LoginNavbar /> */}
+			<Navbar/>
             <BodyWrapper>
                 <PageWrapper>
                     <section className="page-content">

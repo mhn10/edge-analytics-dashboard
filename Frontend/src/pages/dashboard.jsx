@@ -1,33 +1,101 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import LoginNavbar from "../components/Navbar/loginnavbar";
+// import LoginNavbar from "../components/Navbar/loginnavbar";
+import Navbar from "../components/Navbar/navbar";
+import axios from "axios";
 
 import Cards from "../components/card";
+import Modals from "../components/modal";
+import NodeDetailsComponent from "../fragments/nodeDetails";
+
+import DashboardContext from "../context/dashboardContext";
+
+const { CONSTANTS } = require("../Constants");
+
+const reducer = (state, action) => {
+    const { type } = action;
+
+    switch (type) {
+        case "changeState":
+            return { ...state, show: action.value };
+
+        case "toggleState":
+            return {
+                ...state,
+                step: state.show ? false : true
+            };
+
+        case "setValue":
+            return { ...state, value: action.NodeValue };
+        case "setLatitude":
+            return { ...state, lat: action.latitude };
+        case "setLongitude":
+            return { ...state, lng: action.longitude };
+
+        case "setUsername":
+            return { ...state, username: action.email };
+
+        default:
+            return state;
+    }
+};
 
 const Dashboard = ({ props }) => {
+    const [nodes, setNodes] = React.useState([]);
+    const [dashboardState, dispatch] = React.useReducer(reducer, {
+        username: "",
+        value: "",
+        lat: "",
+        lng: "",
+
+        show: false
+    });
+
+    useEffect(() => {
+        console.log("fetch data here");
+
+        axios
+            .get(`${CONSTANTS.BACKEND_URL}/activenodes`)
+            .then(response => {
+                console.log("Response node details", response.data.Active);
+                //create option map to setDeafultoption
+                setNodes(response.data.Active);
+            })
+            .catch(error => {
+                console.log("Error in useEffect nameAdd", error);
+                alert("No Data available, reload");
+            });
+    }, []);
+
+    const nodeCards = nodes.map((node, key) => {
+        console.log("Node details : Nodekey: ", node, "Key", key);
+        return (
+            <Cards
+                IP={node.IP}
+                Value={node.Name}
+                Name={node.Name}
+                Port={node.Port}
+            />
+        );
+    });
+
     return (
         <>
-            <LoginNavbar />
+            {/* <LoginNavbar /> */}
+            <DashboardContext.Provider value={{ dashboardState, dispatch }}>
+                <Navbar />
 
-            <Wrapper>
                 {/* <GridContainer> */}
-
-                {/* <section className="page-content"> */}
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
-                <Cards />
+                <Wrapper>
+                    {/* <section className="page-content"> */}
+                    {dashboardState.show === false && nodeCards}
+                </Wrapper>
                 {/* </section> */}
+                {dashboardState.show === true && <NodeDetailsComponent />}
 
                 {/* </GridContainer> */}
-            </Wrapper>
+            </DashboardContext.Provider>
         </>
     );
 };
@@ -41,7 +109,7 @@ const Wrapper = styled.div`
     margin-right: 2rem;
     background-color: #fff;
     color: #444;
-    margin-top: 10px;
+    margin-top: 50px;
     border-radius: 18px;
 
     /* Grid styles */
@@ -59,12 +127,14 @@ const Wrapper = styled.div`
         padding-right: 3rem;
         margin-left: 10%;
         margin-right: 10%;
+        margin-top: 60px;
     }
     @media only screen and (min-width: 1400px) {
         padding-left: 3rem;
         padding-right: 3rem;
         margin-left: 20%;
         margin-right: 20%;
+        margin-top: 70px;
     }
 `;
 

@@ -10,6 +10,7 @@ sqs = boto3.resource( 'sqs' )
 queue = sqs.get_queue_by_name( QueueName='taskQ1' )
 
 try:
+    print( "Worker started" )
     while True:
         # Process messages by printing out body and optional author name
         for message in queue.receive_messages():
@@ -18,9 +19,10 @@ try:
 
             # Print out body and author
             print('Name: {0} '.format( js ) )
-            # subprocess.Popen( [ 'python3', 'bucket.py', user, action, message.body ] )
+            subprocess.Popen( [ 'python3', 'bucket.py', js['userName'], js['actionType'], js['taskName'] ] )
             # Let the queue know that the message is processed
             message.delete()
+
 except KeyboardInterrupt:
     print('Interrupted')
     try:

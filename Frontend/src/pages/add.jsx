@@ -1,7 +1,8 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import LoginNavbar from "../components/Navbar/loginnavbar";
+// import LoginNavbar from "../components/Navbar/loginnavbar";
+import Navbar from "../components/Navbar/navbar";
 
 import AddContext from "../context/addContext";
 import { PageWrapper } from "../components/Page";
@@ -92,7 +93,8 @@ const AddPage = ({ props }) => {
 
     return (
         <>
-            <LoginNavbar />
+			{/* <LoginNavbar /> */}
+			<Navbar/>
             <BodyWrapper>
                 <PageWrapper>
                     <section className="page-content">
@@ -171,7 +173,7 @@ const AddDetailsWrapper = styled.div`
     color: #606060;
 `;
 
-const BodyWrapper = styled.div`
+export const BodyWrapper = styled.div`
     padding: 1rem;
     display: grid;
     margin-top: 70px;

@@ -6,14 +6,13 @@ const cors = require('cors');
 const { mongoose } = require('./Mongo/connect');
 const AWS = require("aws-sdk");
 const bluebird = require("bluebird");
-const { CONSTANTS } = require('./Constants');
 require("dotenv").config();
 
 
 // configure the keys for accessing AWS
 AWS.config.update({
-	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+	accessKeyId: process.env.AWS_ACCESS_KEY_ID_BAK,
+	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_BAK,
 	region: 'us-west-1'
 });
 
@@ -38,11 +37,11 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(bodyParser.json());
-app.use(cors({ origin: `${CONSTANTS.FRONT_END_URL}`, credentials: true }));
-// app.use(formidable());
+app.use(cors({ origin: `${process.env.FRONT_END_URL}`, credentials: true }));
+
 //Allow Access Control
 app.use(function (req, res, next) {
-	res.setHeader("Access-Control-Allow-Origin", `${CONSTANTS.FRONT_END_URL}`);
+	res.setHeader("Access-Control-Allow-Origin", `${process.env.FRONT_END_URL}`);
 	res.setHeader("Access-Control-Allow-Credentials", "true");
 	res.setHeader(
 		"Access-Control-Allow-Methods",

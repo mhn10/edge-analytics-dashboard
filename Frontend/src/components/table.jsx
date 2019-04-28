@@ -202,9 +202,12 @@ const MyTable = () => {
                             <div className="attribute-value">{file.model}</div>
                         </div>
                         <br />
+         
                         <div className="attribute">
-                            <div class="attribute-name">Output: </div>
-                            <div className="attribute-value">{file.result}</div>
+                           
+            {file.result !=="" &&   <div class="attribute-name"> Output: <a href={file.result} rel="noopener noreferrer" target="_blank"> Output </a>  </div>}
+                           
+                            {/* <div className="attribute-value">{file.result}</div> */}
                         </div>
                         <br />
                     </td>
@@ -249,8 +252,6 @@ const MyTable = () => {
 };
 
 export default MyTable;
-
-
 
 const Button = styled.button`
     background-color: transparent;

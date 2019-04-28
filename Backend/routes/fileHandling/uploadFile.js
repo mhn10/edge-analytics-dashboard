@@ -37,9 +37,10 @@ router.post('/', (req, res) => {
 					//This is a new task, and needs to be uploaded in S3 as well as mongoDB
 					console.log(`Creating the new task :${taskName}`);
 					//parse the files from the request
-					const codeFilePath = files.code[0];
-					const dataFilePath = files.data[0];
-					const inputFilePath = files.input[0];
+					// console.log("Type of: ", typeof (files));
+					const codeFilePath = (files.hasOwnProperty('code'))?files.code[0]:'';
+					const dataFilePath = (files.hasOwnProperty('data'))?files.data[0]:'';
+					const inputFilePath = (files.hasOwnProperty('input'))?files.input[0]:'';
 					const requirementFilePath = files.requirement[0];
 
 					//Create a Map and store the values
@@ -51,15 +52,19 @@ router.post('/', (req, res) => {
 
 					//Push the extra model file if the actionType is classification
 					if (actionType === 'Classification') {
-						const modelFilePath = files.model[0];
+						const modelFilePath = (files.hasOwnProperty('model'))?files.model[0]:'';
 						filesMap.set("Model", modelFilePath);
 					}
 					var fileNamesMap = new Map();
 					//Loop through each file object and upload in S3 bucket
 					for (let [key, value] of filesMap) {
-						var path = value.path;
-						var buffer = await fs.readFileSync(path);
-						var fileName = value.originalFilename;
+						if(value !==""){
+							var path = value.path;
+							var buffer = await fs.readFileSync(path);
+							var fileName = value.originalFilename;
+						} else {
+							fileName = "";
+						}
 						var filePath = `${userFirstName}/${actionType}/${taskName}/${key}/${fileName}`;
 						var data = await uploadFile(buffer, filePath);
 						fileNamesMap.set(key, fileName);
@@ -81,7 +86,7 @@ const uploadFile = (buffer, name) => {
 	const params = {
 		// ACL: "public-read",
 		Body: buffer,
-		Bucket: process.env.S3_BUCKET,
+		Bucket: process.env.S3_BUCKET_BAK,
 		Key: `${name}`
 	};
 	console.log("params: ", params);

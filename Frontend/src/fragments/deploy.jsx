@@ -30,7 +30,8 @@ const Deploy = props => {
                 console.log("Response nodedetails", response.data);
                 //create option map to setDeafultoption
                 const { data } = response;
-                let result = data.map(task => createOption(task));
+                const {Active} = data;
+                let result = Active.map(task => createOption(task));
                 console.log("TCL: result", result);
                 // console.log("Default options", result);
                 setDefaultOption([...defaultOption, ...result]);
@@ -69,7 +70,7 @@ const Deploy = props => {
 
     };
     const createOption = label => ({
-        label: label.Name.split(".", 2)[1],
+        label: label.Name,
         value: label.Name
     });
 
@@ -104,7 +105,7 @@ const Deploy = props => {
                 <div />
                 <label>Input :</label>
                 <span className="item-name" style={{ margin: "1rem 0" }}>
-                    {context.taskState.input}
+                    {context.taskState.input === "" &&  <input type="checkbox" name="LiveData" value="True">Take Live Data </input>}
                 </span>
                 <div />
                 <label>Data :</label>
