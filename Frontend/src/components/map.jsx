@@ -49,7 +49,9 @@ const GreatPlaceStyle = styled.div`
     background-color: white;
     text-align: center;
     color: #3f51b5;
-    font-size: 0.6rem;
+    font-size: 0.9rem;
     font-weight: bold;
+    padding-top:4px;
     padding: 4;
+
 `;
