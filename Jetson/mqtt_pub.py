@@ -32,27 +32,11 @@ SQS_QUEUE_NAME = "NodeCommunication"
 
 class MQTT:
     def __init__( self ):
-        # logging.basicConfig(level=logging.DEBUG)
         self.client = mqtt.Client()
         self.topics = {}
         self.sqs = boto3.resource( 'sqs' )
 
-    def __onConnect(self, client, userdata, flags, rc):
-        print("Connected")
-        self.client.loop_start()
-        
-
-    def __onDisconnect(self, client, userdata, rc):
-        print("Disconnected From Broker")
-        self.client.loop_stop()
-
-    # def __onMessage(self, client, userdata, message):
-    #     pritn("received message")
-    #     pass
-        # msg = message.payload.decode()
-        # self.info = json.loads(msg)
-        # print( "got info {0} at {1}".format(self.info, datetime.datetime.now()) )
-
+    # Gather all info of the node
     def __getNodeInfo( self ):
         node_details = dict()
         
@@ -91,6 +75,7 @@ class MQTT:
         return node_details
 
 
+    # Publish node on topic
     def __publish( self, topic, payload ):
         self.client.publish(topic=topic, payload=payload, qos=0, retain=True )
         
@@ -100,20 +85,19 @@ class MQTT:
     # Make connection with mqtt broker
     def connect( self, broker_addr, port, queue_name ):
         self.client.connect( broker_addr, port )
-        # print( "Client connected with broker" )
-        
-        self.client.on_connect = self.__onConnect
-        self.client.on_disconnect = self.__onDisconnect
-        # self.client.message_callback_add("NodeInfo", self.__onMessage)
+        print("Client connected")
 
         self.queue = self.sqs.get_queue_by_name( QueueName = queue_name )
         print( "Listening on queue {}".format( queue_name ) )
 
 
+    # Set topics on which to publish
     def setPublishTopics( self, topic_active, topic_info ):
         self.topicActive = topic_active
         self.topicInfo = topic_info
 
+
+    # set local api url for node info and members list
     def setUrls( self, active_rqst_url, info_rqst_url ):
         self.activeUrl = active_rqst_url
         self.infoUrl = info_rqst_url
@@ -122,65 +106,56 @@ class MQTT:
     def start( self ):
         self.__getNodeInfo()
         while True:
-            # time.sleep( 5 )
-            # print("ACTIVE")
-            # r = requests.get( self.activeUrl )
-            # js = r.json()
-            # self.__publish( TOPIC_ACTIVE, js)
-
-            # time.sleep(5)
-
-            # print("INFO")
-            # r = requests.get( self.infoUrl )
-            # js = r.json()
-            # js = js.update(self.__getNodeInfo())
-            # print( js )
-            # # js = json.dumps( js )
-            # self.__publish( TOPIC_INFO, js )
-
-            # time.sleep(5)
-
-
+            # Get messag from SQS
             for message in self.queue.receive_messages():
                 print ( "Received message {0} from SQS at: {1}".format( message.body, datetime.datetime.now() ) )
                 if len(message.body) == 0:
                     pass
                 js = json.loads( message.body )
 
+                try:
+                    # Check if list of active nodes is asked
+                    # If it is, then do a get call to our cluster and 
+                    # get list of active nodes
+                    if ( js['action'].lower()  == "active" ):
+                        print("[DEBUG]: Sending active nodes")
+                        # Call to get list of members
+                        r = requests.get( self.activeUrl )
 
-                # Check if list of active nodes is asked
-                # If it is, then do a get call to our cluster and 
-                # get list of active nodes
-                if ( js['action'].lower()  == "active" ):
-                    # Call to get list of members
-                    r = requests.get( self.activeUrl )
+                        # # Get JSON response
+                        js = json.dumps( r.json() )
+                        
+                        self.__publish( self.topicActive, js )
 
-                    # # Get JSON response
-                    js = json.dumps( r.json() )
-                    
-                    self.__publish( self.topicActive, js )
+                        message.delete()
 
+                    # Check if request if for Node info
+                    elif ( js['action'].lower() == "info" ):
+                        print("[DEBUG]: Sending info")
+                        r = requests.get( self.infoUrl )
+                        js2 = r.json()
+                        
+                        # Validate node info
+                        # If we are the correct node then reply with correct info
+                        try:
+                            if ( js['Node'].lower() == js2['Name'].lower() ):
+                                print( self.__getNodeInfo() )
+                                js2.update( self.__getNodeInfo() )
+
+                                js2 = json.dumps( js2 )
+                                
+                                self.__publish( self.topicInfo, js2 )
+                                message.delete()
+                        except KeyError:
+                            print("ERROR: KEY ERROR")
+                            message.delete()
+                            pass
+
+
+                except KeyError:
+                    print("ERROR: KEY ERROR")
                     message.delete()
-
-                # Check if request if for Node info
-                elif ( js['action'].lower() == "info" ):
-
-                    r = requests.get( self.infoUrl )
-                    
-                    js = r.json()
-                    
-                    # Validate node info
-                    # If we are the correct node then reply with correct info
-                    # if ( js['Node'] == js['Name'] ):
-
-                    print( self.__getNodeInfo() )
-                    js.update( self.__getNodeInfo() )
-
-                    js = json.dumps( js )
-                    
-                    self.__publish( self.topicInfo, js )
-                    message.delete()
-
+                    pass
 
 
 def main():
