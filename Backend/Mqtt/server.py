@@ -68,7 +68,7 @@ class MQTT:
     def start(self):
         broker_address = "54.67.84.242"
         broker_portno = 1883
-        self.client = mqtt.Client(client_id="server1")
+        self.client = mqtt.Client()
 
         # Assigning the object attribute to the Callback Function
         self.client.on_connect = self.__onConnect

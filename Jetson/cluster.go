@@ -11,12 +11,13 @@ import (
 	"sync"
 
 	"github.com/hashicorp/memberlist"
-	"github.com/pborman/uuid"
 )
 
 var (
 	mtx            sync.RWMutex
+	name           = flag.String("name", "", "name given to node")
 	members        = flag.String("members", "", "comma seperated list of members")
+	ip             = flag.String("ip", "", "public IP on which node is connected")
 	port           = flag.Int("port", 4001, "http port")
 	bindPort       = flag.Int("bindPort", 7946, "binding port")
 	memberObj      *memberlist.Memberlist
@@ -134,6 +135,7 @@ func (d *delegate) MergeRemoteState(buf []byte, join bool) {
 
 // Post call for node
 func addHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("add handler")
 	r.ParseForm()
 	var key string
 	var val string
@@ -144,7 +146,7 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%s: %s", key, val)
 
 	mtx.Lock()
-	// items[key] = val
+	items[key] = val
 	mtx.Unlock()
 
 	b, err := json.Marshal([]*update{
@@ -169,6 +171,17 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Done")
 }
 
+func getHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("called")
+	r.ParseForm()
+	key := r.Form.Get("key")
+	mtx.RLock()
+	val := items[key]
+	mtx.RUnlock()
+	// json.NewEncoder(w).Encode(items)
+	w.Write([]byte(val))
+}
+
 // Returns list of all active members in cluster
 func getMembersHandler(w http.ResponseWriter, r *http.Request) {
 	allMembers := memberObj.Members()
@@ -191,30 +204,6 @@ func getMembersHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
-/*
-func startNodeHandler(w http.ResponseWriter, r *http.Request) {
-	memberObj.UpdateNode(10)
-	w.Write([]byte("Node started"))
-}
-
-func stopNodeHandler(w http.ResponseWriter, r *http.Request) {
-	memberObj.Shutdown()
-	w.Write([]byte("Node shutdown"))
-}
-
-func getStatusHandler(w http.ResponseWriter, r *http.Request) {
-	result := HealthScore{Name: "Health Score", Score: memberObj.GetHealthScore()}
-
-	w.Header().Set("Content-Type", "application/json")
-	js, err := json.Marshal(result)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	fmt.Println(result)
-	w.Write(js)
-}
-*/
 func getNodeInfoHandler(w http.ResponseWriter, r *http.Request) {
 	node := Member{
 		Name: memberObj.LocalNode().Name,
@@ -232,15 +221,32 @@ func getNodeInfoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func start() (*memberlist.Memberlist, error) {
+	if *ip == "" {
+		fmt.Println("IP address not provided")
+		os.Exit(1)
+	}
+
+	if *name == "" {
+		fmt.Println("No name is given to node")
+		os.Exit(1)
+	}
+
 	// Get hostname
-	hostname, _ := os.Hostname()
+	// hostname, _ := os.Hostname()
 
 	// Configure member list
 	c := memberlist.DefaultLocalConfig()
-	c.BindPort = *bindPort
-	c.AdvertiseAddr = "73.92.205.30"
+	// c.BindPort = *bindPort
+	// fmt.Println(*bindPort)
+	// fmt.Println(c.BindPort)
+	c.BindPort = 0
 
-	c.Name = hostname + "-" + uuid.NewUUID().String()
+	c.AdvertiseAddr = *ip
+	key := make([]byte, 24)
+	// Encryption key
+	copy(key, "clustersecret")
+	c.SecretKey = key
+	c.Name = *name
 	list, err := memberlist.Create(c)
 
 	if err != nil {
@@ -273,6 +279,7 @@ func main() {
 
 	// Handle addition of node
 	http.HandleFunc("/add", addHandler)
+	http.HandleFunc("/get", getHandler)
 
 	// Get node info
 	http.HandleFunc("/info", getNodeInfoHandler)
@@ -280,18 +287,9 @@ func main() {
 	// Get member list
 	http.HandleFunc("/members", getMembersHandler)
 
-	// Stop node
-	// http.HandleFunc("/stop", stopNodeHandler)
-	// http.HandleFunc("/start", startNodeHandler)
-
-	// Status
-	// http.HandleFunc("/status", getStatusHandler)
-
 	fmt.Printf("Listening on :%d\n", *port)
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", *port), nil); err != nil {
 		fmt.Println(err)
 	}
 }
-
-//https://github.com/octu0/example-memberlist
