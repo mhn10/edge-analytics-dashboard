@@ -49,13 +49,13 @@ const ResponsiveBarComponent = ({ data /* see data tab */ }) => (
         fill={[
             {
                 "match": {
-                    "id": "CPU"
+                    "id": "critical"
                 },
                 "id": "dots"
             },
             {
                 "match": {
-                    "id": "GPU"
+                    "id": "high"
                 },
                 "id": "lines"
             }
