@@ -8,7 +8,7 @@ def getNodeInfo():
     node_details['location'] = geocoder.ip('me').latlng
 
     # Get machine details
-    node_details['Aarchitecture'] = platform.machine()
+    node_details['Architecture'] = platform.machine()
     node_details['OS'] = platform.system()
     node_details['OS_Version'] = platform.release()
 
@@ -36,6 +36,6 @@ def getNodeInfo():
             
             detail.append( temp )
 
-    node_details['temperatue'] = detail
+    node_details['temperature'] = detail
 
     return node_details

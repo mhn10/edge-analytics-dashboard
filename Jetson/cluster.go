@@ -231,15 +231,12 @@ func start() (*memberlist.Memberlist, error) {
 		os.Exit(1)
 	}
 
-	// Get hostname
-	// hostname, _ := os.Hostname()
-
 	// Configure member list
 	c := memberlist.DefaultLocalConfig()
-	// c.BindPort = *bindPort
+	c.BindPort = *bindPort
 	// fmt.Println(*bindPort)
 	// fmt.Println(c.BindPort)
-	c.BindPort = 0
+	// c.BindPort = 0
 
 	c.AdvertiseAddr = *ip
 	key := make([]byte, 24)
