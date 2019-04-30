@@ -1,4 +1,6 @@
 # !/bin/sh
 
-pkill -f "python3 worker.py"
-pkill -f "python3 active_nodePub.py"
+kill `pidof go run cluster`
+pkill -f "python3 nodeComm.py"
+
+# pkill -f "python3 worker.py"
