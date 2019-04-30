@@ -88,27 +88,39 @@ class Jetson:
             self.__files['code'] =  file
         
         # Move Data files in one common directory
-        for file in os.listdir( self.__path + 'Data/' ):
-            path = self.__path + 'Data/' + file
-            # Move file to proper folder
-            shutil.move( path, '{0}{1}'.format(self.__path, file))
+        try:
+            for file in os.listdir( self.__path + 'Data/' ):
+                path = self.__path + 'Data/' + file
+                # Move file to proper folder
+                shutil.move( path, '{0}{1}'.format(self.__path, file))
+        except Exception:
+            pass
 
         # Store requirements file name and move in one common directory
-        for file in os.listdir( self.__path + 'Requirements/' ):
-            path = self.__path + 'Requirements/' + file
-            # Move file to proper folder
-            shutil.move( path, '{0}{1}'.format(self.__path, file))
-            self.__files['requirements'] = file
+        try:
+            for file in os.listdir( self.__path + 'Requirements/' ):
+                path = self.__path + 'Requirements/' + file
+                # Move file to proper folder
+                shutil.move( path, '{0}{1}'.format(self.__path, file))
+                self.__files['requirements'] = file
+        except Exception:
+            pass
 
         # Move Input file in one common directory
-        for file in os.listdir( self.__path + 'Input/' ):
-            path = self.__path + 'Input/' + file
-            shutil.move( path, '{0}{1}'.format(self.__path, file))
+        try:
+            for file in os.listdir( self.__path + 'Input/' ):
+                path = self.__path + 'Input/' + file
+                shutil.move( path, '{0}{1}'.format(self.__path, file))
+        except Exception:
+            pass
 
         # Move Model file in one common directory
-        for file in os.listdir( self.__path + 'Model/' ):
-            path = self.__path + 'Model/' + file
-            shutil.move( path, '{0}{1}'.format(self.__path, file) )
+        try:
+            for file in os.listdir( self.__path + 'Model/' ):
+                path = self.__path + 'Model/' + file
+                shutil.move( path, '{0}{1}'.format(self.__path, file) )
+        except:
+            pass
 
         # Create results folder
         if not os.path.exists( self.__path + "Results/" ):
