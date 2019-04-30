@@ -4,7 +4,7 @@ import geocoder
 def getNodeInfo():
     node_details = dict()
         
-    # Node location
+    Node location
     node_details['location'] = geocoder.ip('me').latlng
 
     # Get machine details
@@ -22,17 +22,19 @@ def getNodeInfo():
     node_details['memory_available'] = round (memory.available / ( 1024 * 1024 * 1024 ), 2)
 
     temps =  psutil.sensors_temperatures()
-    detail = {}
+    detail = []
     
     for key, value in temps.items():
-        detail[key] = []
         for val in value:
             f = val._fields
             temp = {}
             for n, k in zip( f, val ) :
-                temp[n] = k
+                if n == 'label':
+                    temp[n] = key + '-' + k
+                else:
+                    temp[n] = k
             
-            detail[key].append( temp )
+            detail.append( temp )
 
     node_details['temperatue'] = detail
 
