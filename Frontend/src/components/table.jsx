@@ -206,7 +206,14 @@ const MyTable = () => {
                         <div className="attribute">
                            
             {file.result !=="" &&   <div class="attribute-name"> Output: <a href={file.result} rel="noopener noreferrer" target="_blank"> Output </a>  </div>}
-                           
+           {console.log("slice file format is :  " , file.result.slice(-3))}
+           
+            {file.result !=="" && 
+            ['jpg','png'].includes(file.result.slice(-3)) &&
+            <div className="attribute-value"> 
+            <img src={file.result} alt="Output Image" height="300" width ="300" ></img>
+            </div>
+            }
                             {/* <div className="attribute-value">{file.result}</div> */}
                         </div>
                         <br />
