@@ -1,13 +1,15 @@
-import * as React from "react";
+import  React, {useState} from "react";
 import { withRouter } from "react-router-dom";
 import AddContext from "../context/addContext";
 import styled from "styled-components";
 import axios from "axios";
-import {useSpring, animated, config} from 'react-spring'
+import {useSpring, animated, config} from 'react-spring';
+import Progress from "../components/progress";
 // import Button from "react-bootstrap/Button";
 
 const SubmitAdd = props => {
     const context = React.useContext(AddContext);
+    const [uploadPercentage, setUploadPercentage] = useState(0);
     // const {} = context
     console.log("All context is ", context, "ADDState is: ", context.addState);
     const animatedProps = useSpring({opacity: 1,marginRight:0, config:config.default, from: {opacity: 0, marginRight:-200}});
@@ -15,6 +17,7 @@ const SubmitAdd = props => {
         console.log("Button Clicked");
         event.preventDefault();
         const formData = new FormData();
+ 
         const {
             name,
             type,
@@ -39,7 +42,17 @@ const SubmitAdd = props => {
             .post(`http://localhost:3001/uploadfile`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
-                }
+                },onUploadProgress: progressEvent => {
+                    setUploadPercentage(
+                      parseInt(
+                        Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                      )
+                    );
+          
+                    // Clear percentage
+                    // setTimeout(() => setUploadPercentage(0), 10000);
+                  }
+                
             })
             .then(response => {
                 console.log("data upload success", response);
@@ -97,6 +110,8 @@ const SubmitAdd = props => {
                     onClick={clickHandler}
                     //   style={{position:'inherit', right : '0'}}
                 />
+                 <Progress percentage={uploadPercentage} />
+
             </animated.div>
         </SubmitWrapper>
     );
