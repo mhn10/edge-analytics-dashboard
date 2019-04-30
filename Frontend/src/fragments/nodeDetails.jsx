@@ -13,33 +13,6 @@ import { useSpring, animated, config } from "react-spring";
 // import Button from "react-bootstrap/Button";
 const { CONSTANTS } = require("../Constants");
 
-const thermalsDummy = [
-    {
-        component: "CPU",
-        critical: "101",
-        current: "41",
-        high: "101"
-    },
-    {
-        component: "GPU",
-        critical: "-40",
-        current: "40.5",
-        high: "40.5"
-    },
-    {
-        component: "NCPU",
-        critical: "101",
-        current: "41",
-        high: "101"
-    },
-
-    {
-        component: "TBoard",
-        critical: "107",
-        current: "37",
-        high: "107"
-    }
-];
 
 const NodeDetailsComponent = props => {
     const context = React.useContext(DashboardContext);
@@ -81,6 +54,7 @@ const NodeDetailsComponent = props => {
 
                 setLocation({ lat: data.location[0], lng: data.location[1] });
                 setNodeDetails(data);
+                setThermals(data.temperatue);
                 setMemPie([
                     {
                         id: "memoryUtil",
@@ -200,7 +174,7 @@ const NodeDetailsComponent = props => {
                         <ResponsivePieComponent data={cpuPie} />
                     </div> */}
                     <div style={{ height: 350 }}>
-                        <ResponsiveBarComponent data={thermalsDummy} />
+                        <ResponsiveBarComponent data={thermals} />
                     </div>
 
                     <div>

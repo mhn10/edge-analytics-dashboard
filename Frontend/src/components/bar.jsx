@@ -13,7 +13,7 @@ const ResponsiveBarComponent = ({ data /* see data tab */ }) => (
            "current",
            "high"
         ]}
-        indexBy="component"
+        indexBy="label"
         margin={{
             "top": 50,
             "right": 130,
