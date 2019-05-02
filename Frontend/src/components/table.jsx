@@ -177,47 +177,76 @@ const MyTable = () => {
         if (isExpanded(file, key)) {
             const detailRow = (
                 <tr className="task-details">
-                    <td colspan="4" className="task-details">
-                        <br />
-                        <div className="attribute">
-                            <div className="attribute-name">Requirement: </div>
-                            <div className="attribute-value">
+                    {/* <td colspan="5" className="task-details"> */}
+
+                    <br />
+                    <td colSpan="3">
+                        <div>
+                            <label> Requirement: </label>
+                            <span style={{ margin: "1rem 0",  fontSize: "1rem", color: "#008fda", textAlign: "center" }}>
                                 {file.requirements}
-                            </div>
+                            </span>
                         </div>
-                        <br />
-                        <div className="attribute">
-                            <div className="attribute-name">code: </div>
-                            <div className="attribute-value">{file.code}</div>
+                        <div>
+                            <label>Code: </label>
+                            <span style={{ margin: "1rem 0",  fontSize: "1rem", color: "#008fda", textAlign: "center" }}>
+                                {file.code}
+                            </span>
                         </div>
-                        <br />
-                        <div className="attribute">
-                            <div class="attribute-name">Input: </div>
-                            <div className="attribute-value">{file.input}</div>
+                        <div> 
+                        <label>Input: </label>
+                            <span style={{ margin: "1rem 0",  fontSize: "1rem", color: "#008fda", textAlign: "center" }}>
+                                {file.input}
+                            </span>
                         </div>
-                        <br />
-                        <br />
-                        <div className="attribute">
-                            <div class="attribute-name">Model: </div>
-                            <div className="attribute-value">{file.model}</div>
+                        <div> 
+
+                        <label>Model: </label>
+                            <span style={{ margin: "1rem 0",  fontSize: "1rem", color: "#008fda", textAlign: "center" }}>
+                                {file.model}
+                            </span>            
                         </div>
-                        <br />
-         
+                    </td>
+                    <td colSpan="3">
                         <div className="attribute">
-                           
-            {file.result !=="" &&   <div class="attribute-name"> Output: <a href={file.result} rel="noopener noreferrer" target="_blank"> Output </a>  </div>}
-           {console.log("slice file format is :  " , file.result.slice(-3))}
-           
-            {file.result !=="" && 
-            ['jpg','png'].includes(file.result.slice(-3)) &&
-            <div className="attribute-value"> 
-            <img src={file.result} alt="Output Image" height="300" width ="300" ></img>
-            </div>
-            }
+                            {file.result !== "" && (
+                                <div class="attribute-name">
+                                    {" "}
+                                    Output:{" "}
+                                    <a
+                                        href={file.result}
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        {" "}
+                                        Output{" "}
+                                    </a>{" "}
+                                </div>
+                            )}
+                            {console.log(
+                                "slice file format is :  ",
+                                file.result.slice(-3)
+                            )}
+
+                            {file.result !== "" &&
+                                ["jpg", "png"].includes(
+                                    file.result.slice(-3)
+                                ) && (
+                                    <div className="attribute-value">
+                                        <img
+                                            src={file.result}
+                                            alt="Output"
+                                            height="300"
+                                            width="300"
+                                            style={{boxShadow:"0px 30px 100px -10px rgba(0, 0, 0, 0.4)"}}
+                                        />
+                                    </div>
+                                )}
                             {/* <div className="attribute-value">{file.result}</div> */}
                         </div>
-                        <br />
                     </td>
+                    <br />
+                    {/* </td> */}
                 </tr>
             );
             rows.push(detailRow);
