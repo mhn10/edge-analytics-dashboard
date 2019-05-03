@@ -3,40 +3,17 @@
 echo "Intializing..."
 
 echo "Installing dependencies..."
-echo "Installing Golang.."
 echo "Do you want to continue? [Y/N]"
 read response
 
-if [ "$response" != "Y" ] && [ "$response" != "y" ]; then
+if [ "$response" != "Y" ] && [ "$response" != "y" ]
+then
     echo "Installation declined"
-    echo "Exiting..."
-    exit 1
+    echo "Skipping..."
+else
+    pip3 install -r requirements.txt --user
 fi
 
-sudo apt-get update
-sudo apt-get install golang-go
-
-echo "Installing pip3..."
-echo "Do you want to continue? [Y/N]"
-read response
-
-if [ "$response" != "Y" ] && [ "$response" != "y" ]; then
-    echo "Installation declined"
-    echo "Exiting..."
-    exit 1
-fi
-
-echo "Installing other dependencies..."
-echo "Do you want to continue? [Y/N]"
-read response
-
-if [ "$response" != "Y" ] && [ "$response" != "y" ]; then
-    echo "Installation declined"
-    echo "Exiting..."
-    exit 1
-fi
-
-pip3 install -r requirements.txt
 
 mkdir --parents $HOME/go
 go get
@@ -47,20 +24,17 @@ read node_name
 echo "Enter your public address for connection with cluster and press [ENTER]:"
 read node_ip
 
-go run cluster.go --name=$node_name --ip=$node_ip &
+echo "Joining cluster? Enter member's IP"
+echo "If there are more than one members you are joining, \nenter comma separated values without space"
+echo "If not, leave empty"
+read members
 
-
-
-sudo apt-install python3-pip
-
-ping -c 1 $node_addr &>/dev/null ; a=$?
-if [ "$a" != "0" ]; then
-    echo "Chekc IP"
-    exit 1
+if [ -z "$members" ]; then
+        go run cluster.go --name=$node_name --ip=$node_ip &
+else
+        go run cluster.go --name=$node_name --ip=$node_ip --members=$members:7946 &
 fi
 
-echo "Enter node port and press [ENTER]: "
-read node_port
-
+sleep 2
 python3 nodeComm.py &
 python3 worker.py &
