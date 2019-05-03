@@ -3,7 +3,7 @@
 # ans ends with replying with output file or error message to server                                #
 #                                                                                                   #
 # Author: Sahil Sharma                                                                              #
-# Last Edited: Apr 13, 2019                                                                         #
+# Last Edited: May 2, 2019                                                                         #
 #####################################################################################################
 import s3
 import boto3, botocore
@@ -13,6 +13,8 @@ import time
 from collections import defaultdict
 import logging
 from botocore.exceptions import ClientError
+import mqtt
+import json
 
 class Jetson:
     def __init__( self ):
@@ -25,7 +27,10 @@ class Jetson:
 
         # Get the reouserce
         self.s3Obj = s3.S3()
-    
+
+        self.mqttObj = mqtt.MQTT()
+        self.mqttObj.start()
+        self.updateTopic = "Updates"
     
     def __deleteDirs( self, path ):
         if os.path.exists( path ):
@@ -138,27 +143,38 @@ class Jetson:
                     'backToDir': 'cd ~/Documents/Final/' }
 
         print( "Installing dependencies..." )
+        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Installing dependencies...." }
+        msg = ""
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ),False )
         subprocess.call(commands['install'], shell=True)
+        
         print( "Dependencies successfully installed.")
+        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Dependencies successfully installed" }
+        # self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+
+        
+
 
         subprocess.call( commands['changeDir'], shell=True )
         print( "Process started..." )
-        subprocess.call( commands['run'], shell=True )
-        print( "Process completed..." )
-        subprocess.call( commands['backToDir'], shell=True )
+        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Task started...." }
+        # self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
 
-        # myProcess = subprocess.call( '{0}; {1}; {2}'.format( commands['changeDir'], commands['run'], commands['backToDir'] ), shell = True)
-        # print( "Done" )
+        subprocess.call( commands['run'], shell=True )
         
-        #[outStream, errStream] = myProcess.communicate()
-        #print( outStream )
-        #print( errStream )
-        # print( "got here" )
-        #myProcess.kill()
+        print( "Process completed..." )
+        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Task Completed." }
+        # self.mqttObj.publish( self.updateTopic, json.dumps( msg ),False )
+
+        subprocess.call( commands['backToDir'], shell=True )
 
         # Task is completed
 
+        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Uploading result file...." }
+        # self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+
         self.__uploadResultFile( )
+        
 
 
     def __uploadResultFile( self ):
@@ -172,6 +188,9 @@ class Jetson:
             except ClientError as e:
                 logging.error( e )
         print( "upload complete" )
+        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Upload complete" }
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+        
 
 
     # Delete all the local creation after task is over
@@ -193,7 +212,7 @@ def main():
 
     j = Jetson()
     j.SetUser( userName, taskName, uploadName )
-    j.downloadFiles( 'vision-analytics-bucket' )
+    j.downloadFiles( 'edge-vision-analytics' )
     j.CollectFiles()
     j.RunCode()
 
@@ -237,3 +256,4 @@ if __name__ == "__main__":
 # User002, Classification, MyFirstModel
 # User002, Regression, Test
 
+# {"userName": "kaikai", "isCamera": "false", "actionType": "Classification", "taskName": "task7", "nodeId": "Jetson"}

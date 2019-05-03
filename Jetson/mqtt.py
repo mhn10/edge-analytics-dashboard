@@ -20,6 +20,6 @@ class MQTT:
         
         # return self.client
 
-    def publish(self, topic, payload):
+    def publish(self, topic, payload, shouldRetain = True):
         print("[DEBUG]: Publishing message: {0} on queue: {1}".format(payload, topic))
-        self.client.publish(topic=topic, payload=payload, qos=0, retain=True)
+        self.client.publish(topic=topic, payload=payload, qos=0, retain=shouldRetain)
