@@ -4,7 +4,7 @@ import geocoder
 def getNodeInfo():
     node_details = dict()
         
-    Node location
+    # Node location
     node_details['location'] = geocoder.ip('me').latlng
 
     # Get machine details
@@ -39,3 +39,5 @@ def getNodeInfo():
     node_details['temperature'] = detail
 
     return node_details
+
+print( getNodeInfo() )
