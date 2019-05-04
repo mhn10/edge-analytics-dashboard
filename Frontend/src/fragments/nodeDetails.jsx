@@ -54,7 +54,7 @@ const NodeDetailsComponent = props => {
 
                 setLocation({ lat: data.location[0], lng: data.location[1] });
                 setNodeDetails(data);
-                setThermals(data.temperatue);
+                setThermals(data.temperature);
                 setMemPie([
                     {
                         id: "memoryUtil",
@@ -173,10 +173,13 @@ const NodeDetailsComponent = props => {
                     <div style={{ height: 200 }}>
                         <ResponsivePieComponent data={cpuPie} />
                     </div> */}
-                    <div style={{ height: 350 }}>
+
+
+                     <div style={{ height: 350 }}>
                         <ResponsiveBarComponent data={thermals} />
                     </div>
-
+                    
+               
                     <div>
                         <MappingComponent />
                     </div>
