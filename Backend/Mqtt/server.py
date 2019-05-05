@@ -45,8 +45,10 @@ class MQTT:
         print( "got active: {0} at {1}".format(self.actives, datetime.datetime.now()) )
 
     def __onUpdateMessage(self, client, userdata, message):
+        print("got update")
         print(message.payload.decode())
-        print(message.topic)
+        # print(message.topic)
+        
 
     # Getters
     def getInfo(self):
