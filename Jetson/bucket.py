@@ -1,4 +1,3 @@
-#####################################################################################################
 # This code is called by Worker which then handle the complete task                                 #
 # ans ends with replying with output file or error message to server                                #
 #                                                                                                   #
@@ -15,6 +14,7 @@ import logging
 from botocore.exceptions import ClientError
 import mqtt
 import json
+import requests
 
 class Jetson:
     def __init__( self ):
@@ -24,7 +24,8 @@ class Jetson:
         self.__actionName = ''
         self.__taskName = ''
         self.__path = ''
-
+        self.__nodeID = requests.get( "http://localhost:4001/info" ).json()['Name']
+        # print("CHECK: ", self.__nodeID )
         # Get the reouserce
         self.s3Obj = s3.S3()
 
@@ -46,6 +47,7 @@ class Jetson:
 
     def downloadFiles( self, bucket_name ):
         res = self.s3Obj.getResource()
+        self.__bucketName = bucket_name
         bucket = res.Bucket( bucket_name )
         # logging.debug( "Connected to bucket in S3." )
 
@@ -53,6 +55,10 @@ class Jetson:
         self.__path = self.__userName + '/' + self.__actionName + '/' + self.__taskName + '/'
         # clean if something folder already exists
         # self.Clean()
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status": "Downloading files...", "time":localtime}
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+
         # Find objects that we want to download
         for obj in bucket.objects.filter( Prefix = self.__path ):
 
@@ -79,6 +85,10 @@ class Jetson:
                     else:
                         print( "An error encountered" )
                         return False
+
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Download complete", "time":localtime}
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
         return True
 
 
@@ -137,36 +147,43 @@ class Jetson:
     # Creates a vritual envrionment and run all the required commands
     def RunCode( self ):
 
-        commands = {'install': 'pip3 install -r {0}/{1}'.format( self.__userName, self.__files['requirements'] ),
+        commands = {'install': 'pip3 install -r {0}'.format( self.__files['requirements'] ),
                     'run': 'python3 {0}'.format( self.__files['code'] ),
                     'changeDir': 'cd {0}'.format( self.__path ),
                     'backToDir': 'cd ~/Documents/Final/' }
-
+        # print("RUN: ", self.__path)
         print( "Installing dependencies..." )
-        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Installing dependencies...." }
-        msg = ""
-        self.mqttObj.publish( self.updateTopic, json.dumps( msg ),False )
-        subprocess.call(commands['install'], shell=True)
+        print( "Check Node ID: ", self.__nodeID )
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Installing dependencies....", "time":localtime}
+        # msg = ""
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), True )
+        #subprocess.call(commands['install'], shell=True)
+        subprocess.call( "{0}; {1}".format( commands['changeDir'], commands['install'] ), shell=True)
         
         print( "Dependencies successfully installed.")
-        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Dependencies successfully installed" }
-        # self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Dependencies successfully installed", "time":localtime }
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
 
         
 
 
-        subprocess.call( commands['changeDir'], shell=True )
+        #subprocess.call( commands['changeDir'], shell=True )
         print( "Process started..." )
-        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Task started...." }
-        # self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Task started" , "time":localtime}
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
 
-        subprocess.call( commands['run'], shell=True )
+        #subprocess.call( commands['run'], shell=True )
+        subprocess.call( "{0}; {1}".format( commands['changeDir'], commands['run'] ), shell=True )
         
         print( "Process completed..." )
-        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Task Completed." }
-        # self.mqttObj.publish( self.updateTopic, json.dumps( msg ),False )
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Task Completed.", "time": localtime }
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ),False )
 
-        subprocess.call( commands['backToDir'], shell=True )
+        #subprocess.call( commands['backToDir'], shell=True )
 
         # Task is completed
 
@@ -174,6 +191,10 @@ class Jetson:
         # self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
 
         self.__uploadResultFile( )
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Done", "time":localtime}
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), True )
+        
         
 
 
@@ -184,11 +205,12 @@ class Jetson:
             print( "DEBUG: ", file )
             print( "DEBUG: ", obj )
             try:
-                response = client.upload_file( "{0}Results/{1}".format( self.__path, file ), self.__bucketName, obj )
+                response = client.upload_file( "{0}Results/{1}".format( self.__path, file ), self.__bucketName, obj, ExtraArgs={'ACL':'public-read'} )
             except ClientError as e:
                 logging.error( e )
         print( "upload complete" )
-        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Upload complete" }
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Results uploaded", "time":localtime }
         self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
         
 
