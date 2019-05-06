@@ -10,6 +10,7 @@
 
 # Required Libraries
 from flask import Flask, jsonify
+from flask import Response, stream_with_context
 import paho.mqtt.client as mqtt
 import sys
 import os
@@ -23,6 +24,7 @@ class MQTT:
         self.topics = ["NodeInfo", "ActiveNodes", "Updates"]
         self.info = {}
         self.actives = {}
+        self.updates = dict()
 
     # the callback function
     def __onConnect(self, client, userdata, flags, rc):
@@ -45,9 +47,57 @@ class MQTT:
         print( "got active: {0} at {1}".format(self.actives, datetime.datetime.now()) )
 
     def __onUpdateMessage(self, client, userdata, message):
-        print("got update")
-        print(message.payload.decode())
-        # print(message.topic)
+        # print(message.payload.decode())
+        msg = json.loads( message.payload.decode() )
+        # print( type( msg ) )
+
+        
+        # Check if there is existing data for the user
+        if msg['userName'] in self.updates:
+
+            # Now check if the task is existing or not
+            for idx in range( len( self.updates[ msg['userName'] ] ) ):
+            
+                if msg['taskName'] in self.updates[ msg['userName'] ][idx]:
+                    # Check if this task is completed or not
+                    print("CEHCK: ", self.updates[ msg['userName'] ][idx][ msg['taskName'] ][0] )
+                    if self.updates[ msg['userName'] ][idx][ msg['taskName'] ][0]["status"] == "Done":
+                        self.updates[msg['userName']][idx][msg['taskName']] = [{ 
+                                "nodeID": msg["nodeID"], 
+                                "time": msg["time"], 
+                                "status": msg["status"],
+                                "displayed": False
+                            }]
+                        
+                    else:
+                        self.updates[msg['userName']][idx][msg['taskName']].append( 
+                            { 
+                                "nodeID": msg["nodeID"], 
+                                "time": msg["time"], 
+                                "status": msg["status"],
+                                "displayed": False
+                            }
+                        )
+                else:
+                    self.updates[msg['userName']].append( 
+                        { 
+                            msg["taskName"] :
+                            [ { 
+                                "nodeID": msg["nodeID"], 
+                                "time": msg["time"], 
+                                "status": msg["status"],
+                                "displayed": False
+                            } ]
+                        } 
+                    )
+        else:
+            print( "CHECK: Creating once" )
+            if msg['status'] != "Done":
+                self.updates[msg['userName']] = [ { msg["taskName"]: [ { "nodeID": msg["nodeID"], "time": msg["time"], "status": msg["status"], "displayed": False } ] } ]
+                
+
+        print( self.updates )
+        print("============================================")
         
 
     # Getters
@@ -65,6 +115,36 @@ class MQTT:
             time.sleep(.2)
             pass
         return self.actives
+
+    def getUpdates( self, userName, taskName ):
+        print( "Sending updates" )
+        # Travel through each task of that user
+        if userName not in self.updates:
+            msg = {"status":"No data for user"}
+            return json.dumps( msg )
+        
+        is_done = False
+
+        while not is_done:
+            for task in self.updates[userName]:
+                # Check if task is correct one
+                if taskName in task:
+                    for idx in range( len( task[taskName] ) ):
+                        if not task[taskName][idx]["displayed"]:
+                            yield json.dumps( task[taskName][idx] )
+                            yield '\n'
+                            task[taskName][idx]["displayed"] = True
+
+                        if( task[taskName][idx]['status'] == "Done" ):
+                            self.updates[userName] = [ { taskName: [] } ]
+                            is_done = True
+                            return
+                else:
+                    msg = {"status": "No pending task"}
+                    yield json.dumps( msg )
+                    yield '\n'
+                    is_done = True
+            time.sleep(.02)
 
 
     def start(self):
@@ -103,6 +183,11 @@ def get_active_nodes():
 def get_node_info():
     print( "Inside Node info API call", subscriber.getInfo() )
     return jsonify (subscriber.getInfo())
+
+@app.route('/updates/<userName>/<taskName>', methods=['GET'] )
+def get_updates( userName, taskName ):
+    # print( "Inside updates call" )
+    return Response( stream_with_context( subscriber.getUpdates(userName, taskName) ), mimetype='application/json', content_type="application/json")
 
 
 def task_update():
