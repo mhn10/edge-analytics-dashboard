@@ -17,11 +17,7 @@ const { CONSTANTS } = require("../Constants");
 const NodeDetailsComponent = props => {
     const context = React.useContext(DashboardContext);
     // const {} = context
-    console.log("All context is ", context, "ADDState is: ", context.addState);
-    console.log(
-        "TCL: process.env.GOOGLE_API_KEY",
-        process.env.REACT_APP_GOOGLE_API_KEY
-    );
+    console.log("All context is ", context, "Dashboard state is: ", context.dashboardState.value);
     const animatedProps = useSpring({
         opacity: 1,
 
@@ -39,7 +35,7 @@ const NodeDetailsComponent = props => {
         axios
             .get(`${CONSTANTS.BACKEND_URL}/nodedetail`, {
                 params: {
-                    nodeId: context.dashboardState.value
+                    nodeid: context.dashboardState.value
                 }
             })
             .then(response => {
@@ -106,11 +102,12 @@ const NodeDetailsComponent = props => {
                         style={{
                             textAlign: "right",
                             color: "grey",
-                            fontSize: "2rem"
+                            fontSize: "2rem",
+                            background:"transparent"
                         }}
                         onClick={closeHandler}
                     >
-                        X
+                       <button> X </button> 
                     </div>
                     <h3>{context.dashboardState.value}</h3>
                     {console.log("TCL: dashboardState", nodeDetails)}
