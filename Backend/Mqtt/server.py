@@ -17,6 +17,7 @@ import os
 import json
 import threading
 import time, datetime
+from flask_cors import CORS
 
 class MQTT:
     def __init__(self):
@@ -59,7 +60,7 @@ class MQTT:
             
                 if msg['taskName'] in self.updates[ msg['userName'] ][idx]:
                     # Check if this task is completed or not
-                    print("CEHCK: ", self.updates[ msg['userName'] ][idx][ msg['taskName'] ][0] )
+                    # print("CEHCK: ", self.updates[ msg['userName'] ][idx][ msg['taskName'] ][0] )
                     if self.updates[ msg['userName'] ][idx][ msg['taskName'] ][0]["status"] == "Done":
                         self.updates[msg['userName']][idx][msg['taskName']] = [{ 
                                 "nodeID": msg["nodeID"], 
@@ -171,7 +172,7 @@ threads.append( threading.Thread(target=subscriber.start, daemon=True).start() )
 
 # start flask app
 app = Flask(__name__)
-
+CORS(app)
 @app.route('/active', methods=['GET'])
 def get_active_nodes():
     print( "Inside active nodes list API call" )

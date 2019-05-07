@@ -6,8 +6,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 
 import Select from "react-select";
-import { truncate } from "fs";
-
+import NodeStatus from "../components/nodeStatus";
 const { CONSTANTS } = require("../Constants");
 
 // import Button from "react-bootstrap/Button";
@@ -59,7 +58,8 @@ const Deploy = props => {
         axios.post(`${CONSTANTS.BACKEND_URL}/runtask`,data)
         .then( response => {
         console.log("TCL: response", response);
-        context.dispatch({type : "changeState", value : 1});
+        setLoading(true);
+        // context.dispatch({type : "changeState", value : 1});
 
         })
         .catch(error => {
@@ -141,6 +141,11 @@ const Deploy = props => {
                     onClick={clickHandler}
                     //   style={{position:'inherit', right : '0'}}
                 />
+                <div> 
+                    {" "}
+                    {loading && <NodeStatus />}
+                </div>
+
             </div>
         </SubmitWrapper>
     );
