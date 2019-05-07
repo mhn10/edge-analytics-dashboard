@@ -1,0 +1,4 @@
+boto3==1.9.137
+geocoder==1.38.1
+paho-mqtt==1.4.0
+psutil==5.6.2

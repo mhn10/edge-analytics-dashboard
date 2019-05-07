@@ -64,8 +64,9 @@ foo@bar:~$ curl -X GET http://localhost:4001/info
 ```
 
 ### Using other files
-1. **_startScripts.sh_**: Its a shell script that will help starting other scripts on jetson. It will ask for node's IP and port and then spin up MQTT publisher (__mqtt_pub.py__) and a worker ( __worker.py__ ) that will keep listening to SQS queue.  
+1. **_startScripts.sh_**: It will take all the information to set up environment and install dependencies.  
 2. **_endScripts.sh_**: This script will get PIDs of processes spun by __startsScripts.sh__ and kill those process. ( Usefull when shutting down the node ).  
-3. **_mqtt_pub.py_**: This a MQTT pubisher which is continuously listening to SQS queue for message regarding Alive nodes or Node's info.  After receiving the message, it will publish the response to appropriate topic to which server is subscribed.  
-4. **_worker.py_**: This script will listen to another SQS queue for messages regarding a task that is to be run on Jetson, after getting details from message, it will start __bucket.py__.  
+3. **_nodeConn.py_**: This script will respond to requests related to cluster or node info.  
+4. **_worker.py_**: This script will listen to another SQS queue for messages regarding a task that is to be run on Jetson.  
 5. **_bucket.py_**: This script will download required files from S3 bucket and store them locally. Then the code file which is downloaded will run and outfile generated will be uploaded to S3 bucket.
+6. **_mqtt.py_****_node.py_****_sqs.py_**: Supporting functions for making connections and providing additional details
