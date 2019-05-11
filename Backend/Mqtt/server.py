@@ -9,7 +9,7 @@
 
 
 # Required Libraries
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask import Response, stream_with_context
 import paho.mqtt.client as mqtt
 import sys
@@ -94,7 +94,7 @@ class MQTT:
             print( "CHECK: Creating once" )
             if msg['status'] != "Done":
                 self.updates[msg['userName']] = [ { msg["taskName"]: [ { "nodeID": msg["nodeID"], "time": msg["time"], "status": msg["status"], "displayed": False } ] } ]
-                
+
 
         print( self.updates )
         print("============================================")
@@ -119,24 +119,32 @@ class MQTT:
     def getUpdates( self, userName, taskName ):
         print( "Sending updates" )
         # Travel through each task of that user
-        if userName not in self.updates:
-            msg = {"status":"No data for user"}
-            return json.dumps( msg )
+        # if userName not in self.updates:
+        #     msg = {"status":"No data for user"}
+        #     return json.dumps( msg )
+        
         
         is_done = False
 
         while not is_done:
-            for task in self.updates[userName]:
-                # Check if task is correct one
-                if taskName in task:
-                    for idx in range( len( task[taskName] ) ):
-                        if not task[taskName][idx]["displayed"]:
-                            yield json.dumps( task[taskName][idx] )
-                            yield '\n'
-                            task[taskName][idx]["displayed"] = True
+            if userName not in self.updates:
+                time.sleep( 0.02 )
+                continue
 
-                        if( task[taskName][idx]['status'] == "Done" ):
-                            self.updates[userName] = [ { taskName: [] } ]
+            # print( "[CHECK]: ", self.updates[userName] )
+
+            for tasksIdx in range( len( self.updates[userName] ) ):
+                # Check if task is correct one
+                if taskName in self.updates[userName][tasksIdx]:
+                    for idx in range( len( self.updates[userName][tasksIdx][taskName] ) ):
+                        if not self.updates[userName][tasksIdx][taskName][idx]["displayed"]:
+                            yield json.dumps( self.updates[userName][tasksIdx][taskName][idx] )
+                            yield '\n'
+                            self.updates[userName][tasksIdx][taskName][idx]["displayed"] = True
+
+                        if( self.updates[userName][tasksIdx][taskName][idx]['status'] == "Done" ):
+                            # self.updates[userName] = [ { taskName: [] } ]
+                            del self.updates[userName]
                             is_done = True
                             return
                 else:
@@ -144,6 +152,7 @@ class MQTT:
                     yield json.dumps( msg )
                     yield '\n'
                     is_done = True
+
             time.sleep(.02)
 
 
@@ -184,10 +193,43 @@ def get_node_info():
     print( "Inside Node info API call", subscriber.getInfo() )
     return jsonify (subscriber.getInfo())
 
-@app.route('/updates/<userName>/<taskName>', methods=['GET'] )
-def get_updates( userName, taskName ):
+# End point for updates of task
+@app.route('/updates', methods=['GET'] )
+def get_updates():
     # print( "Inside updates call" )
-    return Response( stream_with_context( subscriber.getUpdates(userName, taskName) ), mimetype='application/json', content_type="application/json")
+    # if request.method == 'GET':
+    userName = request.args.get('userName', '')
+    taskName = request.args.get('taskName', '')
+    return Response( stream_with_context( subscriber.getUpdates(userName, taskName) ), mimetype='text/plain', content_type="text/event-stream")
+    # return Response( stream_with_context( subscriber.getUpdates(userName, taskName) ), mimetype='application/json', content_type="application/json")
+
+# Demo router that Returns response as text
+@app.route('/demo', methods=['GET'] )
+def demo( ):
+    userName = request.args.get('userName', '')
+    taskName = request.args.get('taskName', '')
+
+    def generator():
+        for i in range( 0, 5 ):
+            js = { "nodeID": "Jetson", "time": "Wed May  8 22:15:14 2019", "status": "Hello World {}".format( i ), "displayed": False }
+            yield json.dumps( js )
+            time.sleep(2)
+    
+    return Response( generator(), mimetype='text/plain', content_type="text/event-stream")
+
+# Demo router that Returns response as json
+@app.route('/demojs', methods=['GET'] )
+def demojs( ):
+    userName = request.args.get('userName', '')
+    taskName = request.args.get('taskName', '')
+
+    def generator():
+        for i in range( 0, 5 ):
+            js = { "nodeID": "Jetson", "time": "Wed May  8 22:15:14 2019", "status": "Hello World {}".format( i ), "displayed": False }
+            yield json.dumps( js )
+            time.sleep(2)
+    
+    return Response( stream_with_context( generator() ), mimetype='application/json', content_type="application/json")
 
 
 def task_update():
