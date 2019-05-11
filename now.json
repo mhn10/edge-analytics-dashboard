@@ -3,7 +3,7 @@
   "name": "my-react-app",
   "builds": [
     {
-      "src": "package.json",
+      "src": "Frontend/package.json",
       "use": "@now/static-build",
       "config": { "distDir": "Frontend/build" }
     }
