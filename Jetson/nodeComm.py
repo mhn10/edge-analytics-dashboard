@@ -1,6 +1,6 @@
+
 # This script handles communications regarding node details
 # and active nodes
-
 import mqtt
 import sqs
 import node
@@ -17,6 +17,7 @@ def main():
     topic_node_info = "NodeInfo"
     topic_updates = "Updates"
 
+
     sqsObj = sqs.SQS()
     queue = sqsObj.getNodeCommQueue()
     print("[DEBUG]: Connected to queue")
@@ -32,20 +33,25 @@ def main():
                 # Check if list of active nodes is asked
                 # If it is, then do a get call to our cluster and 
                 # get list of active nodes
+
                 print( "[DEBUG]: Message received ", js )
                 if ( js['action'].lower()  == "active" ):
                     print("[DEBUG]: Active nodes message")
+
 
                     r = requests.get( "http://localhost:4001/members" )
 
                     # Get JSON response
                     js = json.dumps( r.json() )
                     mqttObj.publish( topic_active_nodes, js )
+
                     print( "deleting message" )
+
                     message.delete()
 
                 # Check if request if for Node info
                 elif ( js['action'].lower() == "info" ):
+
                     print("[DEBUG]: Info message")
                     r = requests.get( "http://localhost:4001/info" )
                     js2 = r.json()
@@ -88,3 +94,4 @@ if __name__ == "__main__":
             sys.exit(0)
         except SystemExit:
             os._exit(0)
+

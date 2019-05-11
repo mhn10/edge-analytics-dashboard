@@ -24,6 +24,7 @@ class Jetson:
         self.__actionName = ''
         self.__taskName = ''
         self.__path = ''
+
         self.__nodeID = requests.get( "http://localhost:4001/info" ).json()['Name']
         # print("CHECK: ", self.__nodeID )
         # Get the reouserce
@@ -32,6 +33,7 @@ class Jetson:
         self.mqttObj = mqtt.MQTT()
         self.mqttObj.start()
         self.updateTopic = "Updates"
+
     
     def __deleteDirs( self, path ):
         if os.path.exists( path ):
@@ -47,6 +49,7 @@ class Jetson:
 
     def downloadFiles( self, bucket_name ):
         res = self.s3Obj.getResource()
+
         self.__bucketName = bucket_name
         bucket = res.Bucket( bucket_name )
         # logging.debug( "Connected to bucket in S3." )
@@ -147,6 +150,7 @@ class Jetson:
     # Creates a vritual envrionment and run all the required commands
     def RunCode( self ):
 
+
         commands = {'install': 'pip3 install -r {0}'.format( self.__files['requirements'] ),
                     'run': 'python3 {0}'.format( self.__files['code'] ),
                     'changeDir': 'cd {0}'.format( self.__path ),
@@ -205,6 +209,7 @@ class Jetson:
             print( "DEBUG: ", file )
             print( "DEBUG: ", obj )
             try:
+
                 response = client.upload_file( "{0}Results/{1}".format( self.__path, file ), self.__bucketName, obj, ExtraArgs={'ACL':'public-read'} )
             except ClientError as e:
                 logging.error( e )
@@ -234,6 +239,7 @@ def main():
 
     j = Jetson()
     j.SetUser( userName, taskName, uploadName )
+
     j.downloadFiles( 'edge-vision-analytics' )
     j.CollectFiles()
     j.RunCode()

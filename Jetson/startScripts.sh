@@ -15,6 +15,7 @@ else
 fi
 
 
+
 mkdir --parents $HOME/go
 go get
 
@@ -36,5 +37,6 @@ else
 fi
 
 sleep 2
+
 python3 nodeComm.py &
 python3 worker.py &
