@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e10a40b7-65fd-433b-9795-3cb7d89efab6/deploy-status)](https://app.netlify.com/sites/silly-mcclintock-fe1431/deploys)
+
 # Edge Analytics
 
 A single point dashboard for managing Edge devices
