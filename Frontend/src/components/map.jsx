@@ -3,7 +3,7 @@ import React from "react";
 import GoogleMapReact from "google-map-react";
 import DashboardContext from "../context/dashboardContext";
 import styled from "styled-components";
-
+import {CONSTANTS} from '../Constants';
 const MapPin = () => {
     return <GreatPlaceStyle>X</GreatPlaceStyle>;
 };
@@ -28,7 +28,7 @@ const MappingComponent = () => {
             }}
         >
             <GoogleMapReact
-                bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
+                bootstrapURLKeys={{ key: `${CONSTANTS.REACT_APP_GOOGLE_API_KEY}` }}
                 center={defaultProps}
                 defaultZoom={15}
             >

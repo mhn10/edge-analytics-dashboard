@@ -6,6 +6,7 @@ import axios from "axios";
 import {useSpring, animated, config} from 'react-spring';
 import Progress from "../components/progress";
 // import Button from "react-bootstrap/Button";
+import {CONSTANTS} from '../Constants';
 
 const SubmitAdd = props => {
     const context = React.useContext(AddContext);
@@ -39,7 +40,7 @@ const SubmitAdd = props => {
 
         console.log("FormData before upload ", formData);
         axios
-            .post(`http://localhost:3001/uploadfile`, formData, {
+            .post(`${CONSTANTS.BACKEND_URL}/uploadfile`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 },onUploadProgress: progressEvent => {
