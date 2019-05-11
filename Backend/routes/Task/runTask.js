@@ -6,8 +6,10 @@ const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 router.post("/", (req, res) => {
 	console.log("Inside run task API");
 	//parse the details from the request object
+
+	console.log("TCL: req.body", req.body)
 	var username = req.body.userName;
-	var nodeid = req.body.nodeid;
+	var nodeid = req.body.node;
 	var taskname = req.body.name;
 	var actiontype = req.body.type;
 	var isCamera = req.body.isCamera;

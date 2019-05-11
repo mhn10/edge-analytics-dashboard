@@ -1,9 +1,8 @@
-#####################################################################################################
 # This code is called by Worker which then handle the complete task                                 #
 # ans ends with replying with output file or error message to server                                #
 #                                                                                                   #
 # Author: Sahil Sharma                                                                              #
-# Last Edited: Apr 13, 2019                                                                         #
+# Last Edited: May 2, 2019                                                                         #
 #####################################################################################################
 import s3
 import boto3, botocore
@@ -13,6 +12,9 @@ import time
 from collections import defaultdict
 import logging
 from botocore.exceptions import ClientError
+import mqtt
+import json
+import requests
 
 class Jetson:
     def __init__( self ):
@@ -23,9 +25,15 @@ class Jetson:
         self.__taskName = ''
         self.__path = ''
 
+        self.__nodeID = requests.get( "http://localhost:4001/info" ).json()['Name']
+        # print("CHECK: ", self.__nodeID )
         # Get the reouserce
         self.s3Obj = s3.S3()
-    
+
+        self.mqttObj = mqtt.MQTT()
+        self.mqttObj.start()
+        self.updateTopic = "Updates"
+
     
     def __deleteDirs( self, path ):
         if os.path.exists( path ):
@@ -41,6 +49,8 @@ class Jetson:
 
     def downloadFiles( self, bucket_name ):
         res = self.s3Obj.getResource()
+
+        self.__bucketName = bucket_name
         bucket = res.Bucket( bucket_name )
         # logging.debug( "Connected to bucket in S3." )
 
@@ -48,6 +58,10 @@ class Jetson:
         self.__path = self.__userName + '/' + self.__actionName + '/' + self.__taskName + '/'
         # clean if something folder already exists
         # self.Clean()
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status": "Downloading files...", "time":localtime}
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+
         # Find objects that we want to download
         for obj in bucket.objects.filter( Prefix = self.__path ):
 
@@ -74,6 +88,10 @@ class Jetson:
                     else:
                         print( "An error encountered" )
                         return False
+
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Download complete", "time":localtime}
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
         return True
 
 
@@ -132,33 +150,56 @@ class Jetson:
     # Creates a vritual envrionment and run all the required commands
     def RunCode( self ):
 
-        commands = {'install': 'pip3 install -r {0}/{1}'.format( self.__userName, self.__files['requirements'] ),
+
+        commands = {'install': 'pip3 install -r {0}'.format( self.__files['requirements'] ),
                     'run': 'python3 {0}'.format( self.__files['code'] ),
                     'changeDir': 'cd {0}'.format( self.__path ),
                     'backToDir': 'cd ~/Documents/Final/' }
-
+        # print("RUN: ", self.__path)
         print( "Installing dependencies..." )
-        subprocess.call(commands['install'], shell=True)
-        print( "Dependencies successfully installed.")
-
-        subprocess.call( commands['changeDir'], shell=True )
-        print( "Process started..." )
-        subprocess.call( commands['run'], shell=True )
-        print( "Process completed..." )
-        subprocess.call( commands['backToDir'], shell=True )
-
-        # myProcess = subprocess.call( '{0}; {1}; {2}'.format( commands['changeDir'], commands['run'], commands['backToDir'] ), shell = True)
-        # print( "Done" )
+        print( "Check Node ID: ", self.__nodeID )
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Installing dependencies....", "time":localtime}
+        # msg = ""
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), True )
+        #subprocess.call(commands['install'], shell=True)
+        subprocess.call( "{0}; {1}".format( commands['changeDir'], commands['install'] ), shell=True)
         
-        #[outStream, errStream] = myProcess.communicate()
-        #print( outStream )
-        #print( errStream )
-        # print( "got here" )
-        #myProcess.kill()
+        print( "Dependencies successfully installed.")
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Dependencies successfully installed", "time":localtime }
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+
+        
+
+
+        #subprocess.call( commands['changeDir'], shell=True )
+        print( "Process started..." )
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Task started" , "time":localtime}
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+
+        #subprocess.call( commands['run'], shell=True )
+        subprocess.call( "{0}; {1}".format( commands['changeDir'], commands['run'] ), shell=True )
+        
+        print( "Process completed..." )
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Task Completed.", "time": localtime }
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ),False )
+
+        #subprocess.call( commands['backToDir'], shell=True )
 
         # Task is completed
 
+        # msg = {"userName":self.__userName, "taskName":self.__taskName, "msg":"Uploading result file...." }
+        # self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+
         self.__uploadResultFile( )
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Done", "time":localtime}
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), True )
+        
+        
 
 
     def __uploadResultFile( self ):
@@ -168,10 +209,15 @@ class Jetson:
             print( "DEBUG: ", file )
             print( "DEBUG: ", obj )
             try:
-                response = client.upload_file( "{0}Results/{1}".format( self.__path, file ), self.__bucketName, obj )
+
+                response = client.upload_file( "{0}Results/{1}".format( self.__path, file ), self.__bucketName, obj, ExtraArgs={'ACL':'public-read'} )
             except ClientError as e:
                 logging.error( e )
         print( "upload complete" )
+        localtime = time.asctime( time.localtime( time.time() ) )
+        msg = {"nodeID":self.__nodeID, "userName":self.__userName, "taskName":self.__taskName, "status":"Results uploaded", "time":localtime }
+        self.mqttObj.publish( self.updateTopic, json.dumps( msg ), False )
+        
 
 
     # Delete all the local creation after task is over
@@ -193,7 +239,8 @@ def main():
 
     j = Jetson()
     j.SetUser( userName, taskName, uploadName )
-    j.downloadFiles( 'vision-analytics-bucket' )
+
+    j.downloadFiles( 'edge-vision-analytics' )
     j.CollectFiles()
     j.RunCode()
 
@@ -237,3 +284,4 @@ if __name__ == "__main__":
 # User002, Classification, MyFirstModel
 # User002, Regression, Test
 
+# {"userName": "kaikai", "isCamera": "false", "actionType": "Classification", "taskName": "task7", "nodeId": "Jetson"}

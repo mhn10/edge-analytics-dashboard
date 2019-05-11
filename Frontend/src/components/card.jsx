@@ -28,6 +28,8 @@ context.dispatch({ type: "changeState", value: true });
         <h7>
           <b style={{ wordWrap:"break-word"}}>{props.Name}</b>
         </h7>
+        <div /> 
+        
         {/* <div/> give location herev */}
       <Meta> {props.IP}:{props.Port} </Meta>
 {/* 

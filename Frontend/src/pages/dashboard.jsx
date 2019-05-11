@@ -42,7 +42,7 @@ const reducer = (state, action) => {
 };
 
 const Dashboard = ({ props }) => {
-    const [nodes, setNodes] = React.useState([]);
+    const [nodes, setNodes] = React.useState([{IP: "73.92.205.40", Name: "Jetson2", Port: 7946},{IP: "74.93.105.30", Name: "Jetson3", Port: 7946},{IP: "190.92.150.32", Name: "Jetson4", Port: 7946},{IP: "73.92.205.22", Name: "Jetson5", Port: 7946}]);
     const [dashboardState, dispatch] = React.useReducer(reducer, {
         username: "",
         value: "",
@@ -59,8 +59,11 @@ const Dashboard = ({ props }) => {
             .get(`${CONSTANTS.BACKEND_URL}/activenodes`)
             .then(response => {
                 console.log("Response node details", response.data.Active);
+                const {Active} = response.data;
+				console.log("TCL: Dashboard -> Active", Active)
+                Array.prototype.push.apply(Active,nodes); 
                 //create option map to setDeafultoption
-                setNodes(response.data.Active);
+                setNodes(Active);
             })
             .catch(error => {
                 console.log("Error in useEffect nameAdd", error);

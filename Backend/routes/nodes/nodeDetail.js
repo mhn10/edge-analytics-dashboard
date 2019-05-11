@@ -6,11 +6,11 @@ const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 const axios = require('axios');
 
 router.get('/', async (req, res, next) => {
-	console.log("Inside Node Detail API");
-	var nodeId = req.body.nodeid;
+	console.log("Inside Node Detail API", req.query.nodeid);
+	var nodeId = req.query.nodeid;
 	// create parameters
 	var data = {
-		nodeId: nodeId,
+		node: nodeId,
 		action: "Info"
 	}
 	var dataTobeSent = JSON.stringify(data);
