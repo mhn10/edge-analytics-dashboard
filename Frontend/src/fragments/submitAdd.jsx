@@ -12,7 +12,7 @@ const SubmitAdd = props => {
     const context = React.useContext(AddContext);
     const [uploadPercentage, setUploadPercentage] = useState(0);
     // const {} = context
-    console.log("All context is ", context, "ADDState is: ", context.addState);
+    // console.log("All context is ", context, "ADDState is: ", context.addState);
     const animatedProps = useSpring({opacity: 1,marginRight:0, config:config.default, from: {opacity: 0, marginRight:-200}});
     const clickHandler = event => {
         console.log("Button Clicked");

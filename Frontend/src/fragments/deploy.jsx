@@ -41,7 +41,10 @@ const Deploy = props => {
                 alert("Data fetch failed, reload");
             });
     }, []);
+const loadingHandler = () =>{
+    setTimeout(setLoading(true),4000)
 
+}
     const clickHandler = event => {
         console.log("Deploy Clicked", context.taskState);
         const { firstName } = jwtDecode(localStorage.getItem("userToken"));
@@ -58,9 +61,10 @@ const Deploy = props => {
         axios.post(`${CONSTANTS.BACKEND_URL}/runtask`,data)
         .then( response => {
         console.log("TCL: response", response);
-        setTimeout(setLoading(true),4000)
         
-        // context.dispatch({type : "changeState", value : 1});
+        setLoading(true);
+        //declare as a function so that it doesnt invoke first
+        setTimeout(() => {context.dispatch({type : "changeState", value : 1})}, 8000);
 
         })
         .catch(error => {
@@ -142,7 +146,14 @@ const Deploy = props => {
                     onClick={clickHandler}
                     //   style={{position:'inherit', right : '0'}}
                 />
-                <div> 
+                {/* <Button
+                    as="loadingtester"
+                    type="submit"
+                    value="Submit"
+                    onClick={loadingHandler}
+                    //   style={{position:'inherit', right : '0'}}
+                /> */}
+                <div style={{marginTop: "4px"}}> 
                     {" "}
                     {loading && <NodeStatus />}
                 </div>
