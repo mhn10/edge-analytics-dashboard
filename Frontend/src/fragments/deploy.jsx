@@ -58,7 +58,8 @@ const Deploy = props => {
         axios.post(`${CONSTANTS.BACKEND_URL}/runtask`,data)
         .then( response => {
         console.log("TCL: response", response);
-        setLoading(true);
+        setTimeout(setLoading(true),4000)
+        
         // context.dispatch({type : "changeState", value : 1});
 
         })
