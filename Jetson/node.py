@@ -4,7 +4,9 @@ import geocoder
 def getNodeInfo():
     node_details = dict()
         
+
     # Node location
+
     node_details['location'] = geocoder.ip('me').latlng
 
     # Get machine details
@@ -40,4 +42,6 @@ def getNodeInfo():
 
     return node_details
 
+
 print( getNodeInfo() )
+
