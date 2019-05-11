@@ -52,7 +52,7 @@ const NodeStatus = props => {
             <ClimbingBoxLoader
                 css={override}
                 sizeUnit={"px"}
-                size={45}
+                size={10}
                 color={"#1edbed"}
                 loading={true}
             />
