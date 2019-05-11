@@ -64,7 +64,7 @@ const loadingHandler = () =>{
         
         setLoading(true);
         //declare as a function so that it doesnt invoke first
-        setTimeout(() => {context.dispatch({type : "changeState", value : 1})}, 90000);
+        setTimeout(() => {context.dispatch({type : "changeState", value : 1})}, 110000);
 
         })
         .catch(error => {
