@@ -7,3 +7,4 @@ export const CONSTANTS = {
 };
 
 
+//http://ec2-54-215-156-177.us-west-1.compute.amazonaws.com

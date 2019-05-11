@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { css } from "@emotion/core";
-import { RingLoader } from "react-spinners";
+import { ClimbingBoxLoader } from "react-spinners";
 import ReactEventSource from "react-eventsource";
 const { CONSTANTS } = require("../Constants");
 
@@ -49,10 +49,10 @@ const NodeStatus = props => {
               {events => events.map(renderEvent) }
             </ReactEventSource>
             Loader Comp */}
-            <RingLoader
+            <ClimbingBoxLoader
                 css={override}
                 sizeUnit={"px"}
-                size={30}
+                size={45}
                 color={"#1edbed"}
                 loading={true}
             />
