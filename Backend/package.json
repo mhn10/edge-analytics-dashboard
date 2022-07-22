@@ -29,7 +29,7 @@
     "express-healthcheck": "^0.1.0",
     "express-session": "^1.15.6",
     "express-sessions": "^1.0.6",
-    "file-type": "^10.9.0",
+    "file-type": "^16.5.4",
     "fs": "0.0.1-security",
     "jsonwebtoken": "^8.3.0",
     "mocha": "^6.1.3",
